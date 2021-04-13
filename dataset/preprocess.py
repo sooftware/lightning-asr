@@ -66,7 +66,7 @@ def prepare_tokenizer(train_transcripts, vocab_size):
         for transcript in train_transcripts:
             f.write('{}\n'.format(transcript.split('|')[-1]))
 
-    input_args = '--input=%s --model_prefix=%s --vocab_size=%s --model_type=%s'
+    input_args = '--input=%s --model_prefix=%s --vocab_size=%s --model_type=%s --pad_id=0 --bos_id=1 --eos_id=2'
     cmd = input_args % (input_file, model_name, vocab_size, model_type)
     spm.SentencePieceTrainer.Train(cmd)
 
@@ -82,18 +82,3 @@ def generate_transcript_file(dataset_name, transcripts):
             label = " ".join([str(item) for item in sp.EncodeAsIds(transcript)])
 
             f.write('%s\t%s\t%s\n' % (audio, text, label))
-
-
-def merge_train_dev_transcript_file():
-    merge_list = ['train_960', 'dev-clean', 'dev-other']
-
-    lines = list()
-
-    for dataset in merge_list:
-        with open('../../data/%s-transcript.txt' % dataset) as f:
-            for line in f.readlines():
-                lines.append(line)
-
-    with open('../../data/train.txt', 'w') as f:
-        for line in lines:
-            f.write('%s' % line)

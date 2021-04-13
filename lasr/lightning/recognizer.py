@@ -26,14 +26,14 @@ import pytorch_lightning as pl
 from torch import Tensor
 from typing import Tuple, List
 
-from lasr.criterioin.joint_ctc_cross_entropy import JointCTCCrossEntropyLoss
 from lasr.model.decoder import DecoderRNN
 from lasr.model.encoder import ConformerEncoder
 from lasr.optim.lr_scheduler import TransformerLRScheduler
+from lasr.criterioin.joint_ctc_cross_entropy import JointCTCCrossEntropyLoss
 from lasr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
 
 
-class LightningASR(pl.LightningModule):
+class LightningSpeechRecognizer(pl.LightningModule):
     """
     PyTorch Lightning ASR Pipeline. It consist of a conformer encoder and rnn decoder.
 
@@ -78,7 +78,7 @@ class LightningASR(pl.LightningModule):
             decoder_dropout_p: float = 0.1,
             conv_kernel_size: int = 31,
             half_step_residual: bool = True,
-            max_length: int = 150,
+            max_length: int = 128,
             peak_lr: float = 1e-04,
             final_lr: float = 1e-07,
             final_lr_scale: float = 0.05,
@@ -88,14 +88,16 @@ class LightningASR(pl.LightningModule):
             sos_id: int = 1,
             eos_id: int = 2,
             blank_id: int = 3,
+            teacher_forcing_ratio: float = 1.0,
     ) -> None:
-        super(LightningASR, self).__init__()
+        super(LightningSpeechRecognizer, self).__init__()
 
         self.peak_lr = peak_lr
         self.final_lr = final_lr
         self.final_lr_scale = final_lr_scale
         self.warmup_steps = warmup_steps
         self.decay_steps = decay_steps
+        self.teacher_forcing_ratio = teacher_forcing_ratio
         self.criterion = self.configure_criterion(num_classes, ignore_index=pad_id, blank_id=blank_id)
 
         self.encoder = ConformerEncoder(
@@ -148,30 +150,11 @@ class LightningASR(pl.LightningModule):
         predictions = self.decoder(encoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
         return predictions
 
-    def training_step(
-            self,
-            inputs: Tensor,
-            input_lengths: Tensor,
-            targets: Tensor,
-            target_lengths: Tensor,
-            teacher_forcing_ratio: float = 1.0,
-    ) -> Tensor:
-        """
-        Forward propagate a `inputs` and `targets` pair for training.
+    def training_step(self, train_batch: tuple, batch_idx: int) -> Tensor:
+        inputs, input_lengths, targets, target_lengths = train_batch
 
-        Args:
-            inputs (torch.FloatTensor): A input sequence passed to encoder. Typically for inputs this will be a padded
-                `FloatTensor` of size ``(batch, seq_length, dimension)``.
-            input_lengths (torch.LongTensor): The length of input tensor. ``(batch)``
-            targets (torch.LongTensr): A target sequence passed to decoder. `IntTensor` of size ``(batch, seq_length)``
-            target_lengths (torch.LongTensor): The length of target tensor. ``(batch)``
-            teacher_forcing_ratio (float): ratio of teacher forcing
-
-        Returns:
-            * predictions (torch.FloatTensor): Result of model predictions.
-        """
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
-        predictions = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=teacher_forcing_ratio)
+        predictions = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=self.teacher_forcing_ratio)
 
         loss, ctc_loss, cross_entropy_loss = self.criterion(
             encoder_log_probs=encoder_log_probs.transpose(0, 1),
@@ -186,13 +169,9 @@ class LightningASR(pl.LightningModule):
 
         return loss
 
-    def validation_step(
-            self,
-            inputs: Tensor,
-            input_lengths: Tensor,
-            targets: Tensor,
-            target_lengths: Tensor,
-    ) -> Tensor:
+    def validation_step(self, val_batch: tuple, batch_idx: int) -> Tensor:
+        inputs, input_lengths, targets, target_lengths = val_batch
+
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
         predictions = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=0.0)
 
@@ -209,13 +188,24 @@ class LightningASR(pl.LightningModule):
 
         return loss
 
-    def test_step(
-            self,
-            inputs: Tensor,
-            input_lengths: Tensor,
-            targets: Tensor,
-    ) -> Tensor:
-        return self.forward(inputs, input_lengths, targets)
+    def test_step(self, test_batch: tuple, batch_idx: int) -> Tensor:
+        inputs, input_lengths, targets, target_lengths = test_batch
+
+        encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
+        predictions = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=0.0)
+
+        loss, ctc_loss, cross_entropy_loss = self.criterion(
+            encoder_log_probs=encoder_log_probs.transpose(0, 1),
+            decoder_log_probs=predictions.contiguous().view(-1, predictions.size(-1)),
+            output_lengths=encoder_output_lengths,
+            targets=targets[:, 1:],
+            target_lengths=target_lengths,
+        )
+        self.log("test_loss", loss)
+        self.log("test_cross_entropy_loss", cross_entropy_loss)
+        self.log("test_ctc_loss", ctc_loss)
+
+        return loss
 
     def configure_optimizers(self) -> Tuple[List[torch.optim.Optimizer], List[LearningRateScheduler]]:
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)

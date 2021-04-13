@@ -40,7 +40,7 @@ class DecoderRNN(nn.Module):
     def __init__(
             self,
             num_classes: int,
-            max_length: int = 150,
+            max_length: int = 128,
             hidden_state_dim: int = 1024,
             pad_id: int = 0,
             sos_id: int = 1,
