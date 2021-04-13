@@ -1,5 +1,20 @@
-# Byte-compiled / optimized / DLL files
+experiment/
+experiment/*
+data/sample
+data/sample/*
+data/data_list/debug_list.csv
+data/data_list/sample_list.csv
+*.bin
+*.zip
+*.idea
+docs/training
+docs/training/*
 __pycache__/
+venv/*
+*.pyc
+.idea
+.ipynb_checkpoints
+
 *.py[cod]
 *$py.class
 
