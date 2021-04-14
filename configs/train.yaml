@@ -1,0 +1,4 @@
+defaults:
+  - data: default
+  - recognizer: default
+  - trainer: default
