@@ -1,5 +1,6 @@
 seed: 777
 accelerator: dp
+precision: 16
 num_gpus: 4
 accumulate_grad_batches: 1
 amp_backend: apex
