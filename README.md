@@ -1,5 +1,6 @@
 # <h1 align="center">lasr</h1>
 
+<p align="center">Lightening Automatic Speech Recognition
 <p  align="center">An MIT License ASR research library, built on PyTorch-Lightning, for developing end-to-end ASR models.
   
 ***
@@ -20,7 +21,7 @@
     
 ## Introduction
     
-[PyTorch Lightning](https://github.com/PyTorchLightning/pytorch-lightning) is the lightweight [PyTorch](https://github.com/pytorch/pytorch) wrapper for high-performance AI research. PyTorch is extremely easy to use to build complex AI models. But once the research gets complicated and things like multi-GPU training, 16-bit precision and TPU training get mixed in, users are likely to introduce bugs. PyTorch Lightning solves exactly this problem. Lightning structures your PyTorch code so it can abstract the details of training. This makes AI research scalable and fast to iterate on. This project is an example that implements the asr project with PyTorch Lightning. In this project, I trained a model consisting of a conformer encoder + LSTM decoder with Joint CTC-Attention. The **lasr** means lighthning automatic speech recognition. I hope this could be a guideline for those who research speech recognition.  
+[PyTorch Lightning](https://github.com/PyTorchLightning/pytorch-lightning) is the lightweight [PyTorch](https://github.com/pytorch/pytorch) wrapper for high-performance AI research. PyTorch is extremely easy to use to build complex AI models. But once the research gets complicated and things like multi-GPU training, 16-bit precision and TPU training get mixed in, users are likely to introduce bugs. PyTorch Lightning solves exactly this problem. Lightning structures your PyTorch code so it can abstract the details of training. This makes AI research scalable and fast to iterate on. This project is an example that implements the asr project with PyTorch Lightning. In this project, I trained a model consisting of a conformer encoder + LSTM decoder with Joint CTC-Attention. The **lasr** means **l**ighthning **a**utomatic **s**peech **r**ecognition. I hope this could be a guideline for those who research speech recognition.  
   
 ## Installation
   
