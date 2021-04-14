@@ -84,6 +84,7 @@ def main(config: DictConfig) -> None:
         joint_ctc_attention=config.recognizer.joint_ctc_attention,
     )
     trainer = pl.Trainer(
+        precision=config.trainer.precision,
         accelerator=config.trainer.accelerator,
         gpus=config.trainer.num_gpus,
         accumulate_grad_batches=config.trainer.accumulate_grad_batches,
