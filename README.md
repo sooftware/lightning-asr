@@ -14,8 +14,8 @@
      <a href="https://www.python.org/dev/peps/pep-0008/">
           <img src="http://img.shields.io/badge/codestyle-PEP--8-informational"> 
      </a>
-     <a href="https://sooftware.github.io/lasr/">
-          <img src="http://img.shields.io/badge/docs-fail-fail">
+  <a href="https://sooftware.github.io/lasr/">
+          <img src="http://img.shields.io/badge/build-not tested-red">
      </a>
     
 ## Introduction
@@ -85,10 +85,15 @@ $ ./dataset/prepare-libri.sh $DIR_TO_SAVE_DATA
   
 You can simply train with LibriSpeech dataset like below:
 ```
-$ python ./bin/main.py --data.dataset_path $DATASET_PATH --data.train_manifest_path $TRAIN_MANIFEST_PATH \
---data.valid_clean_manifest_path $VALID_CLEAN_MANIFEST_PATH --data.valid_other_manifest_path $VALID_OTHER_MANIFEST_PATH \
---data.test_clean_manifest_path $TEST_CLEAN_MANIFEST_PATH --data.test_other_manifest_path $TEST_OTHER_MANIFEST_PATH \
---data.vocab_path $VOCAB_PATH --data.vocab_model_path $VOCAB_MODEL_PATH
+$ python ./bin/main.py \
+--data.dataset_path $DATASET_PATH \
+--data.train_manifest_path $TRAIN_MANIFEST_PATH \
+--data.valid_clean_manifest_path $VALID_CLEAN_MANIFEST_PATH \
+--data.valid_other_manifest_path $VALID_OTHER_MANIFEST_PATH \
+--data.test_clean_manifest_path $TEST_CLEAN_MANIFEST_PATH \
+--data.test_other_manifest_path $TEST_OTHER_MANIFEST_PATH \
+--data.vocab_path $VOCAB_PATH \
+--data.vocab_model_path $VOCAB_MODEL_PATH
 ```
   
 ## Troubleshoots and Contributing
@@ -101,3 +106,8 @@ I follow [PEP-8](https://www.python.org/dev/peps/pep-0008/) for code style. Espe
   
 ### License
 This project is licensed under the MIT LICENSE - see the [LICENSE.md](https://github.com/sooftware/lasr/blob/master/LICENSE) file for details
+  
+## Author
+  
+* Soohwan Kim [@sooftware](https://github.com/sooftware)
+* Contacts: sh951011@gmail.com
