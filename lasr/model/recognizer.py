@@ -26,11 +26,13 @@ import pytorch_lightning as pl
 from torch import Tensor
 from typing import Tuple, List
 
+from lasr.metric import UnitErrorRate, ErrorRate
 from lasr.model.decoder import DecoderRNN
 from lasr.model.encoder import ConformerEncoder
 from lasr.optim.lr_scheduler import TransformerLRScheduler
 from lasr.criterioin.joint_ctc_cross_entropy import JointCTCCrossEntropyLoss
 from lasr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
+from lasr.vocabs import Vocabulary, LibriSpeechVocabulary
 
 
 class LightningSpeechRecognizer(pl.LightningModule):
@@ -52,14 +54,17 @@ class LightningSpeechRecognizer(pl.LightningModule):
         decoder_dropout_p (float, optional): Probability of model decoder dropout
         conv_kernel_size (int or tuple, optional): Size of the convolving kernel
         half_step_residual (bool): Flag indication whether to use half step residual or not
-
-    Inputs: inputs
-        - **inputs** (batch, time, dim): Tensor containing input vector
-        - **input_lengths** (batch): list of sequence input lengths
-
-    Returns: outputs, output_lengths
-        - **outputs** (batch, out_channels, time): Tensor produces by model.
-        - **output_lengths** (batch): list of sequence output lengths
+        max_length (int, optional): max decoding length
+        peak_lr (float): peak learning rate
+        final_lr (float): final learning rate
+        final_lr_scale (float): scaling value of final learning rate
+        warmup_steps (int): warmup steps of learning rate
+        decay_steps (int): decay steps of learning rate
+        vocab (Vocabulary): vocab of training data
+        teacher_forcing_ratio (float): ratio of teacher forcing (forward label as decoder input)
+        cross_entropy_weight (float): weight of cross entropy loss
+        ctc_weight (float): weight of ctc loss
+        joint_ctc_attention (bool): flag indication joint ctc attention or not
     """
     def __init__(
             self,
@@ -84,11 +89,12 @@ class LightningSpeechRecognizer(pl.LightningModule):
             final_lr_scale: float = 0.05,
             warmup_steps: int = 10000,
             decay_steps: int = 80000,
-            pad_id: int = 0,
-            sos_id: int = 1,
-            eos_id: int = 2,
-            blank_id: int = 3,
+            vocab: Vocabulary = LibriSpeechVocabulary,
+            metric: ErrorRate = UnitErrorRate,
             teacher_forcing_ratio: float = 1.0,
+            cross_entropy_weight: float = 0.7,
+            ctc_weight: float = 0.3,
+            joint_ctc_attention: bool = True,
     ) -> None:
         super(LightningSpeechRecognizer, self).__init__()
 
@@ -98,7 +104,15 @@ class LightningSpeechRecognizer(pl.LightningModule):
         self.warmup_steps = warmup_steps
         self.decay_steps = decay_steps
         self.teacher_forcing_ratio = teacher_forcing_ratio
-        self.criterion = self.configure_criterion(num_classes, ignore_index=pad_id, blank_id=blank_id)
+        self.vocab = vocab
+        self.metric = metric
+        self.criterion = self.configure_criterion(
+            num_classes,
+            ignore_index=self.vocab.pad_id,
+            blank_id=self.vocab.blank_id,
+            ctc_weight=ctc_weight,
+            cross_entropy_weight=cross_entropy_weight,
+        )
 
         self.encoder = ConformerEncoder(
             num_classes=num_classes,
@@ -114,26 +128,22 @@ class LightningSpeechRecognizer(pl.LightningModule):
             conv_dropout_p=conv_dropout_p,
             conv_kernel_size=conv_kernel_size,
             half_step_residual=half_step_residual,
+            joint_ctc_attention=joint_ctc_attention,
         )
         self.decoder = DecoderRNN(
             num_classes=num_classes,
             max_length=max_length,
             hidden_state_dim=encoder_dim,
-            pad_id=pad_id,
-            sos_id=sos_id,
-            eos_id=eos_id,
+            pad_id=self.vocab.pad_id,
+            sos_id=self.vocab.sos_id,
+            eos_id=self.vocab.eos_id,
             num_heads=num_attention_heads,
             dropout_p=decoder_dropout_p,
             num_layers=num_decoder_layers,
             rnn_type="lstm",
         )
 
-    def forward(
-            self,
-            inputs: Tensor,
-            input_lengths: Tensor,
-            targets: Tensor,
-    ) -> Tensor:
+    def forward(self, inputs: Tensor, input_lengths: Tensor) -> Tensor:
         """
         Forward propagate a `inputs` and `targets` pair for inference.
 
@@ -141,7 +151,6 @@ class LightningSpeechRecognizer(pl.LightningModule):
             inputs (torch.FloatTensor): A input sequence passed to encoder. Typically for inputs this will be a padded
                 `FloatTensor` of size ``(batch, seq_length, dimension)``.
             input_lengths (torch.LongTensor): The length of input tensor. ``(batch)``
-            targets (torch.LongTensr): A target sequence passed to decoder. `IntTensor` of size ``(batch, seq_length)``
 
         Returns:
             * predictions (torch.FloatTensor): Result of model predictions.
@@ -151,6 +160,16 @@ class LightningSpeechRecognizer(pl.LightningModule):
         return predictions
 
     def training_step(self, train_batch: tuple, batch_idx: int) -> Tensor:
+        """
+        Forward propagate a `inputs` and `targets` pair for training.
+
+        Inputs:
+            train_batch (tuple): A train batch contains `inputs`, `input_lengths`, `targets`, `target_lengths`
+            batch_idx (int): The index of batch
+
+        Returns:
+            loss (torch.FloatTensor): Loss for training.
+        """
         inputs, input_lengths, targets, target_lengths = train_batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
@@ -163,6 +182,9 @@ class LightningSpeechRecognizer(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
+        uer = self.metric(targets, predictions)
+
+        self.log("train_uer", uer)
         self.log("train_loss", loss)
         self.log("train_cross_entropy_loss", cross_entropy_loss)
         self.log("train_ctc_loss", ctc_loss)
@@ -170,6 +192,16 @@ class LightningSpeechRecognizer(pl.LightningModule):
         return loss
 
     def validation_step(self, val_batch: tuple, batch_idx: int) -> Tensor:
+        """
+        Forward propagate a `inputs` and `targets` pair for validation.
+
+        Inputs:
+            train_batch (tuple): A train batch contains `inputs`, `input_lengths`, `targets`, `target_lengths`
+            batch_idx (int): The index of batch
+
+        Returns:
+            loss (torch.FloatTensor): Loss for training.
+        """
         inputs, input_lengths, targets, target_lengths = val_batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
@@ -182,6 +214,9 @@ class LightningSpeechRecognizer(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
+        uer = self.metric(targets, predictions)
+
+        self.log("val_uer", uer)
         self.log("val_loss", loss)
         self.log("val_cross_entropy_loss", cross_entropy_loss)
         self.log("val_ctc_loss", ctc_loss)
@@ -189,6 +224,16 @@ class LightningSpeechRecognizer(pl.LightningModule):
         return loss
 
     def test_step(self, test_batch: tuple, batch_idx: int) -> Tensor:
+        """
+        Forward propagate a `inputs` and `targets` pair for test.
+
+        Inputs:
+            train_batch (tuple): A train batch contains `inputs`, `input_lengths`, `targets`, `target_lengths`
+            batch_idx (int): The index of batch
+
+        Returns:
+            loss (torch.FloatTensor): Loss for training.
+        """
         inputs, input_lengths, targets, target_lengths = test_batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
@@ -201,6 +246,9 @@ class LightningSpeechRecognizer(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
+        uer = self.metric(targets, predictions)
+
+        self.log("test_uer", uer)
         self.log("test_loss", loss)
         self.log("test_cross_entropy_loss", cross_entropy_loss)
         self.log("test_ctc_loss", ctc_loss)
@@ -219,14 +267,21 @@ class LightningSpeechRecognizer(pl.LightningModule):
         )
         return [optimizer], [scheduler]
 
-    def configure_criterion(self, num_classes: int, ignore_index: int, blank_id: int) -> nn.Module:
+    def configure_criterion(
+            self,
+            num_classes: int,
+            ignore_index: int,
+            blank_id: int,
+            cross_entropy_weight: float,
+            ctc_weight: float,
+    ) -> nn.Module:
         criterion = JointCTCCrossEntropyLoss(
             num_classes=num_classes,
             ignore_index=ignore_index,
             reduction="mean",
             blank_id=blank_id,
             dim=-1,
-            ctc_weight=0.3,
-            cross_entropy_weight=0.7,
+            cross_entropy_weight=cross_entropy_weight,
+            ctc_weight=ctc_weight,
         )
         return criterion

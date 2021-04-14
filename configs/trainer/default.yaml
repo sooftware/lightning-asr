@@ -1,0 +1,8 @@
+seed: 777
+accelerator: dp
+num_gpus: 4
+accumulate_grad_batches: 1
+amp_backend: apex
+auto_select_gpus: True
+check_val_every_n_epoch: 1
+gradient_clip_val: 400

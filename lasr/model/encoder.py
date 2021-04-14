@@ -34,7 +34,7 @@ from lasr.model.convolution import (
 from lasr.model.modules import (
     ResidualConnectionModule,
     LayerNorm,
-    Linear,
+    Linear, Transpose,
 )
 
 
@@ -160,8 +160,10 @@ class ConformerEncoder(nn.Module):
             conv_dropout_p: float = 0.1,
             conv_kernel_size: int = 31,
             half_step_residual: bool = True,
+            joint_ctc_attention: bool = True,
     ):
         super(ConformerEncoder, self).__init__()
+        self.joint_ctc_attention = joint_ctc_attention
         self.conv_subsample = Conv2dSubampling(in_channels=1, out_channels=encoder_dim)
         self.input_projection = nn.Sequential(
             Linear(encoder_dim * (((input_dim - 1) // 2 - 1) // 2), encoder_dim),
@@ -178,17 +180,14 @@ class ConformerEncoder(nn.Module):
             conv_kernel_size=conv_kernel_size,
             half_step_residual=half_step_residual,
         ) for _ in range(num_layers)])
-        self.fc = Linear(encoder_dim, num_classes, bias=False)
 
-    def count_parameters(self) -> int:
-        """ Count parameters of encoder """
-        return sum([p.numel for p in self.parameters()])
-
-    def update_dropout(self, dropout_p: float) -> None:
-        """ Update dropout probability of encoder """
-        for name, child in self.named_children():
-            if isinstance(child, nn.Dropout):
-                child.p = dropout_p
+        if self.joint_ctc_attention:
+            self.fc = nn.Sequential(
+                nn.BatchNorm1d(encoder_dim),
+                Transpose(shape=(1, 2)),
+                nn.Dropout(feed_forward_dropout_p),
+                Linear(encoder_dim, num_classes, bias=False),
+            )
 
     def forward(self, inputs: Tensor, input_lengths: Tensor) -> Tuple[Tensor, Tensor, Tensor]:
         """
@@ -214,7 +213,7 @@ class ConformerEncoder(nn.Module):
         for layer in self.layers:
             outputs = layer(outputs)
 
-        if self.training:
-            encoder_log_probs = self.fc(outputs)
+        if self.joint_ctc_attention and self.training:
+            encoder_log_probs = self.fc(outputs.transpose(1, 2)).log_softmax(dim=2)
 
         return encoder_log_probs, outputs, output_lengths

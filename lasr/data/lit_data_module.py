@@ -20,11 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
 import pytorch_lightning as pl
 from typing import Any, Union, List, Tuple
 from torch.utils.data import DataLoader
 
 from lasr.data.data_loader import SpectrogramDataset, BucketingSampler, AudioDataLoader
+from lasr.vocabs import Vocabulary
 
 
 def _parse_manifest_file(manifest_file_path: str) -> Tuple[list, list]:
@@ -51,7 +53,7 @@ class LightningLibriDataModule(pl.LightningDataModule):
             valid_other_manifest_path: str,
             test_clean_manifest_path: str,
             test_other_manifest_path: str,
-            vocab,
+            vocab: Vocabulary,
             apply_spec_augment: bool,
             num_epochs: int,
             batch_size: int,
@@ -66,23 +68,23 @@ class LightningLibriDataModule(pl.LightningDataModule):
             test_clean_manifest_path,
             test_other_manifest_path,
         ]
+        self.dataset = dict()
         self.vocab = vocab
         self.apply_spec_augment = apply_spec_augment
         self.num_epochs = num_epochs
         self.batch_size = batch_size
         self.num_workers = num_workers
 
-    def setup(self, stage):
-        if stage == 'fit':
-            # Get dataloader by calling it - train_dataloader() is called after setup() by default
-            train_loader = self.train_dataloader()
+    def prepare_data(self):
+        for path in self.manifest_paths:
+            if not os.path.isfile(path):
+                raise FileExistsError("Manifest file is not exist.")
 
-    def prepare_data(self, *args, **kwargs):
-        self.dataset = dict()
+    def setup(self):
         splits = ['train', 'val-clean', 'val-other', 'test-clean', 'test-other']
 
-        for idx, (manifest_path, split) in enumerate(zip(self.manifest_paths, splits)):
-            audio_paths, transcripts = _parse_manifest_file(manifest_path)
+        for idx, (path, split) in enumerate(zip(self.manifest_paths, splits)):
+            audio_paths, transcripts = _parse_manifest_file(path)
             self.dataset[split] = SpectrogramDataset(
                 dataset_path=self.dataset_path,
                 audio_paths=audio_paths,
