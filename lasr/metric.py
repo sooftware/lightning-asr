@@ -1,4 +1,3 @@
-import Levenshtein as Lev
 # MIT License
 #
 # Copyright (c) 2021 Soohwan Kim
