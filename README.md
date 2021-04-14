@@ -46,7 +46,10 @@ following commands:
 pip install -e .
 ```
   
-### Install Apex (for 16-bit training)
+### Install Apex (for 16-bit training) 
+  
+For faster training install NVIDIA's apex library:
+  
 ```
 $ git clone https://github.com/NVIDIA/apex
 $ cd apex
