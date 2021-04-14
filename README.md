@@ -45,6 +45,27 @@ following commands:
 pip install -e .
 ```
   
+### Install Apex (for 16-bit training)
+```
+$ git clone https://github.com/NVIDIA/apex
+$ cd apex
+
+# ------------------------
+# OPTIONAL: on your cluster you might need to load CUDA 10 or 9
+# depending on how you installed PyTorch
+
+# see available modules
+module avail
+
+# load correct CUDA before install
+module load cuda-10.0
+# ------------------------
+
+# make sure you've loaded a cuda version > 4.0 and < 7.0
+module load gcc-6.1.0
+
+$ pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
+```
   
 ## Get Started
   
@@ -52,12 +73,22 @@ I use [Hydra](https://github.com/facebookresearch/hydra) to control all the trai
   
 ### Preparing LibriSpeech Dataset  
   
-This procedure can take hours or more. It includes downloading and preprocessing LibriSpeech data.
+This procedure can take hours or more. Download the required data in the next step and create the manifest files and vocab files.  
   
 - Command
   
 ```
 $ ./dataset/prepare-libri.sh $DIR_TO_SAVE_DATA
+```
+  
+### Training Speech Recognizer
+  
+You can simply train with LibriSpeech dataset like below:
+```
+$ python ./bin/main.py --data.dataset_path $DATASET_PATH --data.train_manifest_path $TRAIN_MANIFEST_PATH \
+--data.valid_clean_manifest_path $VALID_CLEAN_MANIFEST_PATH --data.valid_other_manifest_path $VALID_OTHER_MANIFEST_PATH \
+--data.test_clean_manifest_path $TEST_CLEAN_MANIFEST_PATH --data.test_other_manifest_path $TEST_OTHER_MANIFEST_PATH \
+--data.vocab_path $VOCAB_PATH --data.vocab_model_path $VOCAB_MODEL_PATH
 ```
   
 ## Troubleshoots and Contributing
