@@ -66,7 +66,7 @@ def prepare_tokenizer(train_transcripts, vocab_size):
         for transcript in train_transcripts:
             f.write('{}\n'.format(transcript.split('|')[-1]))
 
-    input_args = '--input=%s --model_prefix=%s --vocab_size=%s --model_type=%s --pad_id=0 --bos_id=1 --eos_id=2'
+    input_args = '--input=%s --model_prefix=%s --vocab_size=%s --model_type=%s'
     cmd = input_args % (input_file, model_name, vocab_size, model_type)
     spm.SentencePieceTrainer.Train(cmd)
 
