@@ -37,14 +37,17 @@ class ScaledDotProductAttention(nn.Module):
     Scaled Dot-Product Attention proposed in "Attention Is All You Need"
     Compute the dot products of the query with all keys, divide each by sqrt(dim),
     and apply a softmax function to obtain the weights on the values
+
     Args: dim, mask
         dim (int): dimension of attention
         mask (torch.Tensor): tensor containing indices to be masked
+
     Inputs: query, key, value, mask
         - **query** (batch, q_len, d_model): tensor containing projection vector for decoder.
         - **key** (batch, k_len, d_model): tensor containing projection vector for encoder.
         - **value** (batch, v_len, d_model): tensor containing features of the encoded input sequence.
         - **mask** (-): tensor containing indices to be masked
+
     Returns: context, attn
         - **context**: tensor containing the context vector from attention mechanism.
         - **attn**: tensor containing the attention (alignment) from the encoder outputs.
@@ -81,16 +84,20 @@ class MultiHeadAttention(nn.Module):
     These are concatenated and once again projected, resulting in the final values.
     Multi-head attention allows the model to jointly attend to information from different representation
     subspaces at different positions.
+
     MultiHead(Q, K, V) = Concat(head_1, ..., head_h) · W_o
         where head_i = Attention(Q · W_q, K · W_k, V · W_v)
+
     Args:
         dim (int): The dimension of model (default: 512)
         num_heads (int): The number of attention heads. (default: 8)
+
     Inputs: query, key, value, mask
         - **query** (batch, q_len, d_model): tensor containing projection vector for decoder.
         - **key** (batch, k_len, d_model): tensor containing projection vector for encoder.
         - **value** (batch, v_len, d_model): tensor containing features of the encoded input sequence.
         - **mask** (-): tensor containing indices to be masked
+
     Returns: output, attn
         - **output** (batch, output_len, dimensions): tensor containing the attended output features.
         - **attn** (batch * num_heads, v_len): tensor containing the attention (alignment) from the encoder outputs.

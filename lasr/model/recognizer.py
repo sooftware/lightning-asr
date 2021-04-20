@@ -31,7 +31,7 @@ from lasr.model.decoder import DecoderRNN
 from lasr.model.encoder import ConformerEncoder
 from lasr.optim import AdamP, RAdam
 from lasr.optim.lr_scheduler import TransformerLRScheduler, TriStageLRScheduler
-from lasr.criterioin.joint_ctc_cross_entropy import JointCTCCrossEntropyLoss
+from lasr.criterion.joint_ctc_cross_entropy import JointCTCCrossEntropyLoss
 from lasr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
 from lasr.vocabs import Vocabulary, LibriSpeechVocabulary
 
@@ -266,6 +266,7 @@ class LightningSpeechRecognizer(pl.LightningModule):
         return loss
 
     def configure_optimizers(self) -> Tuple[List[torch.optim.Optimizer], List[LearningRateScheduler]]:
+        """ Configure optimizer """
         if self.optimizer == 'adam':
             optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
         elif self.optimizer == 'adamp':
@@ -308,6 +309,7 @@ class LightningSpeechRecognizer(pl.LightningModule):
             cross_entropy_weight: float,
             ctc_weight: float,
     ) -> nn.Module:
+        """ Configure criterion """
         criterion = JointCTCCrossEntropyLoss(
             num_classes=num_classes,
             ignore_index=ignore_index,

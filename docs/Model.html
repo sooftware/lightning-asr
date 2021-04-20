@@ -1,0 +1,1071 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Model &mdash; lasr latest documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Optim" href="Optim.html" />
+    <link rel="prev" title="Metric" href="Metric.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> lasr
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">GETTING STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html#get-started">Get Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html#troubleshoots-and-contributing">Troubleshoots and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html#author">Author</a></li>
+</ul>
+<p class="caption"><span class="caption-text">LIBRI REFERENCE</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Criterion.html">Criterion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Lr_scheduler.html">LR Scheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Metric.html">Metric</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-lasr.model.activation">Activation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lasr.model.attention">Attention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lasr.model.convolution">Convolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#decoder">Decoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lasr.model.embedding">Embedding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lasr.model.encoder">Encoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lasr.model.feed_forward">Feed Forward</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lasr.model.modules">Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lasr.model.recognizer">Recognizer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Optim.html">Optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Vocab.html">Vocabs</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">lasr</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/Model.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="model">
+<h1>Model<a class="headerlink" href="#model" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-lasr.model.activation">
+<span id="activation"></span><h2>Activation<a class="headerlink" href="#module-lasr.model.activation" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lasr.model.activation.GLU">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.activation.</code><code class="sig-name descname">GLU</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dim</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/activation.html#GLU"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.activation.GLU" title="Permalink to this definition">¶</a></dt>
+<dd><p>The gating mechanism is called Gated Linear Units (GLU), which was first introduced for natural language processing
+in the paper “Language Modeling with Gated Convolutional Networks”</p>
+<dl class="py method">
+<dt id="lasr.model.activation.GLU.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/activation.html#GLU.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.activation.GLU.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="lasr.model.activation.Swish">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.activation.</code><code class="sig-name descname">Swish</code><a class="reference internal" href="_modules/lasr/model/activation.html#Swish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.activation.Swish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Swish is a smooth, non-monotonic function that consistently matches or outperforms ReLU on deep networks applied
+to a variety of challenging domains such as Image classification and Machine translation.</p>
+<dl class="py method">
+<dt id="lasr.model.activation.Swish.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/activation.html#Swish.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.activation.Swish.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lasr.model.attention">
+<span id="attention"></span><h2>Attention<a class="headerlink" href="#module-lasr.model.attention" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lasr.model.attention.MultiHeadAttention">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.attention.</code><code class="sig-name descname">MultiHeadAttention</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dim</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">512</span></em>, <em class="sig-param"><span class="n">num_heads</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">8</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/attention.html#MultiHeadAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.attention.MultiHeadAttention" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multi-Head Attention proposed in “Attention Is All You Need”
+Instead of performing a single attention function with d_model-dimensional keys, values, and queries,
+project the queries, keys and values h times with different, learned linear projections to d_head dimensions.
+These are concatenated and once again projected, resulting in the final values.
+Multi-head attention allows the model to jointly attend to information from different representation
+subspaces at different positions.</p>
+<dl class="simple">
+<dt>MultiHead(Q, K, V) = Concat(head_1, …, head_h) · W_o</dt><dd><p>where head_i = Attention(Q · W_q, K · W_k, V · W_v)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The dimension of model (default: 512)</p></li>
+<li><p><strong>num_heads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of attention heads. (default: 8)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Inputs: query, key, value, mask</dt><dd><ul class="simple">
+<li><p><strong>query</strong> (batch, q_len, d_model): tensor containing projection vector for decoder.</p></li>
+<li><p><strong>key</strong> (batch, k_len, d_model): tensor containing projection vector for encoder.</p></li>
+<li><p><strong>value</strong> (batch, v_len, d_model): tensor containing features of the encoded input sequence.</p></li>
+<li><p><strong>mask</strong> (-): tensor containing indices to be masked</p></li>
+</ul>
+</dd>
+<dt>Returns: output, attn</dt><dd><ul class="simple">
+<li><p><strong>output</strong> (batch, output_len, dimensions): tensor containing the attended output features.</p></li>
+<li><p><strong>attn</strong> (batch * num_heads, v_len): tensor containing the attention (alignment) from the encoder outputs.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lasr.model.attention.MultiHeadAttention.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">mask</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>torch.Tensor<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="reference internal" href="_modules/lasr/model/attention.html#MultiHeadAttention.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.attention.MultiHeadAttention.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="lasr.model.attention.MultiHeadedSelfAttentionModule">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.attention.</code><code class="sig-name descname">MultiHeadedSelfAttentionModule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d_model</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">num_heads</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">dropout_p</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/attention.html#MultiHeadedSelfAttentionModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.attention.MultiHeadedSelfAttentionModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conformer employ multi-headed self-attention (MHSA) while integrating an important technique from Transformer-XL,
+the relative sinusoidal positional encoding scheme. The relative positional encoding allows the self-attention
+module to generalize better on different input length and the resulting encoder is more robust to the variance of
+the utterance length. Conformer use prenorm residual units with dropout which helps training
+and regularizing deeper models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d_model</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The dimension of model</p></li>
+<li><p><strong>num_heads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of attention heads.</p></li>
+<li><p><strong>dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – probability of dropout</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Inputs: inputs, mask</dt><dd><ul class="simple">
+<li><p><strong>inputs</strong> (batch, time, dim): Tensor containing input vector</p></li>
+<li><p><strong>mask</strong> (batch, 1, time2) or (batch, time1, time2): Tensor containing indices to be masked</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tensor produces by relative multi headed self attention module.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>outputs</strong> (batch, time, dim)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lasr.model.attention.MultiHeadedSelfAttentionModule.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">mask</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>torch.Tensor<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/attention.html#MultiHeadedSelfAttentionModule.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.attention.MultiHeadedSelfAttentionModule.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="lasr.model.attention.RelativeMultiHeadAttention">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.attention.</code><code class="sig-name descname">RelativeMultiHeadAttention</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d_model</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">512</span></em>, <em class="sig-param"><span class="n">num_heads</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">16</span></em>, <em class="sig-param"><span class="n">dropout_p</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/attention.html#RelativeMultiHeadAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.attention.RelativeMultiHeadAttention" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multi-head attention with relative positional encoding.
+This concept was proposed in the “Transformer-XL: Attentive Language Models Beyond a Fixed-Length Context”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d_model</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The dimension of model</p></li>
+<li><p><strong>num_heads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – The number of attention heads.</p></li>
+<li><p><strong>dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – probability of dropout</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Inputs: query, key, value, pos_embedding, mask</dt><dd><ul class="simple">
+<li><p><strong>query</strong> (batch, time, dim): Tensor containing query vector</p></li>
+<li><p><strong>key</strong> (batch, time, dim): Tensor containing key vector</p></li>
+<li><p><strong>value</strong> (batch, time, dim): Tensor containing value vector</p></li>
+<li><p><strong>pos_embedding</strong> (batch, time, dim): Positional embedding tensor</p></li>
+<li><p><strong>mask</strong> (batch, 1, time2) or (batch, time1, time2): Tensor containing indices to be masked</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tensor produces by relative multi head attention module.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>outputs</strong></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lasr.model.attention.RelativeMultiHeadAttention.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">pos_embedding</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">mask</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>torch.Tensor<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/attention.html#RelativeMultiHeadAttention.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.attention.RelativeMultiHeadAttention.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="lasr.model.attention.ScaledDotProductAttention">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.attention.</code><code class="sig-name descname">ScaledDotProductAttention</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dim</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">scale</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/attention.html#ScaledDotProductAttention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.attention.ScaledDotProductAttention" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scaled Dot-Product Attention proposed in “Attention Is All You Need”
+Compute the dot products of the query with all keys, divide each by sqrt(dim),
+and apply a softmax function to obtain the weights on the values</p>
+<dl class="simple">
+<dt>Args: dim, mask</dt><dd><p>dim (int): dimension of attention
+mask (torch.Tensor): tensor containing indices to be masked</p>
+</dd>
+<dt>Inputs: query, key, value, mask</dt><dd><ul class="simple">
+<li><p><strong>query</strong> (batch, q_len, d_model): tensor containing projection vector for decoder.</p></li>
+<li><p><strong>key</strong> (batch, k_len, d_model): tensor containing projection vector for encoder.</p></li>
+<li><p><strong>value</strong> (batch, v_len, d_model): tensor containing features of the encoded input sequence.</p></li>
+<li><p><strong>mask</strong> (-): tensor containing indices to be masked</p></li>
+</ul>
+</dd>
+<dt>Returns: context, attn</dt><dd><ul class="simple">
+<li><p><strong>context</strong>: tensor containing the context vector from attention mechanism.</p></li>
+<li><p><strong>attn</strong>: tensor containing the attention (alignment) from the encoder outputs.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lasr.model.attention.ScaledDotProductAttention.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">value</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">mask</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>torch.Tensor<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="reference internal" href="_modules/lasr/model/attention.html#ScaledDotProductAttention.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.attention.ScaledDotProductAttention.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lasr.model.convolution">
+<span id="convolution"></span><h2>Convolution<a class="headerlink" href="#module-lasr.model.convolution" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lasr.model.convolution.ConformerConvModule">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.convolution.</code><code class="sig-name descname">ConformerConvModule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">kernel_size</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">31</span></em>, <em class="sig-param"><span class="n">expansion_factor</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">2</span></em>, <em class="sig-param"><span class="n">dropout_p</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/convolution.html#ConformerConvModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.convolution.ConformerConvModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conformer convolution module starts with a pointwise convolution and a gated linear unit (GLU).
+This is followed by a single 1-D depthwise convolution layer. Batchnorm is  deployed just after the convolution
+to aid training deep models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of channels in the input</p></li>
+<li><p><strong>kernel_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>, </em><em>optional</em>) – Size of the convolving kernel Default: 31</p></li>
+<li><p><strong>dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – probability of dropout</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Inputs: inputs</dt><dd><p>inputs (batch, time, dim): Tensor contains input sequences</p>
+</dd>
+<dt>Outputs: outputs</dt><dd><p>outputs (batch, time, dim): Tensor produces by model convolution module.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lasr.model.convolution.ConformerConvModule.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/convolution.html#ConformerConvModule.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.convolution.ConformerConvModule.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="lasr.model.convolution.Conv2dSubampling">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.convolution.</code><code class="sig-name descname">Conv2dSubampling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">out_channels</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/convolution.html#Conv2dSubampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.convolution.Conv2dSubampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convolutional 2D subsampling (to 1/4 length)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of channels in the input image</p></li>
+<li><p><strong>out_channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of channels produced by the convolution</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Inputs: inputs</dt><dd><ul class="simple">
+<li><p><strong>inputs</strong> (batch, time, dim): Tensor containing sequence of inputs</p></li>
+</ul>
+</dd>
+<dt>Returns: outputs, output_lengths</dt><dd><ul class="simple">
+<li><p><strong>outputs</strong> (batch, time, dim): Tensor produced by the convolution</p></li>
+<li><p><strong>output_lengths</strong> (batch): list of sequence output lengths</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lasr.model.convolution.Conv2dSubampling.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">input_lengths</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="reference internal" href="_modules/lasr/model/convolution.html#Conv2dSubampling.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.convolution.Conv2dSubampling.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="lasr.model.convolution.DepthwiseConv1d">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.convolution.</code><code class="sig-name descname">DepthwiseConv1d</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">out_channels</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">kernel_size</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">stride</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">padding</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/convolution.html#DepthwiseConv1d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.convolution.DepthwiseConv1d" title="Permalink to this definition">¶</a></dt>
+<dd><p>When groups == in_channels and out_channels == K * in_channels, where K is a positive integer,
+this operation is termed in literature as depthwise convolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of channels in the input</p></li>
+<li><p><strong>out_channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of channels produced by the convolution</p></li>
+<li><p><strong>kernel_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a>) – Size of the convolving kernel</p></li>
+<li><p><strong>stride</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Stride of the convolution. Default: 1</p></li>
+<li><p><strong>padding</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>, </em><em>optional</em>) – Zero-padding added to both sides of the input. Default: 0</p></li>
+<li><p><strong>bias</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, adds a learnable bias to the output. Default: True</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Inputs: inputs</dt><dd><ul class="simple">
+<li><p><strong>inputs</strong> (batch, in_channels, time): Tensor containing input vector</p></li>
+</ul>
+</dd>
+<dt>Returns: outputs</dt><dd><ul class="simple">
+<li><p><strong>outputs</strong> (batch, out_channels, time): Tensor produces by depthwise 1-D convolution.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lasr.model.convolution.DepthwiseConv1d.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/convolution.html#DepthwiseConv1d.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.convolution.DepthwiseConv1d.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="lasr.model.convolution.PointwiseConv1d">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.convolution.</code><code class="sig-name descname">PointwiseConv1d</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_channels</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">out_channels</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">stride</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">1</span></em>, <em class="sig-param"><span class="n">padding</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/convolution.html#PointwiseConv1d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.convolution.PointwiseConv1d" title="Permalink to this definition">¶</a></dt>
+<dd><p>When kernel size == 1 conv1d, this operation is termed in literature as pointwise convolution.
+This operation often used to match dimensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of channels in the input</p></li>
+<li><p><strong>out_channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of channels produced by the convolution</p></li>
+<li><p><strong>stride</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Stride of the convolution. Default: 1</p></li>
+<li><p><strong>padding</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>, </em><em>optional</em>) – Zero-padding added to both sides of the input. Default: 0</p></li>
+<li><p><strong>bias</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, adds a learnable bias to the output. Default: True</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Inputs: inputs</dt><dd><ul class="simple">
+<li><p><strong>inputs</strong> (batch, in_channels, time): Tensor containing input vector</p></li>
+</ul>
+</dd>
+<dt>Returns: outputs</dt><dd><ul class="simple">
+<li><p><strong>outputs</strong> (batch, out_channels, time): Tensor produces by pointwise 1-D convolution.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lasr.model.convolution.PointwiseConv1d.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/convolution.html#PointwiseConv1d.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.convolution.PointwiseConv1d.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="decoder">
+<h2>Decoder<a class="headerlink" href="#decoder" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-lasr.model.embedding">
+<span id="embedding"></span><h2>Embedding<a class="headerlink" href="#module-lasr.model.embedding" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lasr.model.embedding.PositionalEncoding">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.embedding.</code><code class="sig-name descname">PositionalEncoding</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d_model</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">512</span></em>, <em class="sig-param"><span class="n">max_len</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">10000</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/embedding.html#PositionalEncoding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.embedding.PositionalEncoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Positional Encoding proposed in “Attention Is All You Need”.
+Since transformer contains no recurrence and no convolution, in order for the model to make
+use of the order of the sequence, we must add some positional information.</p>
+<dl class="simple">
+<dt>“Attention Is All You Need” use sine and cosine functions of different frequencies:</dt><dd><p>PE_(pos, 2i)    =  sin(pos / power(10000, 2i / d_model))
+PE_(pos, 2i+1)  =  cos(pos / power(10000, 2i / d_model))</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lasr.model.embedding.PositionalEncoding.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">length</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/embedding.html#PositionalEncoding.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.embedding.PositionalEncoding.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lasr.model.encoder">
+<span id="encoder"></span><h2>Encoder<a class="headerlink" href="#module-lasr.model.encoder" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lasr.model.encoder.ConformerBlock">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.encoder.</code><code class="sig-name descname">ConformerBlock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">encoder_dim</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">512</span></em>, <em class="sig-param"><span class="n">num_attention_heads</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">8</span></em>, <em class="sig-param"><span class="n">feed_forward_expansion_factor</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">4</span></em>, <em class="sig-param"><span class="n">conv_expansion_factor</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">2</span></em>, <em class="sig-param"><span class="n">feed_forward_dropout_p</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">attention_dropout_p</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">conv_dropout_p</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">conv_kernel_size</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">31</span></em>, <em class="sig-param"><span class="n">half_step_residual</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/encoder.html#ConformerBlock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.encoder.ConformerBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conformer block contains two Feed Forward modules sandwiching the Multi-Headed Self-Attention module
+and the Convolution module. This sandwich structure is inspired by Macaron-Net, which proposes replacing
+the original feed-forward layer in the Transformer block into two half-step feed-forward layers,
+one before the attention layer and one after.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>encoder_dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Dimension of model encoder</p></li>
+<li><p><strong>num_attention_heads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Number of attention heads</p></li>
+<li><p><strong>feed_forward_expansion_factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Expansion factor of feed forward module</p></li>
+<li><p><strong>conv_expansion_factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Expansion factor of model convolution module</p></li>
+<li><p><strong>feed_forward_dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – Probability of feed forward module dropout</p></li>
+<li><p><strong>attention_dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – Probability of attention module dropout</p></li>
+<li><p><strong>conv_dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – Probability of model convolution module dropout</p></li>
+<li><p><strong>conv_kernel_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>, </em><em>optional</em>) – Size of the convolving kernel</p></li>
+<li><p><strong>half_step_residual</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Flag indication whether to use half step residual or not</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Inputs: inputs</dt><dd><ul class="simple">
+<li><p><strong>inputs</strong> (batch, time, dim): Tensor containing input vector</p></li>
+</ul>
+</dd>
+<dt>Returns: outputs</dt><dd><ul class="simple">
+<li><p><strong>outputs</strong> (batch, time, dim): Tensor produces by model block.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lasr.model.encoder.ConformerBlock.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/encoder.html#ConformerBlock.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.encoder.ConformerBlock.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="lasr.model.encoder.ConformerEncoder">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.encoder.</code><code class="sig-name descname">ConformerEncoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_classes</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">input_dim</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">80</span></em>, <em class="sig-param"><span class="n">encoder_dim</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">512</span></em>, <em class="sig-param"><span class="n">num_layers</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">17</span></em>, <em class="sig-param"><span class="n">num_attention_heads</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">8</span></em>, <em class="sig-param"><span class="n">feed_forward_expansion_factor</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">4</span></em>, <em class="sig-param"><span class="n">conv_expansion_factor</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">2</span></em>, <em class="sig-param"><span class="n">input_dropout_p</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">feed_forward_dropout_p</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">attention_dropout_p</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">conv_dropout_p</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">conv_kernel_size</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">31</span></em>, <em class="sig-param"><span class="n">half_step_residual</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">joint_ctc_attention</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/encoder.html#ConformerEncoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.encoder.ConformerEncoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conformer encoder first processes the input with a convolution subsampling layer and then
+with a number of model blocks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Dimension of input vector</p></li>
+<li><p><strong>encoder_dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Dimension of model encoder</p></li>
+<li><p><strong>num_layers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Number of model blocks</p></li>
+<li><p><strong>num_attention_heads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Number of attention heads</p></li>
+<li><p><strong>feed_forward_expansion_factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Expansion factor of feed forward module</p></li>
+<li><p><strong>conv_expansion_factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Expansion factor of model convolution module</p></li>
+<li><p><strong>feed_forward_dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – Probability of feed forward module dropout</p></li>
+<li><p><strong>attention_dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – Probability of attention module dropout</p></li>
+<li><p><strong>conv_dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – Probability of model convolution module dropout</p></li>
+<li><p><strong>conv_kernel_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>, </em><em>optional</em>) – Size of the convolving kernel</p></li>
+<li><p><strong>half_step_residual</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Flag indication whether to use half step residual or not</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Inputs: inputs, input_lengths</dt><dd><ul class="simple">
+<li><p><strong>inputs</strong> (batch, time, dim): Tensor containing input vector</p></li>
+<li><p><strong>input_lengths</strong> (batch): list of sequence input lengths</p></li>
+</ul>
+</dd>
+<dt>Returns: outputs, output_lengths</dt><dd><ul class="simple">
+<li><p><strong>outputs</strong> (batch, out_channels, time): Tensor produces by model encoder.</p></li>
+<li><p><strong>output_lengths</strong> (batch): list of sequence output lengths</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lasr.model.encoder.ConformerEncoder.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">input_lengths</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">, </span>torch.Tensor<span class="p">]</span><a class="reference internal" href="_modules/lasr/model/encoder.html#ConformerEncoder.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.encoder.ConformerEncoder.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forward propagate a <cite>inputs</cite> for  encoder training.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputs</strong> (<em>torch.FloatTensor</em>) – A input sequence passed to encoder. Typically for inputs this will be a padded
+<cite>FloatTensor</cite> of size <code class="docutils literal notranslate"><span class="pre">(batch,</span> <span class="pre">seq_length,</span> <span class="pre">dimension)</span></code>.</p></li>
+<li><p><strong>input_lengths</strong> (<em>torch.LongTensor</em>) – The length of input tensor. <code class="docutils literal notranslate"><span class="pre">(batch)</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>(Tensor, Tensor)</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>outputs (torch.FloatTensor): A output sequence of encoder. <cite>FloatTensor</cite> of size</dt><dd><p><code class="docutils literal notranslate"><span class="pre">(batch,</span> <span class="pre">seq_length,</span> <span class="pre">dimension)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><p>output_lengths (torch.LongTensor): The length of output tensor. <code class="docutils literal notranslate"><span class="pre">(batch)</span></code></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lasr.model.feed_forward">
+<span id="feed-forward"></span><h2>Feed Forward<a class="headerlink" href="#module-lasr.model.feed_forward" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lasr.model.feed_forward.FeedForwardModule">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.feed_forward.</code><code class="sig-name descname">FeedForwardModule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">encoder_dim</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">512</span></em>, <em class="sig-param"><span class="n">expansion_factor</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">4</span></em>, <em class="sig-param"><span class="n">dropout_p</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/feed_forward.html#FeedForwardModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.feed_forward.FeedForwardModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Conformer Feed Forward Module follow pre-norm residual units and apply layer normalization within the residual unit
+and on the input before the first linear layer. This module also apply Swish activation and dropout, which helps
+regularizing the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>encoder_dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Dimension of model encoder</p></li>
+<li><p><strong>expansion_factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Expansion factor of feed forward module.</p></li>
+<li><p><strong>dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – Ratio of dropout</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Inputs: inputs</dt><dd><ul class="simple">
+<li><p><strong>inputs</strong> (batch, time, dim): Tensor contains input sequences</p></li>
+</ul>
+</dd>
+<dt>Outputs: outputs</dt><dd><ul class="simple">
+<li><p><strong>outputs</strong> (batch, time, dim): Tensor produces by feed forward module.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lasr.model.feed_forward.FeedForwardModule.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/feed_forward.html#FeedForwardModule.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.feed_forward.FeedForwardModule.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lasr.model.modules">
+<span id="modules"></span><h2>Modules<a class="headerlink" href="#module-lasr.model.modules" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lasr.model.modules.LayerNorm">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.modules.</code><code class="sig-name descname">LayerNorm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dim</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">eps</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1e-06</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/modules.html#LayerNorm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.modules.LayerNorm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper class of torch.nn.LayerNorm</p>
+<dl class="py method">
+<dt id="lasr.model.modules.LayerNorm.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">z</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/modules.html#LayerNorm.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.modules.LayerNorm.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="lasr.model.modules.Linear">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.modules.</code><code class="sig-name descname">Linear</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_features</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">out_features</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">bias</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/modules.html#Linear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.modules.Linear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper class of torch.nn.Linear
+Weight initialize by xavier initialization and bias initialize to zeros.</p>
+<dl class="py method">
+<dt id="lasr.model.modules.Linear.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/modules.html#Linear.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.modules.Linear.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="lasr.model.modules.ResidualConnectionModule">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.modules.</code><code class="sig-name descname">ResidualConnectionModule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">module</span><span class="p">:</span> <span class="n">torch.nn.modules.module.Module</span></em>, <em class="sig-param"><span class="n">module_factor</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">input_factor</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/modules.html#ResidualConnectionModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.modules.ResidualConnectionModule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Residual Connection Module.
+outputs = (module(inputs) x module_factor + inputs x input_factor)</p>
+<dl class="py method">
+<dt id="lasr.model.modules.ResidualConnectionModule.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/modules.html#ResidualConnectionModule.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.modules.ResidualConnectionModule.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="lasr.model.modules.Transpose">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.modules.</code><code class="sig-name descname">Transpose</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/modules.html#Transpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.modules.Transpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper class of torch.transpose() for Sequential module.</p>
+<dl class="py method">
+<dt id="lasr.model.modules.Transpose.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/modules.html#Transpose.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.modules.Transpose.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="lasr.model.modules.View">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.modules.</code><code class="sig-name descname">View</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></span></em>, <em class="sig-param"><span class="n">contiguous</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/modules.html#View"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.modules.View" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper class of torch.view() for Sequential module.</p>
+<dl class="py method">
+<dt id="lasr.model.modules.View.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/modules.html#View.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.modules.View.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-lasr.model.recognizer">
+<span id="recognizer"></span><h2>Recognizer<a class="headerlink" href="#module-lasr.model.recognizer" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lasr.model.recognizer.LightningSpeechRecognizer">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.model.recognizer.</code><code class="sig-name descname">LightningSpeechRecognizer</code><span class="sig-paren">(</span><em class="sig-param">num_classes: int</em>, <em class="sig-param">input_dim: int = 80</em>, <em class="sig-param">encoder_dim: int = 512</em>, <em class="sig-param">num_encoder_layers: int = 17</em>, <em class="sig-param">num_decoder_layers: int = 2</em>, <em class="sig-param">num_attention_heads: int = 8</em>, <em class="sig-param">feed_forward_expansion_factor: int = 4</em>, <em class="sig-param">conv_expansion_factor: int = 2</em>, <em class="sig-param">input_dropout_p: float = 0.1</em>, <em class="sig-param">feed_forward_dropout_p: float = 0.1</em>, <em class="sig-param">attention_dropout_p: float = 0.1</em>, <em class="sig-param">conv_dropout_p: float = 0.1</em>, <em class="sig-param">decoder_dropout_p: float = 0.1</em>, <em class="sig-param">conv_kernel_size: int = 31</em>, <em class="sig-param">half_step_residual: bool = True</em>, <em class="sig-param">max_length: int = 128</em>, <em class="sig-param">peak_lr: float = 0.0001</em>, <em class="sig-param">final_lr: float = 1e-07</em>, <em class="sig-param">init_lr_scale: float = 0.01</em>, <em class="sig-param">final_lr_scale: float = 0.05</em>, <em class="sig-param">warmup_steps: int = 10000</em>, <em class="sig-param">decay_steps: int = 80000</em>, <em class="sig-param">vocab: lasr.vocabs.Vocabulary = &lt;class 'lasr.vocabs.librispeech.LibriSpeechVocabulary'&gt;</em>, <em class="sig-param">metric: lasr.metric.ErrorRate = &lt;class 'lasr.metric.WordErrorRate'&gt;</em>, <em class="sig-param">teacher_forcing_ratio: float = 1.0</em>, <em class="sig-param">cross_entropy_weight: float = 0.7</em>, <em class="sig-param">ctc_weight: float = 0.3</em>, <em class="sig-param">joint_ctc_attention: bool = True</em>, <em class="sig-param">optimizer: str = 'adam'</em>, <em class="sig-param">lr_scheduler: str = 'transformer'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/model/recognizer.html#LightningSpeechRecognizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.recognizer.LightningSpeechRecognizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>PyTorch Lightning Speech Recognizer. It consist of a conformer encoder and rnn decoder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Number of classification classes</p></li>
+<li><p><strong>input_dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Dimension of input vector</p></li>
+<li><p><strong>encoder_dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Dimension of model encoder</p></li>
+<li><p><strong>num_encoder_layers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Number of model blocks</p></li>
+<li><p><strong>num_decoder_layers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Number of decoder layers</p></li>
+<li><p><strong>num_attention_heads</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Number of attention heads</p></li>
+<li><p><strong>feed_forward_expansion_factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Expansion factor of feed forward module</p></li>
+<li><p><strong>conv_expansion_factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – Expansion factor of model convolution module</p></li>
+<li><p><strong>feed_forward_dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – Probability of feed forward module dropout</p></li>
+<li><p><strong>attention_dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – Probability of attention module dropout</p></li>
+<li><p><strong>conv_dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – Probability of model convolution module dropout</p></li>
+<li><p><strong>decoder_dropout_p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>, </em><em>optional</em>) – Probability of model decoder dropout</p></li>
+<li><p><strong>conv_kernel_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)"><em>tuple</em></a><em>, </em><em>optional</em>) – Size of the convolving kernel</p></li>
+<li><p><strong>half_step_residual</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – Flag indication whether to use half step residual or not</p></li>
+<li><p><strong>max_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – max decoding length</p></li>
+<li><p><strong>peak_lr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – peak learning rate</p></li>
+<li><p><strong>final_lr</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – final learning rate</p></li>
+<li><p><strong>init_lr_scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – scaling value of initial learning rate</p></li>
+<li><p><strong>final_lr_scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – scaling value of final learning rate</p></li>
+<li><p><strong>warmup_steps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – warmup steps of learning rate</p></li>
+<li><p><strong>decay_steps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – decay steps of learning rate</p></li>
+<li><p><strong>vocab</strong> (<a class="reference internal" href="Vocab.html#lasr.vocabs.__init__.Vocabulary" title="lasr.vocabs.__init__.Vocabulary"><em>Vocabulary</em></a>) – vocab of training data</p></li>
+<li><p><strong>teacher_forcing_ratio</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – ratio of teacher forcing (forward label as decoder input)</p></li>
+<li><p><strong>cross_entropy_weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – weight of cross entropy loss</p></li>
+<li><p><strong>ctc_weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – weight of ctc loss</p></li>
+<li><p><strong>joint_ctc_attention</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – flag indication joint ctc attention or not</p></li>
+<li><p><strong>optimizer</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of optimizer (default: adam)</p></li>
+<li><p><strong>lr_scheduler</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of learning rate scheduler (default: transformer)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="lasr.model.recognizer.LightningSpeechRecognizer.configure_criterion">
+<code class="sig-name descname">configure_criterion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_classes</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">ignore_index</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">blank_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">cross_entropy_weight</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em>, <em class="sig-param"><span class="n">ctc_weight</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span></em><span class="sig-paren">)</span> &#x2192; torch.nn.modules.module.Module<a class="reference internal" href="_modules/lasr/model/recognizer.html#LightningSpeechRecognizer.configure_criterion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.recognizer.LightningSpeechRecognizer.configure_criterion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure criterion</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="lasr.model.recognizer.LightningSpeechRecognizer.configure_optimizers">
+<code class="sig-name descname">configure_optimizers</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>List<span class="p">[</span>torch.optim.optimizer.Optimizer<span class="p">]</span><span class="p">, </span>List<span class="p">[</span><a class="reference internal" href="Lr_scheduler.html#lasr.optim.lr_scheduler.lr_scheduler.LearningRateScheduler" title="lasr.optim.lr_scheduler.lr_scheduler.LearningRateScheduler">lasr.optim.lr_scheduler.lr_scheduler.LearningRateScheduler</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/lasr/model/recognizer.html#LightningSpeechRecognizer.configure_optimizers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.recognizer.LightningSpeechRecognizer.configure_optimizers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure optimizer</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="lasr.model.recognizer.LightningSpeechRecognizer.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inputs</span><span class="p">:</span> <span class="n">torch.Tensor</span></em>, <em class="sig-param"><span class="n">input_lengths</span><span class="p">:</span> <span class="n">torch.Tensor</span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/recognizer.html#LightningSpeechRecognizer.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.recognizer.LightningSpeechRecognizer.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forward propagate a <cite>inputs</cite> and <cite>targets</cite> pair for inference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputs</strong> (<em>torch.FloatTensor</em>) – A input sequence passed to encoder. Typically for inputs this will be a padded
+<cite>FloatTensor</cite> of size <code class="docutils literal notranslate"><span class="pre">(batch,</span> <span class="pre">seq_length,</span> <span class="pre">dimension)</span></code>.</p></li>
+<li><p><strong>input_lengths</strong> (<em>torch.LongTensor</em>) – The length of input tensor. <code class="docutils literal notranslate"><span class="pre">(batch)</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result of model predictions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p>y_hats (torch.FloatTensor)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="lasr.model.recognizer.LightningSpeechRecognizer.test_step">
+<code class="sig-name descname">test_step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_batch</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></span></em>, <em class="sig-param"><span class="n">batch_idx</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/recognizer.html#LightningSpeechRecognizer.test_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.recognizer.LightningSpeechRecognizer.test_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forward propagate a <cite>inputs</cite> and <cite>targets</cite> pair for test.</p>
+<dl class="simple">
+<dt>Inputs:</dt><dd><p>train_batch (tuple): A train batch contains <cite>inputs</cite>, <cite>input_lengths</cite>, <cite>targets</cite>, <cite>target_lengths</cite>
+batch_idx (int): The index of batch</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Loss for training.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>loss (torch.FloatTensor)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="lasr.model.recognizer.LightningSpeechRecognizer.training_step">
+<code class="sig-name descname">training_step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">train_batch</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></span></em>, <em class="sig-param"><span class="n">batch_idx</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/recognizer.html#LightningSpeechRecognizer.training_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.recognizer.LightningSpeechRecognizer.training_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forward propagate a <cite>inputs</cite> and <cite>targets</cite> pair for training.</p>
+<dl class="simple">
+<dt>Inputs:</dt><dd><p>train_batch (tuple): A train batch contains <cite>inputs</cite>, <cite>input_lengths</cite>, <cite>targets</cite>, <cite>target_lengths</cite>
+batch_idx (int): The index of batch</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Loss for training.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>loss (torch.FloatTensor)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="lasr.model.recognizer.LightningSpeechRecognizer.validation_step">
+<code class="sig-name descname">validation_step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">val_batch</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.9)">tuple</a></span></em>, <em class="sig-param"><span class="n">batch_idx</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span> &#x2192; torch.Tensor<a class="reference internal" href="_modules/lasr/model/recognizer.html#LightningSpeechRecognizer.validation_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.model.recognizer.LightningSpeechRecognizer.validation_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forward propagate a <cite>inputs</cite> and <cite>targets</cite> pair for validation.</p>
+<dl class="simple">
+<dt>Inputs:</dt><dd><p>train_batch (tuple): A train batch contains <cite>inputs</cite>, <cite>input_lengths</cite>, <cite>targets</cite>, <cite>target_lengths</cite>
+batch_idx (int): The index of batch</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Loss for training.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>loss (torch.FloatTensor)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="Optim.html" class="btn btn-neutral float-right" title="Optim" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Metric.html" class="btn btn-neutral float-left" title="Metric" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Soohwan Kim.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -33,6 +33,7 @@ LIBRI_SPEECH_DATASETS = [
 
 
 def collect_transcripts(dataset_path):
+    """ Collect librispeech transcripts """
     transcripts_collection = list()
 
     for dataset in LIBRI_SPEECH_DATASETS:
@@ -58,6 +59,7 @@ def collect_transcripts(dataset_path):
 
 
 def prepare_tokenizer(train_transcripts, vocab_size):
+    """ Prepare sentencepice tokenizer """
     input_file = 'spm_input.txt'
     model_name = 'tokenizer'
     model_type = 'unigram'
@@ -73,6 +75,7 @@ def prepare_tokenizer(train_transcripts, vocab_size):
 
 
 def generate_manifest_file(dataset_path: str, part: str, transcripts: list):
+    """ Generate manifest file """
     sp = spm.SentencePieceProcessor()
     sp.Load("tokenizer.model")
 

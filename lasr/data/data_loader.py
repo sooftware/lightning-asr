@@ -27,6 +27,7 @@ from torch.utils.data.sampler import Sampler
 
 
 def _collate_fn(batch):
+    """ Custom collate function """
     batch = sorted(batch, key=lambda sample: sample[0].size(1), reverse=True)
     seq_lengths = [s[0].size(1) for s in batch]
     target_lengths = [len(s[1]) for s in batch]
@@ -53,16 +54,15 @@ def _collate_fn(batch):
 
 
 class AudioDataLoader(DataLoader):
+    """ Audio Data Loader """
     def __init__(self, *args, **kwargs):
         super(AudioDataLoader, self).__init__(*args, **kwargs)
         self.collate_fn = _collate_fn
 
 
 class BucketingSampler(Sampler):
+    """ Samples batches assuming they are in order of size to batch similarly sized samples together. """
     def __init__(self, data_source, batch_size: int = 32) -> None:
-        """
-        Samples batches assuming they are in order of size to batch similarly sized samples together.
-        """
         super(BucketingSampler, self).__init__(data_source)
         self.data_source = data_source
         ids = list(range(0, len(data_source)))

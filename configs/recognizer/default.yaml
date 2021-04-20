@@ -18,7 +18,7 @@ final_lr: 1e-07
 init_lr_scale: 0.01
 final_lr_scale: 0.05
 warmup_steps: 10000
-decay_steps: 80000
+decay_steps: 150000
 teacher_forcing_ratio: 1.0
 cross_entropy_weight: 0.7
 ctc_weight: 0.3

@@ -48,6 +48,7 @@ from lasr.data.libri_preprocess import (
 
 
 def _parse_manifest_file(manifest_file_path: str) -> Tuple[list, list]:
+    """ Parsing manifest file """
     audio_paths = list()
     transcripts = list()
 
@@ -187,6 +188,16 @@ class LightningLibriDataModule(pl.LightningDataModule):
             generate_manifest_file(self.dataset_path, part, transcripts_collection[idx])
 
     def prepare_data(self, download: bool = False, vocab_size: int = 5000) -> None:
+        """
+        Prepare librispeech data
+
+        Args:
+            download (bool): if True, download librispeech dataset
+            vocab_size (int): size of subword vocab
+
+        Returns:
+            None
+        """
         if download:
             self._download_librispeech()
         self._generate_manifest_files(vocab_size)
