@@ -24,27 +24,23 @@ from lasr.vocabs import Vocabulary
 
 
 class LibriSpeechVocabulary(Vocabulary):
-    def __init__(self, vocab_path, model_path):
+    def __init__(self, model_path: str, vocab_size: int):
         super(LibriSpeechVocabulary, self).__init__()
         try:
             import sentencepiece as spm
         except ImportError:
             raise ImportError("Please install sentencepiece: `pip install sentencepiece`")
-        self.pad_id = 0
-        self.sos_id = 1
-        self.eos_id = 2
-
-        self.vocab_path = vocab_path
 
         self.sp = spm.SentencePieceProcessor()
         self.sp.Load(model_path)
+        self.pad_id = self.sp.PieceToId("<pad>")
+        self.sos_id = self.sp.PieceToId("<bos>")
+        self.eos_id = self.sp.PieceToId("<eos>")
+        self.blank_id = self.sp.PieceToId("<blank>")
+        self.vocab_size = vocab_size
 
     def __len__(self):
-        count = 0
-        with open(self.vocab_path, encoding='utf-8') as f:
-            for _ in f.readlines():
-                count += 1
-        return count
+        return self.vocab_size
 
     def label_to_string(self, labels):
         if len(labels.shape) == 1:

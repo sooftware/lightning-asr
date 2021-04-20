@@ -45,9 +45,11 @@ class ErrorRate(object):
     def _get_distance(self, targets, y_hats):
         """
         Provides total character distance between targets & y_hats
+
         Args:
             targets (torch.Tensor): set of ground truth
             y_hats (torch.Tensor): predicted y values (y_hat) by the model
+
         Returns: total_dist, total_length
             - **total_dist**: total distance between targets & y_hats
             - **total_length**: total length of targets sequence
@@ -70,15 +72,11 @@ class ErrorRate(object):
         raise NotImplementedError
 
 
-class UnitErrorRate(ErrorRate):
-    """
-    Provides inteface of error rate calcuation.
-    Note:
-        Do not use this class directly, use one of the sub classes.
-    """
+class WordErrorRate(ErrorRate):
+    """ Provides word error rate calcuation. """
 
     def __init__(self, vocab) -> None:
-        super(UnitErrorRate, self).__init__(vocab)
+        super(WordErrorRate, self).__init__(vocab)
 
     def metric(self, s1, s2):
         """

@@ -23,75 +23,70 @@
 import os
 import hydra
 import pytorch_lightning as pl
+import logging
 from omegaconf import OmegaConf, DictConfig
 
 from lasr.data.lit_data_module import LightningLibriDataModule
-from lasr.metric import UnitErrorRate
+from lasr.metric import WordErrorRate
 from lasr.model.recognizer import LightningSpeechRecognizer
 from lasr.vocabs import LibriSpeechVocabulary
 
 
 @hydra.main(config_path=os.path.join('..', "configs"), config_name="train")
 def main(config: DictConfig) -> None:
-    print(OmegaConf.to_yaml(config))
-    pl.seed_everything(config.trainer.seed)
-
-    vocab = LibriSpeechVocabulary(config.data.vocab_path, config.data.vocab_model_path)
-    metric = UnitErrorRate(vocab)
+    logger = logging.getLogger(__name__)
+    logger.info(OmegaConf.to_yaml(config))
+    pl.seed_everything(config.seed)
 
     lit_data_module = LightningLibriDataModule(
-        dataset_path=config.data.dataset_path,
-        train_manifest_path=config.data.train_manifest_path,
-        valid_clean_manifest_path=config.data.valid_clean_manifest_path,
-        valid_other_manifest_path=config.data.valid_other_manifest_path,
-        test_clean_manifest_path=config.data.test_clean_manifest_path,
-        test_other_manifest_path=config.data.test_other_manifest_path,
-        vocab=vocab,
-        apply_spec_augment=config.data.spec_augment,
-        num_epochs=config.data.num_epochs,
-        batch_size=config.data.batch_size,
-        num_workers=config.data.num_workers,
+        dataset_path=config.dataset_path,
+        apply_spec_augment=config.spec_augment,
+        num_epochs=config.num_epochs,
+        batch_size=config.batch_size,
+        num_workers=config.num_workers,
     )
-    lit_data_module.prepare_data()
-    lit_data_module.setup()
+    lit_data_module.prepare_data(config.dataset_download, config.vocab_size)
+    vocab = LibriSpeechVocabulary("tokenizer.model", config.vocab_size)
+    metric = WordErrorRate(vocab)
+    lit_data_module.setup(vocab)
 
     model = LightningSpeechRecognizer(
         num_classes=len(vocab),
-        input_dim=config.recognizer.input_dim,
-        encoder_dim=config.recognizer.encoder_dim,
-        num_encoder_layers=config.recognizer.num_encoder_layers,
-        num_decoder_layers=config.recognizer.num_decoder_layers,
-        num_attention_heads=config.recognizer.num_attention_heads,
-        feed_forward_expansion_factor=config.recognizer.feed_forward_expansion_factor,
-        conv_expansion_factor=config.recognizer.conv_expansion_factor,
-        input_dropout_p=config.recognizer.input_dropout_p,
-        feed_forward_dropout_p=config.recognizer.feed_forward_dropout_p,
-        conv_dropout_p=config.recognizer.conv_dropout_p,
-        decoder_dropout_p=config.recognizer.decoder_dropout_p,
-        conv_kernel_size=config.recognizer.conv_kernel_size,
-        half_step_residual=config.recognizer.half_step_residual,
-        max_length=config.recognizer.max_length,
-        peak_lr=config.recognizer.peak_lr,
-        final_lr=config.recognizer.final_lr,
-        final_lr_scale=config.recognizer.final_lr_scale,
-        warmup_steps=config.recognizer.warmup_steps,
-        decay_steps=config.recognizer.decay_steps,
+        input_dim=config.input_dim,
+        encoder_dim=config.encoder_dim,
+        num_encoder_layers=config.num_encoder_layers,
+        num_decoder_layers=config.num_decoder_layers,
+        num_attention_heads=config.num_attention_heads,
+        feed_forward_expansion_factor=config.feed_forward_expansion_factor,
+        conv_expansion_factor=config.conv_expansion_factor,
+        input_dropout_p=config.input_dropout_p,
+        feed_forward_dropout_p=config.feed_forward_dropout_p,
+        conv_dropout_p=config.conv_dropout_p,
+        decoder_dropout_p=config.decoder_dropout_p,
+        conv_kernel_size=config.conv_kernel_size,
+        half_step_residual=config.half_step_residual,
+        max_length=config.max_length,
+        peak_lr=config.peak_lr,
+        final_lr=config.final_lr,
+        final_lr_scale=config.final_lr_scale,
+        warmup_steps=config.warmup_steps,
+        decay_steps=config.decay_steps,
         vocab=vocab,
         metric=metric,
-        teacher_forcing_ratio=config.recognizer.teacher_forcing_ratio,
-        cross_entropy_weight=config.recognizer.cross_entropy_weight,
-        ctc_weight=config.recognizer.ctc_weight,
-        joint_ctc_attention=config.recognizer.joint_ctc_attention,
+        teacher_forcing_ratio=config.teacher_forcing_ratio,
+        cross_entropy_weight=config.cross_entropy_weight,
+        ctc_weight=config.ctc_weight,
+        joint_ctc_attention=config.joint_ctc_attention,
     )
     trainer = pl.Trainer(
-        precision=config.trainer.precision,
-        accelerator=config.trainer.accelerator,
-        gpus=config.trainer.num_gpus,
-        accumulate_grad_batches=config.trainer.accumulate_grad_batches,
-        amp_backend=config.trainer.amp_backend,
-        auto_select_gpus=config.trainer.auto_select_gpus,
-        check_val_every_n_epoch=config.trainer.check_val_every_n_epoch,
-        gradient_clip_val=config.trainer.gradient_clip_val,
+        precision=config.precision,
+        accelerator=config.accelerator,
+        gpus=config.num_gpus,
+        accumulate_grad_batches=config.accumulate_grad_batches,
+        amp_backend=config.amp_backend,
+        auto_select_gpus=config.auto_select_gpus,
+        check_val_every_n_epoch=config.check_val_every_n_epoch,
+        gradient_clip_val=config.gradient_clip_val,
     )
     trainer.fit(model, lit_data_module)
 

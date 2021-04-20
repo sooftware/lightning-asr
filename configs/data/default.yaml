@@ -1,11 +1,6 @@
-dataset_path: none
-train_manifest_path: none
-valid_clean_manifest_path: none
-valid_other_manifest_path: none
-test_clean_manifest_path: none
-test_other_manifest_path: none
-vocab_path: none
-vocab_model_path: none
+dataset_path: librispeech
+dataset_download: True
+vocab_size: 5000
 spec_augment: True
 num_epochs: 20
 batch_size: 32

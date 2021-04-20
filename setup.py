@@ -40,6 +40,7 @@ setup(
         'sentencepiece',
         'pytorch-lightning',
         'hydra-core',
+        'wget',
     ],
     keywords=['asr', 'speech_recognition', 'pytorch-lightning'],
     python_requires='>=3.7',

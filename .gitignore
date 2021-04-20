@@ -1,12 +1,7 @@
-experiment/
-experiment/*
-data/sample
-data/sample/*
-data/data_list/debug_list.csv
-data/data_list/sample_list.csv
 *.bin
 *.zip
 *.idea
+*.egg-info
 docs/training
 docs/training/*
 __pycache__/
@@ -25,6 +20,7 @@ librispeech/
 *.so
 
 .idea/
+/outputs/*
 
 # Distribution / packaging
 .Python
