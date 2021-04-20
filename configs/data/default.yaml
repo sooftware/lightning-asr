@@ -5,3 +5,11 @@ spec_augment: True
 num_epochs: 20
 batch_size: 32
 num_workers: 4
+sample_rate: 16000
+num_mels: 80
+frame_length: 25.0
+frame_shift: 10.0
+freq_mask_para: 27
+freq_mask_num: 2
+time_mask_num: 4
+feature_extract_method: fbank
