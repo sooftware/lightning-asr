@@ -23,6 +23,7 @@
 import os
 import hydra
 import pytorch_lightning as pl
+import logging
 from omegaconf import OmegaConf, DictConfig
 
 from lasr.data.lit_data_module import LightningLibriDataModule
@@ -33,7 +34,8 @@ from lasr.vocabs import LibriSpeechVocabulary
 
 @hydra.main(config_path=os.path.join('..', "configs"), config_name="train")
 def main(config: DictConfig) -> None:
-    print(OmegaConf.to_yaml(config))
+    logger = logging.getLogger(__name__)
+    logger.info(OmegaConf.to_yaml(config))
     pl.seed_everything(config.seed)
 
     lit_data_module = LightningLibriDataModule(
@@ -43,7 +45,7 @@ def main(config: DictConfig) -> None:
         batch_size=config.batch_size,
         num_workers=config.num_workers,
     )
-    lit_data_module.prepare_data(config.download, config.vocab_size)
+    lit_data_module.prepare_data(config.dataset_download, config.vocab_size)
     vocab = LibriSpeechVocabulary("tokenizer.model", config.vocab_size)
     metric = WordErrorRate(vocab)
     lit_data_module.setup(vocab)

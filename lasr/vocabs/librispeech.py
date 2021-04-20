@@ -36,6 +36,7 @@ class LibriSpeechVocabulary(Vocabulary):
         self.pad_id = self.sp.PieceToId("<pad>")
         self.sos_id = self.sp.PieceToId("<bos>")
         self.eos_id = self.sp.PieceToId("<eos>")
+        self.blank_id = self.sp.PieceToId("<blank>")
         self.vocab_size = vocab_size
 
     def __len__(self):

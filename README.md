@@ -75,29 +75,11 @@ $ pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--c
   
 I use [Hydra](https://github.com/facebookresearch/hydra) to control all the training configurations. If you are not familiar with Hydra we recommend visiting the [Hydra website](https://hydra.cc/). Generally, Hydra is an open-source framework that simplifies the development of research applications by providing the ability to create a hierarchical configuration dynamically.
   
-### Preparing LibriSpeech Dataset  
-  
-This procedure can take hours or more. Download the required data in the next step and create the manifest files and vocab files.  
-  
-- Command
-  
-```
-$ ./dataset/prepare-libri.sh $DIR_TO_SAVE_DATA
-```
-  
 ### Training Speech Recognizer
   
 You can simply train with LibriSpeech dataset like below:
 ```
-$ python ./bin/main.py \
---data.dataset_path $DATASET_PATH \
---data.train_manifest_path $TRAIN_MANIFEST_PATH \
---data.valid_clean_manifest_path $VALID_CLEAN_MANIFEST_PATH \
---data.valid_other_manifest_path $VALID_OTHER_MANIFEST_PATH \
---data.test_clean_manifest_path $TEST_CLEAN_MANIFEST_PATH \
---data.test_other_manifest_path $TEST_OTHER_MANIFEST_PATH \
---data.vocab_path $VOCAB_PATH \
---data.vocab_model_path $VOCAB_MODEL_PATH
+$ python ./bin/main.py --dataset_path $DATASET_PATH --dataset_download True
 ```
   
 ## Troubleshoots and Contributing

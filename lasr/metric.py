@@ -45,9 +45,11 @@ class ErrorRate(object):
     def _get_distance(self, targets, y_hats):
         """
         Provides total character distance between targets & y_hats
+
         Args:
             targets (torch.Tensor): set of ground truth
             y_hats (torch.Tensor): predicted y values (y_hat) by the model
+
         Returns: total_dist, total_length
             - **total_dist**: total distance between targets & y_hats
             - **total_length**: total length of targets sequence

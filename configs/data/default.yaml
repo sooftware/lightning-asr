@@ -1,5 +1,5 @@
 dataset_path: librispeech
-download: True
+dataset_download: True
 vocab_size: 5000
 spec_augment: True
 num_epochs: 20
