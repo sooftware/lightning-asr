@@ -15,7 +15,7 @@
      <a href="https://www.python.org/dev/peps/pep-0008/">
           <img src="http://img.shields.io/badge/codestyle-PEP--8-informational"> 
      </a>
-    <a href="https://www.github.io/sooftware/lasr/">
+    <a href="https://sooftware.github.io/lasr/">
           <img src="http://img.shields.io/badge/docs-passing-success"> 
      </a>
   <a href="https://sooftware.github.io/lasr/">
