@@ -26,6 +26,18 @@ from torch import Tensor
 
 
 class JointCTCCrossEntropyLoss(nn.Module):
+    """
+    Privides Joint CTC-CrossEntropy Loss function
+
+    Args:
+        num_classes (int): the number of classification
+        ignore_index (int): indexes that are ignored when calculating loss
+        dim (int): dimension of calculation loss
+        reduction (str): reduction method [sum, mean] (default: mean)
+        ctc_weight (float): weight of ctc loss
+        cross_entropy_weight (float): weight of cross entropy loss
+        blank_id (int): identification of blank for ctc
+    """
     def __init__(
             self,
             num_classes: int,

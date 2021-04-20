@@ -34,9 +34,9 @@ from lasr.vocabs import LibriSpeechVocabulary
 
 @hydra.main(config_path=os.path.join('..', "configs"), config_name="train")
 def main(config: DictConfig) -> None:
+    pl.seed_everything(config.seed)
     logger = logging.getLogger(__name__)
     logger.info(OmegaConf.to_yaml(config))
-    pl.seed_everything(config.seed)
 
     lit_data_module = LightningLibriDataModule(
         dataset_path=config.dataset_path,
@@ -76,6 +76,7 @@ def main(config: DictConfig) -> None:
         max_length=config.max_length,
         peak_lr=config.peak_lr,
         final_lr=config.final_lr,
+        init_lr_scale=config.init_lr_scale,
         final_lr_scale=config.final_lr_scale,
         warmup_steps=config.warmup_steps,
         decay_steps=config.decay_steps,
@@ -85,6 +86,8 @@ def main(config: DictConfig) -> None:
         cross_entropy_weight=config.cross_entropy_weight,
         ctc_weight=config.ctc_weight,
         joint_ctc_attention=config.joint_ctc_attention,
+        optimizer=config.optimizer,
+        lr_scheduler=config.lr_scheduler,
     )
     trainer = pl.Trainer(
         precision=config.precision,

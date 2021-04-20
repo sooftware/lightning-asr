@@ -1,4 +1,4 @@
-seed: 777
+seed: 1
 accelerator: dp
 precision: 16
 num_gpus: 4

@@ -24,6 +24,7 @@
 class LearningRateScheduler(object):
     """
     Provides inteface of learning rate scheduler.
+
     Note:
         Do not use this class directly, use one of the sub classes.
     """

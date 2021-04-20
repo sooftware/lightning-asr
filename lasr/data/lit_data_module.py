@@ -156,6 +156,7 @@ class LightningLibriDataModule(pl.LightningDataModule):
             tar = tarfile.open(f"{self.dataset_path}/{part}.tar.gz", mode="r:gz")
             tar.extractall()
             tar.close()
+            os.remove(f"{self.dataset_path}/{part}.tar.gz")
 
         self.logger.info("Merge all train packs into one")
 
@@ -164,15 +165,18 @@ class LightningLibriDataModule(pl.LightningDataModule):
         if not os.path.exists(f"{self.dataset_path}/LibriSpeech/{train_dir}/"):
             os.mkdir(f"{self.dataset_path}/LibriSpeech/{train_dir}/")
 
-        for part in self.librispeech_parts[-3:]:
-            path = f"{self.dataset_path}/LibriSpeech/{part}/"
+        for part in self.librispeech_parts[:-3]:    # dev, test
+            path = f"{self.dataset_path}/{part}/"
+            shutil.move(f"{path}/{part}", f"{self.dataset_path}/LibriSpeech/{part}")
+
+        for part in self.librispeech_parts[-3:]:    # train
+            path = f"{self.dataset_path}/{part}/"
             files = os.listdir(path)
             for file in files:
                 shutil.move(f"{path}/{file}", f"{self.dataset_path}/LibriSpeech/{train_dir}/{file}")
 
-        self.logger.info("Remove .tar.gz files..")
-        for part in self.librispeech_parts:
-            os.remove(f"{self.dataset_path}/{part}.tar.gz")
+        # Update dataset path
+        self.dataset_path = f"{self.dataset_path}/LibriSpeech/"
 
     def _generate_manifest_files(self, vocab_size: int) -> None:
         self.logger.info("Generate Manifest Files..")

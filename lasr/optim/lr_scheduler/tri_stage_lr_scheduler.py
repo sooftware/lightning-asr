@@ -27,8 +27,19 @@ from lasr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
 
 class TriStageLRScheduler(LearningRateScheduler):
     """
-    Tri-Stage Learning Rate Scheduler
-    Implement the learning rate scheduler in "SpecAugment"
+    Implement the learning rate scheduler in https://arxiv.org/pdf/1904.08779.pdf
+    Similar to inverse_squre_root scheduler,
+    but tri_stage learning rate employs three stages LR scheduling:
+
+        - warmup stage, starting from `lr` * `init_lr_scale`, linearly
+          increased to `lr` in `warmup_steps` iterations
+
+        - hold stage, after `warmup_steps`, keep the LR as `lr` for `hold_steps`
+          iterations
+
+        - decay stage, after hold stage, decay LR exponetially to
+          `lr` * `final_lr_scale` in `decay_steps`;
+          after that LR is keep as `final_lr_scale` * `lr`
     """
     def __init__(self, optimizer, init_lr, peak_lr, final_lr, init_lr_scale, final_lr_scale, warmup_steps, total_steps):
         assert isinstance(warmup_steps, int), "warmup_steps should be inteager type"
@@ -79,7 +90,7 @@ class TriStageLRScheduler(LearningRateScheduler):
         elif stage == 3:
             self.lr = self.final_lr
         else:
-            raise ValueError("Undefined stage")
+            raise ValueError(f"Undefined stage: {stage}")
 
         self.set_lr(self.optimizer, self.lr)
         self.update_step += 1
