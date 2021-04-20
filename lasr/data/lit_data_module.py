@@ -30,15 +30,20 @@ from typing import Union, List, Tuple
 from torch.utils.data import DataLoader
 
 from lasr.vocabs import Vocabulary
-from lasr.data.data_loader import (
+from lasr.data.dataset import (
     SpectrogramDataset,
+    MelSpectrogramDataset,
+    MFCCDataset,
+    FBankDataset,
+)
+from lasr.data.data_loader import (
     BucketingSampler,
     AudioDataLoader,
 )
 from lasr.data.libri_preprocess import (
     collect_transcripts,
     prepare_tokenizer,
-    generate_transcript_file,
+    generate_manifest_file,
 )
 
 
@@ -58,88 +63,149 @@ def _parse_manifest_file(manifest_file_path: str) -> Tuple[list, list]:
 
 
 class LightningLibriDataModule(pl.LightningDataModule):
+    """
+    PyTorch Lightning Data Module for LibriSpeech Dataset.
+
+    Args:
+        dataset_path (str): path of librispeech dataset
+        apply_spec_augment (bool): flag indication whether to apply spec augment or not
+        num_epochs (int): the number of epochs
+        batch_size (int): the size of batch samples
+        num_workers (int): the number of cpu workers
+        sample_rate (int): sampling rate of audio
+        num_mels (int): the number of mfc coefficients to retain.
+        frame_length (float): frame length for spectrogram (ms)
+        frame_shift (float): length of hop between STFT (short time fourier transform) windows.
+        freq_mask_para (int): hyper Parameter for freq masking to limit freq masking length
+        time_mask_num (int): how many time-masked area to make
+        freq_mask_num (int): how many freq-masked area to make
+    """
+    librispeech_parts = [
+        'dev-clean',
+        'test-clean',
+        'dev-other',
+        'test-other',
+        'train-clean-100',
+        'train-clean-360',
+        'train-other-500',
+    ]
+
     def __init__(
             self,
             dataset_path: str,
+            feature_extract_method: str,
             apply_spec_augment: bool,
             num_epochs: int,
             batch_size: int,
             num_workers: int,
+            sample_rate: int = 16000,
+            num_mels: int = 80,
+            frame_length: float = 25.0,
+            frame_shift: float = 10.0,
+            freq_mask_para: int = 27,
+            time_mask_num: int = 4,
+            freq_mask_num: int = 2,
     ) -> None:
         super(LightningLibriDataModule, self).__init__()
         self.dataset_path = dataset_path
         self.manifest_paths = [
-            f"{dataset_path}/train-960-transcript.txt",
-            f"{dataset_path}/dev-clean-transcript.txt",
-            f"{dataset_path}/dev-other-transcript.txt",
-            f"{dataset_path}/test-clean-transcript.txt",
-            f"{dataset_path}/test-other-transcript.txt",
+            f"{dataset_path}/train-960.txt",
+            f"{dataset_path}/dev-clean.txt",
+            f"{dataset_path}/dev-other.txt",
+            f"{dataset_path}/test-clean.txt",
+            f"{dataset_path}/test-other.txt",
         ]
         self.dataset = dict()
         self.apply_spec_augment = apply_spec_augment
         self.num_epochs = num_epochs
         self.batch_size = batch_size
         self.num_workers = num_workers
+        self.sample_rate = sample_rate
+        self.num_mels = num_mels
+        self.frame_length = frame_length
+        self.frame_shift = frame_shift
+        self.freq_mask_para = freq_mask_para
+        self.time_mask_num = time_mask_num
+        self.freq_mask_num = freq_mask_num
         self.logger = logging.getLogger(__name__)
 
-    def prepare_data(self, download: bool = False, vocab_size: int = 5000) -> None:
+        if feature_extract_method == 'spectrogram':
+            self.audio_dataset = SpectrogramDataset
+        elif feature_extract_method == 'melspectrogram':
+            self.audio_dataset = MelSpectrogramDataset
+        elif feature_extract_method == 'mfcc':
+            self.audio_dataset = MFCCDataset
+        elif feature_extract_method == 'fbank':
+            self.audio_dataset = FBankDataset
+        else:
+            raise ValueError(f"Unsupported `feature_extract_method`: {feature_extract_method}")
+
+    def _download_librispeech(self) -> None:
         base_url = "http://www.openslr.org/resources/12"
         train_dir = "train_960"
-        dataset_parts = [
-            'dev-clean', 'test-clean', 'dev-other', 'test-other',
-            'train-clean-100', 'train-clean-360', 'train-other-500',
-        ]
 
-        if download:
-            if not os.path.exists(self.dataset_path):
-                os.mkdir(self.dataset_path)
+        if not os.path.exists(self.dataset_path):
+            os.mkdir(self.dataset_path)
 
-            for part in dataset_parts:
-                self.logger.info(f"librispeech-{part} download..")
-                url = f"{base_url}/{part}.tar.gz"
-                wget.download(url, self.dataset_path)
+        for part in self.librispeech_parts:
+            self.logger.info(f"librispeech-{part} download..")
+            url = f"{base_url}/{part}.tar.gz"
+            wget.download(url, self.dataset_path)
 
-                self.logger.info(f"un-tarring archive {self.dataset_path}/{part}.tar.gz")
-                tar = tarfile.open(f"{self.dataset_path}/{part}.tar.gz", mode="r:gz")
-                tar.extractall()
-                tar.close()
+            self.logger.info(f"un-tarring archive {self.dataset_path}/{part}.tar.gz")
+            tar = tarfile.open(f"{self.dataset_path}/{part}.tar.gz", mode="r:gz")
+            tar.extractall()
+            tar.close()
 
-            self.logger.info("Merge all train packs into one")
+        self.logger.info("Merge all train packs into one")
 
-            if not os.path.exists(f"{self.dataset_path}/LibriSpeech/"):
-                os.mkdir(f"{self.dataset_path}/LibriSpeech/")
-            if not os.path.exists(f"{self.dataset_path}/LibriSpeech/{train_dir}/"):
-                os.mkdir(f"{self.dataset_path}/LibriSpeech/{train_dir}/")
+        if not os.path.exists(f"{self.dataset_path}/LibriSpeech/"):
+            os.mkdir(f"{self.dataset_path}/LibriSpeech/")
+        if not os.path.exists(f"{self.dataset_path}/LibriSpeech/{train_dir}/"):
+            os.mkdir(f"{self.dataset_path}/LibriSpeech/{train_dir}/")
 
-            for part in dataset_parts[-3:]:
-                path = f"{self.dataset_path}/LibriSpeech/{part}/"
-                files = os.listdir(path)
-                for file in files:
-                    shutil.move(f"{path}/{file}", f"{self.dataset_path}/LibriSpeech/{train_dir}/{file}")
+        for part in self.librispeech_parts[-3:]:
+            path = f"{self.dataset_path}/LibriSpeech/{part}/"
+            files = os.listdir(path)
+            for file in files:
+                shutil.move(f"{path}/{file}", f"{self.dataset_path}/LibriSpeech/{train_dir}/{file}")
 
-        self.logger.info("Data Pre-processing..")
+        self.logger.info("Remove .tar.gz files..")
+        for part in self.librispeech_parts:
+            os.remove(f"{self.dataset_path}/{part}.tar.gz")
+
+    def _generate_manifest_files(self, vocab_size: int) -> None:
+        self.logger.info("Generate Manifest Files..")
         transcripts_collection = collect_transcripts(f"{self.dataset_path}/LibriSpeech/")
         prepare_tokenizer(transcripts_collection[0], vocab_size)
 
         for idx, part in enumerate(['train_960', 'dev-clean', 'dev-other', 'test-clean', 'test-other']):
-            generate_transcript_file(self.dataset_path, part, transcripts_collection[idx])
+            generate_manifest_file(self.dataset_path, part, transcripts_collection[idx])
 
-        self.logger.info("Remove .tar.gz files..")
-        for part in dataset_parts:
-            os.remove(f"{self.dataset_path}/{part}.tar.gz")
+    def prepare_data(self, download: bool = False, vocab_size: int = 5000) -> None:
+        if download:
+            self._download_librispeech()
+        self._generate_manifest_files(vocab_size)
 
     def setup(self, vocab: Vocabulary) -> None:
         splits = ['train', 'val-clean', 'val-other', 'test-clean', 'test-other']
 
         for idx, (path, split) in enumerate(zip(self.manifest_paths, splits)):
             audio_paths, transcripts = _parse_manifest_file(path)
-            self.dataset[split] = SpectrogramDataset(
+            self.dataset[split] = self.audio_dataset(
                 dataset_path=self.dataset_path,
                 audio_paths=audio_paths,
                 transcripts=transcripts,
                 sos_id=vocab.sos_id,
                 eos_id=vocab.eos_id,
                 apply_spec_augment=self.apply_spec_augment if idx == 0 else False,
+                sample_rate=self.sample_rate,
+                num_mels=self.num_mels,
+                frame_length=self.frame_length,
+                frame_shift=self.frame_shift,
+                freq_mask_para=self.freq_mask_para,
+                freq_mask_num=self.freq_mask_num,
+                time_mask_num=self.time_mask_num,
             )
 
     def train_dataloader(self) -> DataLoader:

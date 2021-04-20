@@ -40,10 +40,18 @@ def main(config: DictConfig) -> None:
 
     lit_data_module = LightningLibriDataModule(
         dataset_path=config.dataset_path,
+        feature_extract_method=config.feature_extract_method,
         apply_spec_augment=config.spec_augment,
         num_epochs=config.num_epochs,
         batch_size=config.batch_size,
         num_workers=config.num_workers,
+        sample_rate=config.sample_rate,
+        num_mels=config.num_mels,
+        frame_length=config.frame_length,
+        frame_shift=config.frame_shift,
+        freq_mask_para=config.freq_mask_para,
+        time_mask_num=config.time_mask_num,
+        freq_mask_num=config.freq_mask_num,
     )
     lit_data_module.prepare_data(config.dataset_download, config.vocab_size)
     vocab = LibriSpeechVocabulary("tokenizer.model", config.vocab_size)

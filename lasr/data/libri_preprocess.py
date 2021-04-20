@@ -72,11 +72,11 @@ def prepare_tokenizer(train_transcripts, vocab_size):
     spm.SentencePieceTrainer.Train(cmd)
 
 
-def generate_transcript_file(dataset_path: str, part: str, transcripts: list):
+def generate_manifest_file(dataset_path: str, part: str, transcripts: list):
     sp = spm.SentencePieceProcessor()
     sp.Load("tokenizer.model")
 
-    with open(f"{dataset_path}/{part}-transcript.txt", 'w') as f:
+    with open(f"{dataset_path}/{part}.txt", 'w') as f:
         for transcript in transcripts:
             audio, transcript = transcript.split('|')
             text = " ".join(sp.EncodeAsPieces(transcript))
