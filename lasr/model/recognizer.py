@@ -29,15 +29,16 @@ from typing import Tuple, List
 from lasr.metric import WordErrorRate, ErrorRate
 from lasr.model.decoder import DecoderRNN
 from lasr.model.encoder import ConformerEncoder
-from lasr.optim.lr_scheduler import TransformerLRScheduler
-from lasr.criterioin.joint_ctc_cross_entropy import JointCTCCrossEntropyLoss
+from lasr.optim import AdamP, RAdam
+from lasr.optim.lr_scheduler import TransformerLRScheduler, TriStageLRScheduler
+from lasr.criterion.joint_ctc_cross_entropy import JointCTCCrossEntropyLoss
 from lasr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
 from lasr.vocabs import Vocabulary, LibriSpeechVocabulary
 
 
 class LightningSpeechRecognizer(pl.LightningModule):
     """
-    PyTorch Lightning ASR Pipeline. It consist of a conformer encoder and rnn decoder.
+    PyTorch Lightning Speech Recognizer. It consist of a conformer encoder and rnn decoder.
 
     Args:
         num_classes (int): Number of classification classes
@@ -57,6 +58,7 @@ class LightningSpeechRecognizer(pl.LightningModule):
         max_length (int, optional): max decoding length
         peak_lr (float): peak learning rate
         final_lr (float): final learning rate
+        init_lr_scale (float): scaling value of initial learning rate
         final_lr_scale (float): scaling value of final learning rate
         warmup_steps (int): warmup steps of learning rate
         decay_steps (int): decay steps of learning rate
@@ -65,6 +67,8 @@ class LightningSpeechRecognizer(pl.LightningModule):
         cross_entropy_weight (float): weight of cross entropy loss
         ctc_weight (float): weight of ctc loss
         joint_ctc_attention (bool): flag indication joint ctc attention or not
+        optimizer (str): name of optimizer (default: adam)
+        lr_scheduler (str): name of learning rate scheduler (default: transformer)
     """
     def __init__(
             self,
@@ -86,6 +90,7 @@ class LightningSpeechRecognizer(pl.LightningModule):
             max_length: int = 128,
             peak_lr: float = 1e-04,
             final_lr: float = 1e-07,
+            init_lr_scale: float = 0.01,
             final_lr_scale: float = 0.05,
             warmup_steps: int = 10000,
             decay_steps: int = 80000,
@@ -95,17 +100,22 @@ class LightningSpeechRecognizer(pl.LightningModule):
             cross_entropy_weight: float = 0.7,
             ctc_weight: float = 0.3,
             joint_ctc_attention: bool = True,
+            optimizer: str = 'adam',
+            lr_scheduler: str = 'transformer',
     ) -> None:
         super(LightningSpeechRecognizer, self).__init__()
 
         self.peak_lr = peak_lr
         self.final_lr = final_lr
+        self.init_lr_scale = init_lr_scale
         self.final_lr_scale = final_lr_scale
         self.warmup_steps = warmup_steps
         self.decay_steps = decay_steps
         self.teacher_forcing_ratio = teacher_forcing_ratio
         self.vocab = vocab
         self.metric = metric
+        self.optimizer = optimizer
+        self.lr_scheduler = lr_scheduler
         self.criterion = self.configure_criterion(
             num_classes,
             ignore_index=self.vocab.pad_id,
@@ -256,15 +266,39 @@ class LightningSpeechRecognizer(pl.LightningModule):
         return loss
 
     def configure_optimizers(self) -> Tuple[List[torch.optim.Optimizer], List[LearningRateScheduler]]:
-        optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
-        scheduler = TransformerLRScheduler(
-            optimizer,
-            peak_lr=self.peak_lr,
-            final_lr=self.final_lr,
-            final_lr_scale=self.final_lr_scale,
-            warmup_steps=self.warmup_steps,
-            decay_steps=self.decay_steps,
-        )
+        """ Configure optimizer """
+        if self.optimizer == 'adam':
+            optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
+        elif self.optimizer == 'adamp':
+            optimizer = AdamP(self.parameters(), lr=self.lr)
+        elif self.optimizer == 'radam':
+            optimizer = RAdam(self.parameters(), lr=self.lr)
+        else:
+            raise ValueError(f"Unsupported optimizer: {self.optimizer}")
+
+        if self.lr_scheduler == 'transformer':
+            scheduler = TransformerLRScheduler(
+                optimizer,
+                peak_lr=self.peak_lr,
+                final_lr=self.final_lr,
+                final_lr_scale=self.final_lr_scale,
+                warmup_steps=self.warmup_steps,
+                decay_steps=self.decay_steps,
+            )
+        elif self.lr_scheduler == 'tri_stage':
+            scheduler = TriStageLRScheduler(
+                optimizer,
+                init_lr=1e-10,
+                peak_lr=self.peak_lr,
+                final_lr=self.final_lr,
+                final_lr_scale=self.final_lr_scale,
+                init_lr_scale=self.init_lr_scale,
+                warmup_steps=self.warmup_steps,
+                total_steps=self.warmup_steps + self.decay_steps,
+            )
+        else:
+            raise ValueError(f"Unsupported lr_scheduler: {self.lr_scheduler}")
+
         return [optimizer], [scheduler]
 
     def configure_criterion(
@@ -275,6 +309,7 @@ class LightningSpeechRecognizer(pl.LightningModule):
             cross_entropy_weight: float,
             ctc_weight: float,
     ) -> nn.Module:
+        """ Configure criterion """
         criterion = JointCTCCrossEntropyLoss(
             num_classes=num_classes,
             ignore_index=ignore_index,

@@ -24,6 +24,13 @@ from lasr.vocabs import Vocabulary
 
 
 class LibriSpeechVocabulary(Vocabulary):
+    """
+    Converts label to string for librispeech dataset.
+
+    Args:
+        model_path (str): path of sentencepiece model
+        vocab_size (int): size of vocab
+    """
     def __init__(self, model_path: str, vocab_size: int):
         super(LibriSpeechVocabulary, self).__init__()
         try:

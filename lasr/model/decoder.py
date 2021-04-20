@@ -31,6 +31,22 @@ from lasr.model.modules import View
 
 
 class DecoderRNN(nn.Module):
+    """
+    Converts higher level features (from encoder) into output utterances
+    by specifying a probability distribution over sequences of characters.
+
+    Args:
+        num_classes (int): number of classification
+        hidden_state_dim (int): the number of features in the decoder hidden state `h`
+        pad_id (int, optional): index of the pad symbol (default: 0)
+        sos_id (int, optional): index of the start of sentence symbol (default: 1)
+        eos_id (int, optional): index of the end of sentence symbol (default: 2)
+        num_heads (int, optional): number of attention heads. (default: 4)
+        num_layers (int, optional): number of recurrent layers (default: 2)
+        rnn_type (str, optional): type of RNN cell (default: lstm)
+        dropout_p (float, optional): dropout probability of decoder (default: 0.2)
+    """
+
     supported_rnns = {
         'lstm': nn.LSTM,
         'gru': nn.GRU,

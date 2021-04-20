@@ -32,7 +32,10 @@ from torch.utils.data import Dataset
 
 class AudioDataset(Dataset):
     """
-    Dataset for feature & transcript matching
+    Dataset for audio & transcript matching
+
+    Note:
+        Do not use this class directly, use one of the sub classes.
 
     Args:
         dataset_path (str): path of librispeech dataset
@@ -93,6 +96,10 @@ class AudioDataset(Dataset):
         self.shuffle()
 
     def _spec_augment(self, feature: Tensor) -> Tensor:
+        """
+        Provides Spec Augment. A simple data augmentation method for speech recognition.
+        This concept proposed in https://arxiv.org/abs/1904.08779
+        """
         time_axis_length = feature.size(0)
         freq_axis_length = feature.size(1)
         time_mask_para = time_axis_length / 20      # Refer to "Specaugment on large scale dataset" paper
@@ -112,29 +119,51 @@ class AudioDataset(Dataset):
         return feature
 
     def _get_feature(self, signal: np.ndarray) -> np.ndarray:
+        """
+        Provides feature extraction
+
+        Inputs:
+            signal (np.ndarray): audio signal
+
+        Returns:
+            feature (np.ndarray): feature extract by sub-class
+        """
         raise NotImplementedError
 
     def _parse_audio(self, audio_path: str, apply_spec_augment: bool) -> Tensor:
+        """
+        Parses audio.
+
+        Args:
+            audio_path (str): path of audio file
+            apply_spec_augment (bool): flag indication whether to apply spec augment or not
+
+        Returns:
+            feature (np.ndarray): feature extract by sub-class
+        """
         signal = librosa.load(audio_path, sr=self.sample_rate)
         feature = self._get_feature(signal)
-        fbank = torchaudio.compliance.kaldi.fbank(
-            Tensor(signal).unsqueeze(0),
-            num_mel_bins=self.num_mels,
-            frame_length=self.frame_length,
-            frame_shift=self.frame_shift,
-        ).transpose(0, 1).numpy()
 
-        fbank -= fbank.mean()
-        fbank /= np.std(fbank)
+        feature -= feature.mean()
+        feature /= np.std(feature)
 
-        fbank = FloatTensor(fbank).transpose(0, 1)
+        feature = FloatTensor(feature).transpose(0, 1)
 
         if apply_spec_augment:
-            fbank = self._spec_augment(fbank)
+            feature = self._spec_augment(feature)
 
-        return fbank
+        return feature
 
-    def _parse_transcript(self, transcript):
+    def _parse_transcript(self, transcript: str) -> list:
+        """
+        Parses transcript
+
+        Args:
+            transcript (str): transcript of audio file
+
+        Returns
+            transcript (list): transcript that added <sos> and <eos> tokens
+        """
         tokens = transcript.split(' ')
         transcript = list()
 
@@ -146,6 +175,7 @@ class AudioDataset(Dataset):
         return transcript
 
     def __getitem__(self, idx):
+        """ Provides paif of audio & transcript """
         audio_path = os.path.join(self.dataset_path, self.audio_paths[idx])
         feature = self._parse_audio(audio_path, self.spec_augment_flags[idx])
         transcript = self._parse_transcript(self.transcripts[idx])
@@ -164,6 +194,7 @@ class AudioDataset(Dataset):
 
 
 class FBankDataset(AudioDataset):
+    """ Dataset for filter bank & transcript matching """
     def _get_feature(self, signal: np.ndarray) -> np.ndarray:
         return torchaudio.compliance.kaldi.fbank(
             Tensor(signal).unsqueeze(0),
@@ -174,6 +205,7 @@ class FBankDataset(AudioDataset):
 
 
 class SpectrogramDataset(AudioDataset):
+    """ Dataset for spectrogram & transcript matching """
     def _get_feature(self, signal: np.ndarray) -> np.ndarray:
         spectrogram = torch.stft(
             Tensor(signal), self.n_fft, hop_length=self.hop_length,
@@ -186,6 +218,7 @@ class SpectrogramDataset(AudioDataset):
 
 
 class MelSpectrogramDataset(AudioDataset):
+    """ Dataset for mel-spectrogram & transcript matching """
     def _get_feature(self, signal: np.ndarray) -> np.ndarray:
         melspectrogram = librosa.feature.melspectrogram(
             y=signal,
@@ -199,6 +232,7 @@ class MelSpectrogramDataset(AudioDataset):
 
 
 class MFCCDataset(AudioDataset):
+    """ Dataset for MFCC & transcript matching """
     def _get_feature(self, signal: np.ndarray) -> np.ndarray:
         return librosa.feature.mfcc(
             y=signal,

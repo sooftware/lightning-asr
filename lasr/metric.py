@@ -26,6 +26,7 @@ import Levenshtein as Lev
 class ErrorRate(object):
     """
     Provides inteface of error rate calcuation.
+
     Note:
         Do not use this class directly, use one of the sub classes.
     """

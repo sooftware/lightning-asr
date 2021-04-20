@@ -26,7 +26,7 @@ from lasr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
 
 
 class TransformerLRScheduler(LearningRateScheduler):
-    """ Transformer Learning Rate Scheduler proposed in "Attention Is All You Need" """
+    """ Implement the learning rate scheduler in https://arxiv.org/abs/1706.03762 """
     def __init__(self, optimizer, peak_lr, final_lr, final_lr_scale, warmup_steps, decay_steps):
         assert isinstance(warmup_steps, int), "warmup_steps should be inteager type"
         assert isinstance(decay_steps, int), "total_steps should be inteager type"
