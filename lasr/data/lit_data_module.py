@@ -29,9 +29,17 @@ import pytorch_lightning as pl
 from typing import Union, List, Tuple
 from torch.utils.data import DataLoader
 
-from lasr.data.data_loader import SpectrogramDataset, BucketingSampler, AudioDataLoader
-from lasr.data.preprocess import collect_transcripts, prepare_tokenizer, generate_transcript_file
 from lasr.vocabs import Vocabulary
+from lasr.data.data_loader import (
+    SpectrogramDataset,
+    BucketingSampler,
+    AudioDataLoader,
+)
+from lasr.data.libri_preprocess import (
+    collect_transcripts,
+    prepare_tokenizer,
+    generate_transcript_file,
+)
 
 
 def _parse_manifest_file(manifest_file_path: str) -> Tuple[list, list]:
@@ -53,12 +61,6 @@ class LightningLibriDataModule(pl.LightningDataModule):
     def __init__(
             self,
             dataset_path: str,
-            train_manifest_path: str,
-            valid_clean_manifest_path: str,
-            valid_other_manifest_path: str,
-            test_clean_manifest_path: str,
-            test_other_manifest_path: str,
-            vocab: Vocabulary,
             apply_spec_augment: bool,
             num_epochs: int,
             batch_size: int,
@@ -67,14 +69,13 @@ class LightningLibriDataModule(pl.LightningDataModule):
         super(LightningLibriDataModule, self).__init__()
         self.dataset_path = dataset_path
         self.manifest_paths = [
-            train_manifest_path,
-            valid_clean_manifest_path,
-            valid_other_manifest_path,
-            test_clean_manifest_path,
-            test_other_manifest_path,
+            f"{dataset_path}/train-960-transcript.txt",
+            f"{dataset_path}/dev-clean-transcript.txt",
+            f"{dataset_path}/dev-other-transcript.txt",
+            f"{dataset_path}/test-clean-transcript.txt",
+            f"{dataset_path}/test-other-transcript.txt",
         ]
         self.dataset = dict()
-        self.vocab = vocab
         self.apply_spec_augment = apply_spec_augment
         self.num_epochs = num_epochs
         self.batch_size = batch_size
@@ -107,7 +108,7 @@ class LightningLibriDataModule(pl.LightningDataModule):
 
             if not os.path.exists(f"{self.dataset_path}/LibriSpeech/"):
                 os.mkdir(f"{self.dataset_path}/LibriSpeech/")
-            if not os.path.exists(f"{self.dataset_path}/LibriSpeech/{train_dir}/")
+            if not os.path.exists(f"{self.dataset_path}/LibriSpeech/{train_dir}/"):
                 os.mkdir(f"{self.dataset_path}/LibriSpeech/{train_dir}/")
 
             for part in dataset_parts[-3:]:
@@ -120,14 +121,14 @@ class LightningLibriDataModule(pl.LightningDataModule):
         transcripts_collection = collect_transcripts(f"{self.dataset_path}/LibriSpeech/")
         prepare_tokenizer(transcripts_collection[0], vocab_size)
 
-        for idx, dataset in enumerate(['train_960', 'dev-clean', 'dev-other', 'test-clean', 'test-other']):
-            generate_transcript_file(dataset, transcripts_collection[idx])
+        for idx, part in enumerate(['train_960', 'dev-clean', 'dev-other', 'test-clean', 'test-other']):
+            generate_transcript_file(self.dataset_path, part, transcripts_collection[idx])
 
         self.logger.info("Remove .tar.gz files..")
         for part in dataset_parts:
             os.remove(f"{self.dataset_path}/{part}.tar.gz")
 
-    def setup(self) -> None:
+    def setup(self, vocab: Vocabulary) -> None:
         splits = ['train', 'val-clean', 'val-other', 'test-clean', 'test-other']
 
         for idx, (path, split) in enumerate(zip(self.manifest_paths, splits)):
@@ -136,31 +137,47 @@ class LightningLibriDataModule(pl.LightningDataModule):
                 dataset_path=self.dataset_path,
                 audio_paths=audio_paths,
                 transcripts=transcripts,
-                sos_id=self.vocab.sos_id,
-                eos_id=self.vocab.eos_id,
+                sos_id=vocab.sos_id,
+                eos_id=vocab.eos_id,
                 apply_spec_augment=self.apply_spec_augment if idx == 0 else False,
             )
 
     def train_dataloader(self) -> DataLoader:
         train_sampler = BucketingSampler(self.dataset['train'], batch_size=self.batch_size)
         return AudioDataLoader(
-            self.dataset['train'],
+            dataset=self.dataset['train'],
             num_workers=self.num_workers,
             batch_sampler=train_sampler,
         )
 
     def val_dataloader(self) -> Union[DataLoader, List[DataLoader]]:
-        valid_clean_sampler = BucketingSampler(self.dataset['val-clean'], batch_size=self.batch_size)
-        valid_other_sampler = BucketingSampler(self.dataset['val-other'], batch_size=self.batch_size)
+        val_clean_sampler = BucketingSampler(self.dataset['val-clean'], batch_size=self.batch_size)
+        val_other_sampler = BucketingSampler(self.dataset['val-other'], batch_size=self.batch_size)
         return [
-            AudioDataLoader(self.dataset['val-clean'], num_workers=self.num_workers, batch_sampler=valid_clean_sampler),
-            AudioDataLoader(self.dataset['val-other'], num_workers=self.num_workers, batch_sampler=valid_other_sampler),
+            AudioDataLoader(
+                dataset=self.dataset['val-clean'],
+                num_workers=self.num_workers,
+                batch_sampler=val_clean_sampler,
+            ),
+            AudioDataLoader(
+                dataset=self.dataset['val-other'],
+                num_workers=self.num_workers,
+                batch_sampler=val_other_sampler,
+            ),
         ]
 
     def test_dataloader(self) -> Union[DataLoader, List[DataLoader]]:
         test_clean_sampler = BucketingSampler(self.dataset['test-clean'], batch_size=self.batch_size)
         test_other_sampler = BucketingSampler(self.dataset['test-other'], batch_size=self.batch_size)
         return [
-            AudioDataLoader(self.dataset['test-clean'], num_workers=self.num_workers, batch_sampler=test_clean_sampler),
-            AudioDataLoader(self.dataset['test-other'], num_workers=self.num_workers, batch_sampler=test_other_sampler),
+            AudioDataLoader(
+                dataset=self.dataset['test-clean'],
+                num_workers=self.num_workers,
+                batch_sampler=test_clean_sampler,
+            ),
+            AudioDataLoader(
+                dataset=self.dataset['test-other'],
+                num_workers=self.num_workers,
+                batch_sampler=test_other_sampler,
+            ),
         ]

@@ -70,15 +70,11 @@ class ErrorRate(object):
         raise NotImplementedError
 
 
-class UnitErrorRate(ErrorRate):
-    """
-    Provides inteface of error rate calcuation.
-    Note:
-        Do not use this class directly, use one of the sub classes.
-    """
+class WordErrorRate(ErrorRate):
+    """ Provides word error rate calcuation. """
 
     def __init__(self, vocab) -> None:
-        super(UnitErrorRate, self).__init__(vocab)
+        super(WordErrorRate, self).__init__(vocab)
 
     def metric(self, s1, s2):
         """

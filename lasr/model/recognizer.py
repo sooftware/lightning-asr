@@ -26,7 +26,7 @@ import pytorch_lightning as pl
 from torch import Tensor
 from typing import Tuple, List
 
-from lasr.metric import UnitErrorRate, ErrorRate
+from lasr.metric import WordErrorRate, ErrorRate
 from lasr.model.decoder import DecoderRNN
 from lasr.model.encoder import ConformerEncoder
 from lasr.optim.lr_scheduler import TransformerLRScheduler
@@ -90,7 +90,7 @@ class LightningSpeechRecognizer(pl.LightningModule):
             warmup_steps: int = 10000,
             decay_steps: int = 80000,
             vocab: Vocabulary = LibriSpeechVocabulary,
-            metric: ErrorRate = UnitErrorRate,
+            metric: ErrorRate = WordErrorRate,
             teacher_forcing_ratio: float = 1.0,
             cross_entropy_weight: float = 0.7,
             ctc_weight: float = 0.3,
@@ -153,11 +153,11 @@ class LightningSpeechRecognizer(pl.LightningModule):
             input_lengths (torch.LongTensor): The length of input tensor. ``(batch)``
 
         Returns:
-            * predictions (torch.FloatTensor): Result of model predictions.
+            * y_hats (torch.FloatTensor): Result of model predictions.
         """
         _, encoder_outputs, _ = self.encoder(inputs, input_lengths)
-        predictions = self.decoder(encoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
-        return predictions
+        y_hats = self.decoder(encoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
+        return y_hats
 
     def training_step(self, train_batch: tuple, batch_idx: int) -> Tensor:
         """
@@ -173,16 +173,16 @@ class LightningSpeechRecognizer(pl.LightningModule):
         inputs, input_lengths, targets, target_lengths = train_batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
-        predictions = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=self.teacher_forcing_ratio)
+        y_hats = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=self.teacher_forcing_ratio)
 
         loss, ctc_loss, cross_entropy_loss = self.criterion(
             encoder_log_probs=encoder_log_probs.transpose(0, 1),
-            decoder_log_probs=predictions.contiguous().view(-1, predictions.size(-1)),
+            decoder_log_probs=y_hats.contiguous().view(-1, y_hats.size(-1)),
             output_lengths=encoder_output_lengths,
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        uer = self.metric(targets, predictions)
+        uer = self.metric(targets, y_hats)
 
         self.log("train_uer", uer)
         self.log("train_loss", loss)
@@ -205,16 +205,16 @@ class LightningSpeechRecognizer(pl.LightningModule):
         inputs, input_lengths, targets, target_lengths = val_batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
-        predictions = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=0.0)
+        y_hats = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=0.0)
 
         loss, ctc_loss, cross_entropy_loss = self.criterion(
             encoder_log_probs=encoder_log_probs.transpose(0, 1),
-            decoder_log_probs=predictions.contiguous().view(-1, predictions.size(-1)),
+            decoder_log_probs=y_hats.contiguous().view(-1, y_hats.size(-1)),
             output_lengths=encoder_output_lengths,
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        uer = self.metric(targets, predictions)
+        uer = self.metric(targets, y_hats)
 
         self.log("val_uer", uer)
         self.log("val_loss", loss)
@@ -237,16 +237,16 @@ class LightningSpeechRecognizer(pl.LightningModule):
         inputs, input_lengths, targets, target_lengths = test_batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
-        predictions = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=0.0)
+        y_hats = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=0.0)
 
         loss, ctc_loss, cross_entropy_loss = self.criterion(
             encoder_log_probs=encoder_log_probs.transpose(0, 1),
-            decoder_log_probs=predictions.contiguous().view(-1, predictions.size(-1)),
+            decoder_log_probs=y_hats.contiguous().view(-1, y_hats.size(-1)),
             output_lengths=encoder_output_lengths,
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        uer = self.metric(targets, predictions)
+        uer = self.metric(targets, y_hats)
 
         self.log("test_uer", uer)
         self.log("test_loss", loss)
