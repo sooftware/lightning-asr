@@ -22,7 +22,7 @@
 
 import argparse
 
-from preprocess import (
+from lasr.data.preprocess import (
     collect_transcripts,
     prepare_tokenizer,
     generate_transcript_file

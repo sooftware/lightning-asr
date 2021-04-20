@@ -21,11 +21,16 @@
 # SOFTWARE.
 
 import os
+import wget
+import tarfile
+import logging
+import shutil
 import pytorch_lightning as pl
-from typing import Any, Union, List, Tuple
+from typing import Union, List, Tuple
 from torch.utils.data import DataLoader
 
 from lasr.data.data_loader import SpectrogramDataset, BucketingSampler, AudioDataLoader
+from lasr.data.preprocess import collect_transcripts, prepare_tokenizer, generate_transcript_file
 from lasr.vocabs import Vocabulary
 
 
@@ -74,13 +79,55 @@ class LightningLibriDataModule(pl.LightningDataModule):
         self.num_epochs = num_epochs
         self.batch_size = batch_size
         self.num_workers = num_workers
+        self.logger = logging.getLogger(__name__)
 
-    def prepare_data(self):
-        for path in self.manifest_paths:
-            if not os.path.isfile(path):
-                raise FileExistsError("Manifest file is not exist.")
+    def prepare_data(self, download: bool = False, vocab_size: int = 5000) -> None:
+        base_url = "http://www.openslr.org/resources/12"
+        train_dir = "train_960"
+        dataset_parts = [
+            'dev-clean', 'test-clean', 'dev-other', 'test-other',
+            'train-clean-100', 'train-clean-360', 'train-other-500',
+        ]
 
-    def setup(self):
+        if download:
+            if not os.path.exists(self.dataset_path):
+                os.mkdir(self.dataset_path)
+
+            for part in dataset_parts:
+                self.logger.info(f"librispeech-{part} download..")
+                url = f"{base_url}/{part}.tar.gz"
+                wget.download(url, self.dataset_path)
+
+                self.logger.info(f"un-tarring archive {self.dataset_path}/{part}.tar.gz")
+                tar = tarfile.open(f"{self.dataset_path}/{part}.tar.gz", mode="r:gz")
+                tar.extractall()
+                tar.close()
+
+            self.logger.info("Merge all train packs into one")
+
+            if not os.path.exists(f"{self.dataset_path}/LibriSpeech/"):
+                os.mkdir(f"{self.dataset_path}/LibriSpeech/")
+            if not os.path.exists(f"{self.dataset_path}/LibriSpeech/{train_dir}/")
+                os.mkdir(f"{self.dataset_path}/LibriSpeech/{train_dir}/")
+
+            for part in dataset_parts[-3:]:
+                path = f"{self.dataset_path}/LibriSpeech/{part}/"
+                files = os.listdir(path)
+                for file in files:
+                    shutil.move(f"{path}/{file}", f"{self.dataset_path}/LibriSpeech/{train_dir}/{file}")
+
+        self.logger.info("Data Pre-processing..")
+        transcripts_collection = collect_transcripts(f"{self.dataset_path}/LibriSpeech/")
+        prepare_tokenizer(transcripts_collection[0], vocab_size)
+
+        for idx, dataset in enumerate(['train_960', 'dev-clean', 'dev-other', 'test-clean', 'test-other']):
+            generate_transcript_file(dataset, transcripts_collection[idx])
+
+        self.logger.info("Remove .tar.gz files..")
+        for part in dataset_parts:
+            os.remove(f"{self.dataset_path}/{part}.tar.gz")
+
+    def setup(self) -> None:
         splits = ['train', 'val-clean', 'val-other', 'test-clean', 'test-other']
 
         for idx, (path, split) in enumerate(zip(self.manifest_paths, splits)):
@@ -94,9 +141,13 @@ class LightningLibriDataModule(pl.LightningDataModule):
                 apply_spec_augment=self.apply_spec_augment if idx == 0 else False,
             )
 
-    def train_dataloader(self) -> Any:
+    def train_dataloader(self) -> DataLoader:
         train_sampler = BucketingSampler(self.dataset['train'], batch_size=self.batch_size)
-        return AudioDataLoader(self.dataset['train'], num_workers=self.num_workers, batch_sampler=train_sampler)
+        return AudioDataLoader(
+            self.dataset['train'],
+            num_workers=self.num_workers,
+            batch_sampler=train_sampler,
+        )
 
     def val_dataloader(self) -> Union[DataLoader, List[DataLoader]]:
         valid_clean_sampler = BucketingSampler(self.dataset['val-clean'], batch_size=self.batch_size)
