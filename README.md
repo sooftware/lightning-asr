@@ -85,6 +85,8 @@ You can simply train with LibriSpeech dataset like below:
 $ python ./bin/main.py --dataset_path $DATASET_PATH --dataset_download True
 ```
   
+Check configuraions at [[link]](https://github.com/sooftware/lasr/tree/main/configs)
+  
 ## Troubleshoots and Contributing
 If you have any questions, bug reports, and feature requests, please [open an issue](https://github.com/sooftware/lasr/issues) on Github.   
   
