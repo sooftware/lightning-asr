@@ -33,6 +33,7 @@ from lasr.optim import AdamP, RAdam
 from lasr.optim.lr_scheduler import TransformerLRScheduler, TriStageLRScheduler
 from lasr.criterion.joint_ctc_cross_entropy import JointCTCCrossEntropyLoss
 from lasr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
+from lasr.optim.optimizer import Optimizer
 from lasr.vocabs import Vocabulary, LibriSpeechVocabulary
 
 
@@ -91,9 +92,10 @@ class LightningSpeechRecognizer(pl.LightningModule):
             peak_lr: float = 1e-04,
             final_lr: float = 1e-07,
             init_lr_scale: float = 0.01,
-            final_lr_scale: float = 0.05,
+            final_lr_scale: float = 0.01,
             warmup_steps: int = 10000,
-            decay_steps: int = 80000,
+            decay_steps: int = 200000,
+            max_grad_norm: int = 5.0,
             vocab: Vocabulary = LibriSpeechVocabulary,
             metric: ErrorRate = WordErrorRate,
             teacher_forcing_ratio: float = 1.0,
@@ -111,6 +113,8 @@ class LightningSpeechRecognizer(pl.LightningModule):
         self.final_lr_scale = final_lr_scale
         self.warmup_steps = warmup_steps
         self.decay_steps = decay_steps
+        self.total_steps = warmup_steps + decay_steps
+        self.max_grad_norm = max_grad_norm
         self.teacher_forcing_ratio = teacher_forcing_ratio
         self.vocab = vocab
         self.metric = metric
@@ -298,6 +302,8 @@ class LightningSpeechRecognizer(pl.LightningModule):
             )
         else:
             raise ValueError(f"Unsupported lr_scheduler: {self.lr_scheduler}")
+
+        optimizer = Optimizer(optimizer, scheduler, self.total_steps, self.max_grad_norm)
 
         return [optimizer], [scheduler]
 
