@@ -27,9 +27,11 @@ import logging
 import shutil
 import pytorch_lightning as pl
 from typing import Union, List, Tuple
+
+from omegaconf import DictConfig
 from torch.utils.data import DataLoader
 
-from lasr.vocabs import Vocabulary
+from lasr.vocabs import Vocabulary, LibriSpeechVocabulary
 from lasr.data.dataset import (
     SpectrogramDataset,
     MelSpectrogramDataset,
@@ -68,6 +70,9 @@ class LightningLibriDataModule(pl.LightningDataModule):
     PyTorch Lightning Data Module for LibriSpeech Dataset.
 
     Args:
+        configs (DictConfig): configuraion set
+
+    Attributes:
         dataset_path (str): path of librispeech dataset
         apply_spec_augment (bool): flag indication whether to apply spec augment or not
         num_epochs (int): the number of epochs
@@ -91,55 +96,40 @@ class LightningLibriDataModule(pl.LightningDataModule):
         'train-other-500',
     ]
 
-    def __init__(
-            self,
-            dataset_path: str,
-            feature_extract_method: str,
-            apply_spec_augment: bool,
-            num_epochs: int,
-            batch_size: int,
-            num_workers: int,
-            sample_rate: int = 16000,
-            num_mels: int = 80,
-            frame_length: float = 25.0,
-            frame_shift: float = 10.0,
-            freq_mask_para: int = 27,
-            time_mask_num: int = 4,
-            freq_mask_num: int = 2,
-    ) -> None:
+    def __init__(self, configs: DictConfig) -> None:
         super(LightningLibriDataModule, self).__init__()
-        self.dataset_path = dataset_path
+        self.dataset_path = configs.dataset_path
         self.manifest_paths = [
-            f"{dataset_path}/train-960.txt",
-            f"{dataset_path}/dev-clean.txt",
-            f"{dataset_path}/dev-other.txt",
-            f"{dataset_path}/test-clean.txt",
-            f"{dataset_path}/test-other.txt",
+            f"{configs.dataset_path}/train-960.txt",
+            f"{configs.dataset_path}/dev-clean.txt",
+            f"{configs.dataset_path}/dev-other.txt",
+            f"{configs.dataset_path}/test-clean.txt",
+            f"{configs.dataset_path}/test-other.txt",
         ]
         self.dataset = dict()
-        self.apply_spec_augment = apply_spec_augment
-        self.num_epochs = num_epochs
-        self.batch_size = batch_size
-        self.num_workers = num_workers
-        self.sample_rate = sample_rate
-        self.num_mels = num_mels
-        self.frame_length = frame_length
-        self.frame_shift = frame_shift
-        self.freq_mask_para = freq_mask_para
-        self.time_mask_num = time_mask_num
-        self.freq_mask_num = freq_mask_num
+        self.apply_spec_augment = configs.apply_spec_augment
+        self.num_epochs = configs.num_epochs
+        self.batch_size = configs.batch_size
+        self.num_workers = configs.num_workers
+        self.sample_rate = configs.sample_rate
+        self.num_mels = configs.num_mels
+        self.frame_length = configs.frame_length
+        self.frame_shift = configs.frame_shift
+        self.freq_mask_para = configs.freq_mask_para
+        self.time_mask_num = configs.time_mask_num
+        self.freq_mask_num = configs.freq_mask_num
         self.logger = logging.getLogger(__name__)
 
-        if feature_extract_method == 'spectrogram':
+        if configs.feature_extract_method == 'spectrogram':
             self.audio_dataset = SpectrogramDataset
-        elif feature_extract_method == 'melspectrogram':
+        elif configs.feature_extract_method == 'melspectrogram':
             self.audio_dataset = MelSpectrogramDataset
-        elif feature_extract_method == 'mfcc':
+        elif configs.feature_extract_method == 'mfcc':
             self.audio_dataset = MFCCDataset
-        elif feature_extract_method == 'fbank':
+        elif configs.feature_extract_method == 'fbank':
             self.audio_dataset = FBankDataset
         else:
-            raise ValueError(f"Unsupported `feature_extract_method`: {feature_extract_method}")
+            raise ValueError(f"Unsupported `feature_extract_method`: {configs.feature_extract_method}")
 
     def _download_librispeech(self) -> None:
         base_url = "http://www.openslr.org/resources/12"
@@ -187,7 +177,7 @@ class LightningLibriDataModule(pl.LightningDataModule):
         for idx, part in enumerate(['train_960', 'dev-clean', 'dev-other', 'test-clean', 'test-other']):
             generate_manifest_file(self.dataset_path, part, transcripts_collection[idx])
 
-    def prepare_data(self, download: bool = False, vocab_size: int = 5000) -> None:
+    def prepare_data(self, download: bool = False, vocab_size: int = 5000) -> Vocabulary:
         """
         Prepare librispeech data
 
@@ -201,6 +191,7 @@ class LightningLibriDataModule(pl.LightningDataModule):
         if download:
             self._download_librispeech()
         self._generate_manifest_files(vocab_size)
+        return LibriSpeechVocabulary("tokenizer.model", vocab_size)
 
     def setup(self, vocab: Vocabulary) -> None:
         splits = ['train', 'val-clean', 'val-other', 'test-clean', 'test-other']
