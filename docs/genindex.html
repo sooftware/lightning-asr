@@ -91,7 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="notes/intro.html#troubleshoots-and-contributing">Troubleshoots and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/intro.html#author">Author</a></li>
 </ul>
-<p class="caption"><span class="caption-text">LIBRI REFERENCE</span></p>
+<p class="caption"><span class="caption-text">LIBRARY REFERENCE</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Criterion.html">Criterion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Data.html">Data</a></li>
@@ -176,9 +176,11 @@
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
  | <a href="#J"><strong>J</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
@@ -193,6 +195,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Optim.html#lasr.optim.adamp.AdamP">AdamP (class in lasr.optim.adamp)</a>
 </li>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.apply_spec_augment">apply_spec_augment (lasr.data.lit_data_module.LitLibriDataModule attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Data.html#lasr.data.data_loader.AudioDataLoader">AudioDataLoader (class in lasr.data.data_loader)</a>
@@ -205,6 +209,10 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.batch_size">batch_size (lasr.data.lit_data_module.LitLibriDataModule attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Data.html#lasr.data.data_loader.BucketingSampler">BucketingSampler (class in lasr.data.data_loader)</a>
 </li>
   </ul></td>
@@ -215,9 +223,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Data.html#lasr.data.libri_preprocess.collect_transcripts">collect_transcripts() (in module lasr.data.libri_preprocess)</a>
 </li>
-      <li><a href="Model.html#lasr.model.recognizer.LightningSpeechRecognizer.configure_criterion">configure_criterion() (lasr.model.recognizer.LightningSpeechRecognizer method)</a>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.configure_criterion">configure_criterion() (lasr.model.recognizer.LitSpeechRecognizer method)</a>
 </li>
-      <li><a href="Model.html#lasr.model.recognizer.LightningSpeechRecognizer.configure_optimizers">configure_optimizers() (lasr.model.recognizer.LightningSpeechRecognizer method)</a>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.configure_optimizers">configure_optimizers() (lasr.model.recognizer.LitSpeechRecognizer method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -235,6 +243,12 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.dataset_path">dataset_path (lasr.data.lit_data_module.LitLibriDataModule attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.decay_steps">decay_steps (lasr.model.recognizer.LitSpeechRecognizer attribute)</a>
+</li>
       <li><a href="Model.html#lasr.model.convolution.DepthwiseConv1d">DepthwiseConv1d (class in lasr.model.convolution)</a>
 </li>
   </ul></td>
@@ -254,6 +268,10 @@
       <li><a href="Data.html#lasr.data.dataset.FBankDataset">FBankDataset (class in lasr.data.dataset)</a>
 </li>
       <li><a href="Model.html#lasr.model.feed_forward.FeedForwardModule">FeedForwardModule (class in lasr.model.feed_forward)</a>
+</li>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.final_lr">final_lr (lasr.model.recognizer.LitSpeechRecognizer attribute)</a>
+</li>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.final_lr_scale">final_lr_scale (lasr.model.recognizer.LitSpeechRecognizer attribute)</a>
 </li>
       <li><a href="Criterion.html#lasr.criterion.joint_ctc_cross_entropy.JointCTCCrossEntropyLoss.forward">forward() (lasr.criterion.joint_ctc_cross_entropy.JointCTCCrossEntropyLoss method)</a>
 
@@ -296,9 +314,19 @@
 </li>
         <li><a href="Model.html#lasr.model.modules.View.forward">(lasr.model.modules.View method)</a>
 </li>
-        <li><a href="Model.html#lasr.model.recognizer.LightningSpeechRecognizer.forward">(lasr.model.recognizer.LightningSpeechRecognizer method)</a>
+        <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.forward">(lasr.model.recognizer.LitSpeechRecognizer method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.frame_length">frame_length (lasr.data.lit_data_module.LitLibriDataModule attribute)</a>
+</li>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.frame_shift">frame_shift (lasr.data.lit_data_module.LitLibriDataModule attribute)</a>
+</li>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.freq_mask_num">freq_mask_num (lasr.data.lit_data_module.LitLibriDataModule attribute)</a>
+</li>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.freq_mask_para">freq_mask_para (lasr.data.lit_data_module.LitLibriDataModule attribute)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -310,6 +338,14 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Model.html#lasr.model.activation.GLU">GLU (class in lasr.model.activation)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.init_lr_scale">init_lr_scale (lasr.model.recognizer.LitSpeechRecognizer attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -487,11 +523,13 @@
 </li>
       <li><a href="Vocab.html#lasr.vocabs.librispeech.LibriSpeechVocabulary">LibriSpeechVocabulary (class in lasr.vocabs.librispeech)</a>
 </li>
-      <li><a href="Data.html#lasr.data.lit_data_module.LightningLibriDataModule">LightningLibriDataModule (class in lasr.data.lit_data_module)</a>
-</li>
-      <li><a href="Model.html#lasr.model.recognizer.LightningSpeechRecognizer">LightningSpeechRecognizer (class in lasr.model.recognizer)</a>
-</li>
       <li><a href="Model.html#lasr.model.modules.Linear">Linear (class in lasr.model.modules)</a>
+</li>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule">LitLibriDataModule (class in lasr.data.lit_data_module)</a>
+</li>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer">LitSpeechRecognizer (class in lasr.model.recognizer)</a>
+</li>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.lr_scheduler">lr_scheduler (lasr.model.recognizer.LitSpeechRecognizer attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -563,10 +601,30 @@
   </ul></td>
 </tr></table>
 
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.num_classes">num_classes (lasr.model.recognizer.LitSpeechRecognizer attribute)</a>
+</li>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.num_epochs">num_epochs (lasr.data.lit_data_module.LitLibriDataModule attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.num_mels">num_mels (lasr.data.lit_data_module.LitLibriDataModule attribute)</a>
+</li>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.num_workers">num_workers (lasr.data.lit_data_module.LitLibriDataModule attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Optim.html#lasr.optim.optimizer.Optimizer">Optimizer (class in lasr.optim.optimizer)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.optimizer">optimizer (lasr.model.recognizer.LitSpeechRecognizer attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -574,13 +632,15 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Model.html#lasr.model.convolution.PointwiseConv1d">PointwiseConv1d (class in lasr.model.convolution)</a>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.peak_lr">peak_lr (lasr.model.recognizer.LitSpeechRecognizer attribute)</a>
 </li>
-      <li><a href="Model.html#lasr.model.embedding.PositionalEncoding">PositionalEncoding (class in lasr.model.embedding)</a>
+      <li><a href="Model.html#lasr.model.convolution.PointwiseConv1d">PointwiseConv1d (class in lasr.model.convolution)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Data.html#lasr.data.lit_data_module.LightningLibriDataModule.prepare_data">prepare_data() (lasr.data.lit_data_module.LightningLibriDataModule method)</a>
+      <li><a href="Model.html#lasr.model.embedding.PositionalEncoding">PositionalEncoding (class in lasr.model.embedding)</a>
+</li>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.prepare_data">prepare_data() (lasr.data.lit_data_module.LitLibriDataModule method)</a>
 </li>
       <li><a href="Data.html#lasr.data.libri_preprocess.prepare_tokenizer">prepare_tokenizer() (in module lasr.data.libri_preprocess)</a>
 </li>
@@ -604,6 +664,8 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.sample_rate">sample_rate (lasr.data.lit_data_module.LitLibriDataModule attribute)</a>
+</li>
       <li><a href="Model.html#lasr.model.attention.ScaledDotProductAttention">ScaledDotProductAttention (class in lasr.model.attention)</a>
 </li>
       <li><a href="Data.html#lasr.data.dataset.SpectrogramDataset">SpectrogramDataset (class in lasr.data.dataset)</a>
@@ -624,15 +686,19 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Data.html#lasr.data.lit_data_module.LightningLibriDataModule.test_dataloader">test_dataloader() (lasr.data.lit_data_module.LightningLibriDataModule method)</a>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.teacher_forcing_ratio">teacher_forcing_ratio (lasr.model.recognizer.LitSpeechRecognizer attribute)</a>
 </li>
-      <li><a href="Model.html#lasr.model.recognizer.LightningSpeechRecognizer.test_step">test_step() (lasr.model.recognizer.LightningSpeechRecognizer method)</a>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.test_dataloader">test_dataloader() (lasr.data.lit_data_module.LitLibriDataModule method)</a>
 </li>
-      <li><a href="Data.html#lasr.data.lit_data_module.LightningLibriDataModule.train_dataloader">train_dataloader() (lasr.data.lit_data_module.LightningLibriDataModule method)</a>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.test_step">test_step() (lasr.model.recognizer.LitSpeechRecognizer method)</a>
+</li>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.time_mask_num">time_mask_num (lasr.data.lit_data_module.LitLibriDataModule attribute)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Model.html#lasr.model.recognizer.LightningSpeechRecognizer.training_step">training_step() (lasr.model.recognizer.LightningSpeechRecognizer method)</a>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.train_dataloader">train_dataloader() (lasr.data.lit_data_module.LitLibriDataModule method)</a>
+</li>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.training_step">training_step() (lasr.model.recognizer.LitSpeechRecognizer method)</a>
 </li>
       <li><a href="Lr_scheduler.html#lasr.optim.lr_scheduler.transformer_lr_scheduler.TransformerLRScheduler">TransformerLRScheduler (class in lasr.optim.lr_scheduler.transformer_lr_scheduler)</a>
 </li>
@@ -646,13 +712,15 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="Data.html#lasr.data.lit_data_module.LightningLibriDataModule.val_dataloader">val_dataloader() (lasr.data.lit_data_module.LightningLibriDataModule method)</a>
+      <li><a href="Data.html#lasr.data.lit_data_module.LitLibriDataModule.val_dataloader">val_dataloader() (lasr.data.lit_data_module.LitLibriDataModule method)</a>
 </li>
-      <li><a href="Model.html#lasr.model.recognizer.LightningSpeechRecognizer.validation_step">validation_step() (lasr.model.recognizer.LightningSpeechRecognizer method)</a>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.validation_step">validation_step() (lasr.model.recognizer.LitSpeechRecognizer method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Model.html#lasr.model.modules.View">View (class in lasr.model.modules)</a>
+</li>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.vocab">vocab (lasr.model.recognizer.LitSpeechRecognizer attribute)</a>
 </li>
       <li><a href="Vocab.html#lasr.vocabs.__init__.Vocabulary">Vocabulary (class in lasr.vocabs.__init__)</a>
 </li>
@@ -661,6 +729,10 @@
 
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="Model.html#lasr.model.recognizer.LitSpeechRecognizer.warmup_steps">warmup_steps (lasr.model.recognizer.LitSpeechRecognizer attribute)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="Metric.html#lasr.metric.WordErrorRate">WordErrorRate (class in lasr.metric)</a>
 </li>

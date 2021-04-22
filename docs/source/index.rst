@@ -14,7 +14,7 @@ Welcome to LASR's documentation!
 
 .. toctree::
    :maxdepth: 1
-   :caption: LIBRI REFERENCE
+   :caption: LIBRARY REFERENCE
 
    Criterion
    Data

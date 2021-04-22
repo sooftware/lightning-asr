@@ -93,7 +93,7 @@
 <li class="toctree-l1"><a class="reference internal" href="notes/intro.html#troubleshoots-and-contributing">Troubleshoots and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="notes/intro.html#author">Author</a></li>
 </ul>
-<p class="caption"><span class="caption-text">LIBRI REFERENCE</span></p>
+<p class="caption"><span class="caption-text">LIBRARY REFERENCE</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="Criterion.html">Criterion</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Data</a><ul>
@@ -272,30 +272,149 @@
 <div class="section" id="module-lasr.data.lit_data_module">
 <span id="lightning-data-module"></span><h2>Lightning Data Module<a class="headerlink" href="#module-lasr.data.lit_data_module" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="lasr.data.lit_data_module.LightningLibriDataModule">
-<em class="property">class </em><code class="sig-prename descclassname">lasr.data.lit_data_module.</code><code class="sig-name descname">LightningLibriDataModule</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/data/lit_data_module.html#LightningLibriDataModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.data.lit_data_module.LightningLibriDataModule" title="Permalink to this definition">¶</a></dt>
+<dt id="lasr.data.lit_data_module.LitLibriDataModule">
+<em class="property">class </em><code class="sig-prename descclassname">lasr.data.lit_data_module.</code><code class="sig-name descname">LitLibriDataModule</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/data/lit_data_module.html#LitLibriDataModule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule" title="Permalink to this definition">¶</a></dt>
 <dd><p>PyTorch Lightning Data Module for LibriSpeech Dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path of librispeech dataset</p></li>
-<li><p><strong>apply_spec_augment</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – flag indication whether to apply spec augment or not</p></li>
-<li><p><strong>num_epochs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the number of epochs</p></li>
-<li><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the size of batch samples</p></li>
-<li><p><strong>num_workers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the number of cpu workers</p></li>
-<li><p><strong>sample_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – sampling rate of audio</p></li>
-<li><p><strong>num_mels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the number of mfc coefficients to retain.</p></li>
-<li><p><strong>frame_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – frame length for spectrogram (ms)</p></li>
-<li><p><strong>frame_shift</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – length of hop between STFT (short time fourier transform) windows.</p></li>
-<li><p><strong>freq_mask_para</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – hyper Parameter for freq masking to limit freq masking length</p></li>
-<li><p><strong>time_mask_num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – how many time-masked area to make</p></li>
-<li><p><strong>freq_mask_num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – how many freq-masked area to make</p></li>
-</ul>
+<dd class="field-odd"><p><strong>configs</strong> (<em>DictConfig</em>) – configuraion set</p>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.dataset_path">
+<code class="sig-name descname">dataset_path</code><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.dataset_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>path of librispeech dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.apply_spec_augment">
+<code class="sig-name descname">apply_spec_augment</code><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.apply_spec_augment" title="Permalink to this definition">¶</a></dt>
+<dd><p>flag indication whether to apply spec augment or not</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.num_epochs">
+<code class="sig-name descname">num_epochs</code><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.num_epochs" title="Permalink to this definition">¶</a></dt>
+<dd><p>the number of epochs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.batch_size">
+<code class="sig-name descname">batch_size</code><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.batch_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>the size of batch samples</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.num_workers">
+<code class="sig-name descname">num_workers</code><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.num_workers" title="Permalink to this definition">¶</a></dt>
+<dd><p>the number of cpu workers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.sample_rate">
+<code class="sig-name descname">sample_rate</code><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.sample_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>sampling rate of audio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.num_mels">
+<code class="sig-name descname">num_mels</code><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.num_mels" title="Permalink to this definition">¶</a></dt>
+<dd><p>the number of mfc coefficients to retain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.frame_length">
+<code class="sig-name descname">frame_length</code><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.frame_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>frame length for spectrogram (ms)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.frame_shift">
+<code class="sig-name descname">frame_shift</code><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.frame_shift" title="Permalink to this definition">¶</a></dt>
+<dd><p>length of hop between STFT (short time fourier transform) windows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.freq_mask_para">
+<code class="sig-name descname">freq_mask_para</code><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.freq_mask_para" title="Permalink to this definition">¶</a></dt>
+<dd><p>hyper Parameter for freq masking to limit freq masking length</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.time_mask_num">
+<code class="sig-name descname">time_mask_num</code><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.time_mask_num" title="Permalink to this definition">¶</a></dt>
+<dd><p>how many time-masked area to make</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.freq_mask_num">
+<code class="sig-name descname">freq_mask_num</code><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.freq_mask_num" title="Permalink to this definition">¶</a></dt>
+<dd><p>how many freq-masked area to make</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
-<dt id="lasr.data.lit_data_module.LightningLibriDataModule.prepare_data">
-<code class="sig-name descname">prepare_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">download</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">vocab_size</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">5000</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="reference internal" href="_modules/lasr/data/lit_data_module.html#LightningLibriDataModule.prepare_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.data.lit_data_module.LightningLibriDataModule.prepare_data" title="Permalink to this definition">¶</a></dt>
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.prepare_data">
+<code class="sig-name descname">prepare_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">download</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">vocab_size</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">5000</span></em><span class="sig-paren">)</span> &#x2192; lasr.vocabs.Vocabulary<a class="reference internal" href="_modules/lasr/data/lit_data_module.html#LitLibriDataModule.prepare_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.prepare_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepare librispeech data</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -311,15 +430,15 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="lasr.data.lit_data_module.LightningLibriDataModule.test_dataloader">
-<code class="sig-name descname">test_dataloader</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>torch.utils.data.dataloader.DataLoader<span class="p">, </span>List<span class="p">[</span>torch.utils.data.dataloader.DataLoader<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/lasr/data/lit_data_module.html#LightningLibriDataModule.test_dataloader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.data.lit_data_module.LightningLibriDataModule.test_dataloader" title="Permalink to this definition">¶</a></dt>
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.test_dataloader">
+<code class="sig-name descname">test_dataloader</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>torch.utils.data.dataloader.DataLoader<span class="p">, </span>List<span class="p">[</span>torch.utils.data.dataloader.DataLoader<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/lasr/data/lit_data_module.html#LitLibriDataModule.test_dataloader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.test_dataloader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implement one or multiple PyTorch DataLoaders for testing.</p>
 <p>The dataloader you return will not be called every epoch unless you set
 <a href="#id1"><span class="problematic" id="id2">:paramref:`~pytorch_lightning.trainer.Trainer.reload_dataloaders_every_epoch`</span></a> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
 <p>For data processing use the following pattern:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>download in <a class="reference internal" href="#lasr.data.lit_data_module.LightningLibriDataModule.prepare_data" title="lasr.data.lit_data_module.LightningLibriDataModule.prepare_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_data()</span></code></a></p></li>
+<li><p>download in <a class="reference internal" href="#lasr.data.lit_data_module.LitLibriDataModule.prepare_data" title="lasr.data.lit_data_module.LitLibriDataModule.prepare_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_data()</span></code></a></p></li>
 <li><p>process and split in <code class="xref py py-meth docutils literal notranslate"><span class="pre">setup()</span></code></p></li>
 </ul>
 </div></blockquote>
@@ -331,11 +450,11 @@
 <ul class="simple">
 <li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></p></li>
 <li><p>…</p></li>
-<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LightningLibriDataModule.prepare_data" title="lasr.data.lit_data_module.LightningLibriDataModule.prepare_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_data()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LitLibriDataModule.prepare_data" title="lasr.data.lit_data_module.LitLibriDataModule.prepare_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_data()</span></code></a></p></li>
 <li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">setup()</span></code></p></li>
-<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LightningLibriDataModule.train_dataloader" title="lasr.data.lit_data_module.LightningLibriDataModule.train_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">train_dataloader()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LightningLibriDataModule.val_dataloader" title="lasr.data.lit_data_module.LightningLibriDataModule.val_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">val_dataloader()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LightningLibriDataModule.test_dataloader" title="lasr.data.lit_data_module.LightningLibriDataModule.test_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">test_dataloader()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LitLibriDataModule.train_dataloader" title="lasr.data.lit_data_module.LitLibriDataModule.train_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">train_dataloader()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LitLibriDataModule.val_dataloader" title="lasr.data.lit_data_module.LitLibriDataModule.val_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">val_dataloader()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LitLibriDataModule.test_dataloader" title="lasr.data.lit_data_module.LitLibriDataModule.test_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">test_dataloader()</span></code></a></p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -379,12 +498,12 @@ will have an argument <code class="docutils literal notranslate"><span class="pr
 </dd></dl>
 
 <dl class="py method">
-<dt id="lasr.data.lit_data_module.LightningLibriDataModule.train_dataloader">
-<code class="sig-name descname">train_dataloader</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; torch.utils.data.dataloader.DataLoader<a class="reference internal" href="_modules/lasr/data/lit_data_module.html#LightningLibriDataModule.train_dataloader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.data.lit_data_module.LightningLibriDataModule.train_dataloader" title="Permalink to this definition">¶</a></dt>
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.train_dataloader">
+<code class="sig-name descname">train_dataloader</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; torch.utils.data.dataloader.DataLoader<a class="reference internal" href="_modules/lasr/data/lit_data_module.html#LitLibriDataModule.train_dataloader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.train_dataloader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implement one or more PyTorch DataLoaders for training.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Either a single PyTorch <code class="xref py py-class docutils literal notranslate"><span class="pre">DataLoader</span></code> or a collection of these
+<dd class="field-odd"><p>Either a single PyTorch <a class="reference external" href="https://pytorch.org/docs/master/data.html#torch.utils.data.DataLoader" title="(in PyTorch vmaster (1.9.0a0+gitc797492 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataLoader</span></code></a> or a collection of these
 (list, dict, nested lists and dicts). In the case of multiple dataloaders, please see
 this <span class="xref std std-ref">page</span></p>
 </dd>
@@ -394,7 +513,7 @@ this <span class="xref std std-ref">page</span></p>
 <p>For data processing use the following pattern:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>download in <a class="reference internal" href="#lasr.data.lit_data_module.LightningLibriDataModule.prepare_data" title="lasr.data.lit_data_module.LightningLibriDataModule.prepare_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_data()</span></code></a></p></li>
+<li><p>download in <a class="reference internal" href="#lasr.data.lit_data_module.LitLibriDataModule.prepare_data" title="lasr.data.lit_data_module.LitLibriDataModule.prepare_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_data()</span></code></a></p></li>
 <li><p>process and split in <code class="xref py py-meth docutils literal notranslate"><span class="pre">setup()</span></code></p></li>
 </ul>
 </div></blockquote>
@@ -406,9 +525,9 @@ this <span class="xref std std-ref">page</span></p>
 <ul class="simple">
 <li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></p></li>
 <li><p>…</p></li>
-<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LightningLibriDataModule.prepare_data" title="lasr.data.lit_data_module.LightningLibriDataModule.prepare_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_data()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LitLibriDataModule.prepare_data" title="lasr.data.lit_data_module.LitLibriDataModule.prepare_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_data()</span></code></a></p></li>
 <li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">setup()</span></code></p></li>
-<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LightningLibriDataModule.train_dataloader" title="lasr.data.lit_data_module.LightningLibriDataModule.train_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">train_dataloader()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LitLibriDataModule.train_dataloader" title="lasr.data.lit_data_module.LitLibriDataModule.train_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">train_dataloader()</span></code></a></p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -459,19 +578,19 @@ There is no need to set it yourself.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="lasr.data.lit_data_module.LightningLibriDataModule.val_dataloader">
-<code class="sig-name descname">val_dataloader</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>torch.utils.data.dataloader.DataLoader<span class="p">, </span>List<span class="p">[</span>torch.utils.data.dataloader.DataLoader<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/lasr/data/lit_data_module.html#LightningLibriDataModule.val_dataloader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.data.lit_data_module.LightningLibriDataModule.val_dataloader" title="Permalink to this definition">¶</a></dt>
+<dt id="lasr.data.lit_data_module.LitLibriDataModule.val_dataloader">
+<code class="sig-name descname">val_dataloader</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span>torch.utils.data.dataloader.DataLoader<span class="p">, </span>List<span class="p">[</span>torch.utils.data.dataloader.DataLoader<span class="p">]</span><span class="p">]</span><a class="reference internal" href="_modules/lasr/data/lit_data_module.html#LitLibriDataModule.val_dataloader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.data.lit_data_module.LitLibriDataModule.val_dataloader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implement one or multiple PyTorch DataLoaders for validation.</p>
 <p>The dataloader you return will not be called every epoch unless you set
 <a href="#id5"><span class="problematic" id="id6">:paramref:`~pytorch_lightning.trainer.Trainer.reload_dataloaders_every_epoch`</span></a> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
-<p>It’s recommended that all data downloads and preparation happen in <a class="reference internal" href="#lasr.data.lit_data_module.LightningLibriDataModule.prepare_data" title="lasr.data.lit_data_module.LightningLibriDataModule.prepare_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_data()</span></code></a>.</p>
+<p>It’s recommended that all data downloads and preparation happen in <a class="reference internal" href="#lasr.data.lit_data_module.LitLibriDataModule.prepare_data" title="lasr.data.lit_data_module.LitLibriDataModule.prepare_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_data()</span></code></a>.</p>
 <ul class="simple">
 <li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></p></li>
 <li><p>…</p></li>
-<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LightningLibriDataModule.prepare_data" title="lasr.data.lit_data_module.LightningLibriDataModule.prepare_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_data()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LightningLibriDataModule.train_dataloader" title="lasr.data.lit_data_module.LightningLibriDataModule.train_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">train_dataloader()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LightningLibriDataModule.val_dataloader" title="lasr.data.lit_data_module.LightningLibriDataModule.val_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">val_dataloader()</span></code></a></p></li>
-<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LightningLibriDataModule.test_dataloader" title="lasr.data.lit_data_module.LightningLibriDataModule.test_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">test_dataloader()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LitLibriDataModule.prepare_data" title="lasr.data.lit_data_module.LitLibriDataModule.prepare_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">prepare_data()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LitLibriDataModule.train_dataloader" title="lasr.data.lit_data_module.LitLibriDataModule.train_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">train_dataloader()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LitLibriDataModule.val_dataloader" title="lasr.data.lit_data_module.LitLibriDataModule.val_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">val_dataloader()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#lasr.data.lit_data_module.LitLibriDataModule.test_dataloader" title="lasr.data.lit_data_module.LitLibriDataModule.test_dataloader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">test_dataloader()</span></code></a></p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

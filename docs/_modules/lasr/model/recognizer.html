@@ -91,7 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../notes/intro.html#troubleshoots-and-contributing">Troubleshoots and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../notes/intro.html#author">Author</a></li>
 </ul>
-<p class="caption"><span class="caption-text">LIBRI REFERENCE</span></p>
+<p class="caption"><span class="caption-text">LIBRARY REFERENCE</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../Criterion.html">Criterion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Data.html">Data</a></li>
@@ -193,6 +193,9 @@
 <span class="kn">import</span> <span class="nn">pytorch_lightning</span> <span class="k">as</span> <span class="nn">pl</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">omegaconf</span> <span class="kn">import</span> <span class="n">DictConfig</span>
+<span class="kn">from</span> <span class="nn">torch.optim.lr_scheduler</span> <span class="kn">import</span> <span class="n">ReduceLROnPlateau</span>
+<span class="kn">from</span> <span class="nn">torch.optim</span> <span class="kn">import</span> <span class="n">Adam</span><span class="p">,</span> <span class="n">Adadelta</span><span class="p">,</span> <span class="n">Adagrad</span><span class="p">,</span> <span class="n">SGD</span><span class="p">,</span> <span class="n">Adamax</span><span class="p">,</span> <span class="n">AdamW</span><span class="p">,</span> <span class="n">ASGD</span>
 
 <span class="kn">from</span> <span class="nn">lasr.metric</span> <span class="kn">import</span> <span class="n">WordErrorRate</span><span class="p">,</span> <span class="n">ErrorRate</span>
 <span class="kn">from</span> <span class="nn">lasr.model.decoder</span> <span class="kn">import</span> <span class="n">DecoderRNN</span>
@@ -201,127 +204,95 @@
 <span class="kn">from</span> <span class="nn">lasr.optim.lr_scheduler</span> <span class="kn">import</span> <span class="n">TransformerLRScheduler</span><span class="p">,</span> <span class="n">TriStageLRScheduler</span>
 <span class="kn">from</span> <span class="nn">lasr.criterion.joint_ctc_cross_entropy</span> <span class="kn">import</span> <span class="n">JointCTCCrossEntropyLoss</span>
 <span class="kn">from</span> <span class="nn">lasr.optim.lr_scheduler.lr_scheduler</span> <span class="kn">import</span> <span class="n">LearningRateScheduler</span>
+<span class="kn">from</span> <span class="nn">lasr.optim.optimizer</span> <span class="kn">import</span> <span class="n">Optimizer</span>
 <span class="kn">from</span> <span class="nn">lasr.vocabs</span> <span class="kn">import</span> <span class="n">Vocabulary</span><span class="p">,</span> <span class="n">LibriSpeechVocabulary</span>
 
 
-<div class="viewcode-block" id="LightningSpeechRecognizer"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LightningSpeechRecognizer">[docs]</a><span class="k">class</span> <span class="nc">LightningSpeechRecognizer</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
+<div class="viewcode-block" id="LitSpeechRecognizer"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LitSpeechRecognizer">[docs]</a><span class="k">class</span> <span class="nc">LitSpeechRecognizer</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    PyTorch Lightning Speech Recognizer. It consist of a conformer encoder and rnn decoder.</span>
 
 <span class="sd">    Args:</span>
+<span class="sd">        configs (DictConfig): configuraion set</span>
+<span class="sd">        num_classes (int): number of classification classes</span>
+<span class="sd">        vocab (Vocabulary): vocab of training data</span>
+<span class="sd">        metric (ErrorRate): performance measurement metrics</span>
+
+<span class="sd">    Attributes:</span>
 <span class="sd">        num_classes (int): Number of classification classes</span>
-<span class="sd">        input_dim (int, optional): Dimension of input vector</span>
-<span class="sd">        encoder_dim (int, optional): Dimension of model encoder</span>
-<span class="sd">        num_encoder_layers (int, optional): Number of model blocks</span>
-<span class="sd">        num_decoder_layers (int, optional): Number of decoder layers</span>
-<span class="sd">        num_attention_heads (int, optional): Number of attention heads</span>
-<span class="sd">        feed_forward_expansion_factor (int, optional): Expansion factor of feed forward module</span>
-<span class="sd">        conv_expansion_factor (int, optional): Expansion factor of model convolution module</span>
-<span class="sd">        feed_forward_dropout_p (float, optional): Probability of feed forward module dropout</span>
-<span class="sd">        attention_dropout_p (float, optional): Probability of attention module dropout</span>
-<span class="sd">        conv_dropout_p (float, optional): Probability of model convolution module dropout</span>
-<span class="sd">        decoder_dropout_p (float, optional): Probability of model decoder dropout</span>
-<span class="sd">        conv_kernel_size (int or tuple, optional): Size of the convolving kernel</span>
-<span class="sd">        half_step_residual (bool): Flag indication whether to use half step residual or not</span>
-<span class="sd">        max_length (int, optional): max decoding length</span>
+<span class="sd">        vocab (Vocabulary): vocab of training data</span>
 <span class="sd">        peak_lr (float): peak learning rate</span>
 <span class="sd">        final_lr (float): final learning rate</span>
 <span class="sd">        init_lr_scale (float): scaling value of initial learning rate</span>
 <span class="sd">        final_lr_scale (float): scaling value of final learning rate</span>
 <span class="sd">        warmup_steps (int): warmup steps of learning rate</span>
 <span class="sd">        decay_steps (int): decay steps of learning rate</span>
-<span class="sd">        vocab (Vocabulary): vocab of training data</span>
 <span class="sd">        teacher_forcing_ratio (float): ratio of teacher forcing (forward label as decoder input)</span>
-<span class="sd">        cross_entropy_weight (float): weight of cross entropy loss</span>
-<span class="sd">        ctc_weight (float): weight of ctc loss</span>
-<span class="sd">        joint_ctc_attention (bool): flag indication joint ctc attention or not</span>
 <span class="sd">        optimizer (str): name of optimizer (default: adam)</span>
 <span class="sd">        lr_scheduler (str): name of learning rate scheduler (default: transformer)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
+            <span class="n">configs</span><span class="p">:</span> <span class="n">DictConfig</span><span class="p">,</span>
             <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-            <span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">80</span><span class="p">,</span>
-            <span class="n">encoder_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span>
-            <span class="n">num_encoder_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span>
-            <span class="n">num_decoder_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="n">num_attention_heads</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
-            <span class="n">feed_forward_expansion_factor</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
-            <span class="n">conv_expansion_factor</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="n">input_dropout_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-            <span class="n">feed_forward_dropout_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-            <span class="n">attention_dropout_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-            <span class="n">conv_dropout_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-            <span class="n">decoder_dropout_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-            <span class="n">conv_kernel_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">31</span><span class="p">,</span>
-            <span class="n">half_step_residual</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-            <span class="n">max_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span><span class="p">,</span>
-            <span class="n">peak_lr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-04</span><span class="p">,</span>
-            <span class="n">final_lr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-07</span><span class="p">,</span>
-            <span class="n">init_lr_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
-            <span class="n">final_lr_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
-            <span class="n">warmup_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span>
-            <span class="n">decay_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">80000</span><span class="p">,</span>
             <span class="n">vocab</span><span class="p">:</span> <span class="n">Vocabulary</span> <span class="o">=</span> <span class="n">LibriSpeechVocabulary</span><span class="p">,</span>
             <span class="n">metric</span><span class="p">:</span> <span class="n">ErrorRate</span> <span class="o">=</span> <span class="n">WordErrorRate</span><span class="p">,</span>
-            <span class="n">teacher_forcing_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">cross_entropy_weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span>
-            <span class="n">ctc_weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span>
-            <span class="n">joint_ctc_attention</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-            <span class="n">optimizer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;adam&#39;</span><span class="p">,</span>
-            <span class="n">lr_scheduler</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;transformer&#39;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LightningSpeechRecognizer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LitSpeechRecognizer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">peak_lr</span> <span class="o">=</span> <span class="n">peak_lr</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">final_lr</span> <span class="o">=</span> <span class="n">final_lr</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">init_lr_scale</span> <span class="o">=</span> <span class="n">init_lr_scale</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">final_lr_scale</span> <span class="o">=</span> <span class="n">final_lr_scale</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">warmup_steps</span> <span class="o">=</span> <span class="n">warmup_steps</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">decay_steps</span> <span class="o">=</span> <span class="n">decay_steps</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">teacher_forcing_ratio</span> <span class="o">=</span> <span class="n">teacher_forcing_ratio</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">peak_lr</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">peak_lr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_lr</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">final_lr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_lr_scale</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">init_lr_scale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_lr_scale</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">final_lr_scale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">warmup_steps</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">warmup_steps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decay_steps</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">decay_steps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_steps</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">warmup_steps</span> <span class="o">+</span> <span class="n">configs</span><span class="o">.</span><span class="n">decay_steps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_grad_norm</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">max_grad_norm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">teacher_forcing_ratio</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">teacher_forcing_ratio</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vocab</span> <span class="o">=</span> <span class="n">vocab</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="n">metric</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lr_scheduler</span> <span class="o">=</span> <span class="n">lr_scheduler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">optimizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lr_scheduler</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">lr_scheduler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lr_patience</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">lr_patience</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lr_factor</span> <span class="o">=</span> <span class="n">configs</span><span class="o">.</span><span class="n">lr_factor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configure_criterion</span><span class="p">(</span>
             <span class="n">num_classes</span><span class="p">,</span>
             <span class="n">ignore_index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab</span><span class="o">.</span><span class="n">pad_id</span><span class="p">,</span>
             <span class="n">blank_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab</span><span class="o">.</span><span class="n">blank_id</span><span class="p">,</span>
-            <span class="n">ctc_weight</span><span class="o">=</span><span class="n">ctc_weight</span><span class="p">,</span>
-            <span class="n">cross_entropy_weight</span><span class="o">=</span><span class="n">cross_entropy_weight</span><span class="p">,</span>
+            <span class="n">ctc_weight</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">ctc_weight</span><span class="p">,</span>
+            <span class="n">cross_entropy_weight</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">cross_entropy_weight</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">ConformerEncoder</span><span class="p">(</span>
             <span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">,</span>
-            <span class="n">input_dim</span><span class="o">=</span><span class="n">input_dim</span><span class="p">,</span>
-            <span class="n">encoder_dim</span><span class="o">=</span><span class="n">encoder_dim</span><span class="p">,</span>
-            <span class="n">num_layers</span><span class="o">=</span><span class="n">num_encoder_layers</span><span class="p">,</span>
-            <span class="n">num_attention_heads</span><span class="o">=</span><span class="n">num_attention_heads</span><span class="p">,</span>
-            <span class="n">feed_forward_expansion_factor</span><span class="o">=</span><span class="n">feed_forward_expansion_factor</span><span class="p">,</span>
-            <span class="n">conv_expansion_factor</span><span class="o">=</span><span class="n">conv_expansion_factor</span><span class="p">,</span>
-            <span class="n">input_dropout_p</span><span class="o">=</span><span class="n">input_dropout_p</span><span class="p">,</span>
-            <span class="n">feed_forward_dropout_p</span><span class="o">=</span><span class="n">feed_forward_dropout_p</span><span class="p">,</span>
-            <span class="n">attention_dropout_p</span><span class="o">=</span><span class="n">attention_dropout_p</span><span class="p">,</span>
-            <span class="n">conv_dropout_p</span><span class="o">=</span><span class="n">conv_dropout_p</span><span class="p">,</span>
-            <span class="n">conv_kernel_size</span><span class="o">=</span><span class="n">conv_kernel_size</span><span class="p">,</span>
-            <span class="n">half_step_residual</span><span class="o">=</span><span class="n">half_step_residual</span><span class="p">,</span>
-            <span class="n">joint_ctc_attention</span><span class="o">=</span><span class="n">joint_ctc_attention</span><span class="p">,</span>
+            <span class="n">input_dim</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">num_mels</span><span class="p">,</span>
+            <span class="n">encoder_dim</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">encoder_dim</span><span class="p">,</span>
+            <span class="n">num_layers</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">num_encoder_layers</span><span class="p">,</span>
+            <span class="n">num_attention_heads</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">num_attention_heads</span><span class="p">,</span>
+            <span class="n">feed_forward_expansion_factor</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">feed_forward_expansion_factor</span><span class="p">,</span>
+            <span class="n">conv_expansion_factor</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">conv_expansion_factor</span><span class="p">,</span>
+            <span class="n">input_dropout_p</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">input_dropout_p</span><span class="p">,</span>
+            <span class="n">feed_forward_dropout_p</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">feed_forward_dropout_p</span><span class="p">,</span>
+            <span class="n">attention_dropout_p</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">attention_dropout_p</span><span class="p">,</span>
+            <span class="n">conv_dropout_p</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">conv_dropout_p</span><span class="p">,</span>
+            <span class="n">conv_kernel_size</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">conv_kernel_size</span><span class="p">,</span>
+            <span class="n">half_step_residual</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">half_step_residual</span><span class="p">,</span>
+            <span class="n">joint_ctc_attention</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">joint_ctc_attention</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">DecoderRNN</span><span class="p">(</span>
-            <span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">,</span>
-            <span class="n">max_length</span><span class="o">=</span><span class="n">max_length</span><span class="p">,</span>
-            <span class="n">hidden_state_dim</span><span class="o">=</span><span class="n">encoder_dim</span><span class="p">,</span>
+            <span class="n">num_classes</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">num_classes</span><span class="p">,</span>
+            <span class="n">max_length</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">max_length</span><span class="p">,</span>
+            <span class="n">hidden_state_dim</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">encoder_dim</span><span class="p">,</span>
             <span class="n">pad_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab</span><span class="o">.</span><span class="n">pad_id</span><span class="p">,</span>
             <span class="n">sos_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab</span><span class="o">.</span><span class="n">sos_id</span><span class="p">,</span>
             <span class="n">eos_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vocab</span><span class="o">.</span><span class="n">eos_id</span><span class="p">,</span>
-            <span class="n">num_heads</span><span class="o">=</span><span class="n">num_attention_heads</span><span class="p">,</span>
-            <span class="n">dropout_p</span><span class="o">=</span><span class="n">decoder_dropout_p</span><span class="p">,</span>
-            <span class="n">num_layers</span><span class="o">=</span><span class="n">num_decoder_layers</span><span class="p">,</span>
-            <span class="n">rnn_type</span><span class="o">=</span><span class="s2">&quot;lstm&quot;</span><span class="p">,</span>
+            <span class="n">num_heads</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">num_attention_heads</span><span class="p">,</span>
+            <span class="n">dropout_p</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">decoder_dropout_p</span><span class="p">,</span>
+            <span class="n">num_layers</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">num_decoder_layers</span><span class="p">,</span>
+            <span class="n">rnn_type</span><span class="o">=</span><span class="n">configs</span><span class="o">.</span><span class="n">rnn_type</span><span class="p">,</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="LightningSpeechRecognizer.forward"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LightningSpeechRecognizer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">input_lengths</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+<div class="viewcode-block" id="LitSpeechRecognizer.forward"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LitSpeechRecognizer.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">input_lengths</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward propagate a `inputs` and `targets` pair for inference.</span>
 
@@ -337,7 +308,7 @@
         <span class="n">y_hats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">encoder_outputs</span><span class="o">=</span><span class="n">encoder_outputs</span><span class="p">,</span> <span class="n">teacher_forcing_ratio</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">y_hats</span></div>
 
-<div class="viewcode-block" id="LightningSpeechRecognizer.training_step"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LightningSpeechRecognizer.training_step">[docs]</a>    <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_batch</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+<div class="viewcode-block" id="LitSpeechRecognizer.training_step"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LitSpeechRecognizer.training_step">[docs]</a>    <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_batch</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward propagate a `inputs` and `targets` pair for training.</span>
 
@@ -360,16 +331,16 @@
             <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:],</span>
             <span class="n">target_lengths</span><span class="o">=</span><span class="n">target_lengths</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">uer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">y_hats</span><span class="p">)</span>
+        <span class="n">wer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">y_hats</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;train_uer&quot;</span><span class="p">,</span> <span class="n">uer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;train_wer&quot;</span><span class="p">,</span> <span class="n">wer</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;train_loss&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;train_cross_entropy_loss&quot;</span><span class="p">,</span> <span class="n">cross_entropy_loss</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;train_ctc_loss&quot;</span><span class="p">,</span> <span class="n">ctc_loss</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">loss</span></div>
 
-<div class="viewcode-block" id="LightningSpeechRecognizer.validation_step"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LightningSpeechRecognizer.validation_step">[docs]</a>    <span class="k">def</span> <span class="nf">validation_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val_batch</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+<div class="viewcode-block" id="LitSpeechRecognizer.validation_step"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LitSpeechRecognizer.validation_step">[docs]</a>    <span class="k">def</span> <span class="nf">validation_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val_batch</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward propagate a `inputs` and `targets` pair for validation.</span>
 
@@ -392,16 +363,16 @@
             <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:],</span>
             <span class="n">target_lengths</span><span class="o">=</span><span class="n">target_lengths</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">uer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">y_hats</span><span class="p">)</span>
+        <span class="n">wer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">y_hats</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;val_uer&quot;</span><span class="p">,</span> <span class="n">uer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;val_wer&quot;</span><span class="p">,</span> <span class="n">wer</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;val_loss&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;val_cross_entropy_loss&quot;</span><span class="p">,</span> <span class="n">cross_entropy_loss</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;val_ctc_loss&quot;</span><span class="p">,</span> <span class="n">ctc_loss</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">loss</span></div>
 
-<div class="viewcode-block" id="LightningSpeechRecognizer.test_step"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LightningSpeechRecognizer.test_step">[docs]</a>    <span class="k">def</span> <span class="nf">test_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_batch</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+<div class="viewcode-block" id="LitSpeechRecognizer.test_step"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LitSpeechRecognizer.test_step">[docs]</a>    <span class="k">def</span> <span class="nf">test_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_batch</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward propagate a `inputs` and `targets` pair for test.</span>
 
@@ -424,25 +395,30 @@
             <span class="n">targets</span><span class="o">=</span><span class="n">targets</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:],</span>
             <span class="n">target_lengths</span><span class="o">=</span><span class="n">target_lengths</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">uer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">y_hats</span><span class="p">)</span>
+        <span class="n">wer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">y_hats</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;test_uer&quot;</span><span class="p">,</span> <span class="n">uer</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;test_wer&quot;</span><span class="p">,</span> <span class="n">wer</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;test_loss&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;test_cross_entropy_loss&quot;</span><span class="p">,</span> <span class="n">cross_entropy_loss</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;test_ctc_loss&quot;</span><span class="p">,</span> <span class="n">ctc_loss</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">loss</span></div>
 
-<div class="viewcode-block" id="LightningSpeechRecognizer.configure_optimizers"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LightningSpeechRecognizer.configure_optimizers">[docs]</a>    <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Optimizer</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">LearningRateScheduler</span><span class="p">]]:</span>
+<div class="viewcode-block" id="LitSpeechRecognizer.configure_optimizers"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LitSpeechRecognizer.configure_optimizers">[docs]</a>    <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Optimizer</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">LearningRateScheduler</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot; Configure optimizer &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">==</span> <span class="s1">&#39;adam&#39;</span><span class="p">:</span>
-            <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">==</span> <span class="s1">&#39;adamp&#39;</span><span class="p">:</span>
-            <span class="n">optimizer</span> <span class="o">=</span> <span class="n">AdamP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">==</span> <span class="s1">&#39;radam&#39;</span><span class="p">:</span>
-            <span class="n">optimizer</span> <span class="o">=</span> <span class="n">RAdam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported optimizer: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">supported_optimizers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;adam&quot;</span><span class="p">:</span> <span class="n">Adam</span><span class="p">,</span>
+            <span class="s2">&quot;adamp&quot;</span><span class="p">:</span> <span class="n">AdamP</span><span class="p">,</span>
+            <span class="s2">&quot;radam&quot;</span><span class="p">:</span> <span class="n">RAdam</span><span class="p">,</span>
+            <span class="s2">&quot;adagrad&quot;</span><span class="p">:</span> <span class="n">Adagrad</span><span class="p">,</span>
+            <span class="s2">&quot;adadelta&quot;</span><span class="p">:</span> <span class="n">Adadelta</span><span class="p">,</span>
+            <span class="s2">&quot;adamax&quot;</span><span class="p">:</span> <span class="n">Adamax</span><span class="p">,</span>
+            <span class="s2">&quot;adamw&quot;</span><span class="p">:</span> <span class="n">AdamW</span><span class="p">,</span>
+            <span class="s2">&quot;sgd&quot;</span><span class="p">:</span> <span class="n">SGD</span><span class="p">,</span>
+            <span class="s2">&quot;asgd&quot;</span><span class="p">:</span> <span class="n">ASGD</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="ow">in</span> <span class="n">supported_optimizers</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="sa">f</span><span class="s2">&quot;Unsupported Optimizer: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">supported_optimizers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="p">](</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr_scheduler</span> <span class="o">==</span> <span class="s1">&#39;transformer&#39;</span><span class="p">:</span>
             <span class="n">scheduler</span> <span class="o">=</span> <span class="n">TransformerLRScheduler</span><span class="p">(</span>
@@ -464,12 +440,20 @@
                 <span class="n">warmup_steps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">warmup_steps</span><span class="p">,</span>
                 <span class="n">total_steps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">warmup_steps</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">decay_steps</span><span class="p">,</span>
             <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr_scheduler</span> <span class="o">==</span> <span class="s1">&#39;reduce_lr_on_plateau&#39;</span><span class="p">:</span>
+            <span class="n">scheduler</span> <span class="o">=</span> <span class="n">ReduceLROnPlateau</span><span class="p">(</span>
+                <span class="n">optimizer</span><span class="p">,</span>
+                <span class="n">patience</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr_patience</span><span class="p">,</span>
+                <span class="n">factor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr_factor</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported lr_scheduler: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">Optimizer</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_steps</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_grad_norm</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="p">[</span><span class="n">optimizer</span><span class="p">],</span> <span class="p">[</span><span class="n">scheduler</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="LightningSpeechRecognizer.configure_criterion"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LightningSpeechRecognizer.configure_criterion">[docs]</a>    <span class="k">def</span> <span class="nf">configure_criterion</span><span class="p">(</span>
+<div class="viewcode-block" id="LitSpeechRecognizer.configure_criterion"><a class="viewcode-back" href="../../../Model.html#lasr.model.recognizer.LitSpeechRecognizer.configure_criterion">[docs]</a>    <span class="k">def</span> <span class="nf">configure_criterion</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
             <span class="n">ignore_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>

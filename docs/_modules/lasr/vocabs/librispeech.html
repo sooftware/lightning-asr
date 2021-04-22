@@ -91,7 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../notes/intro.html#troubleshoots-and-contributing">Troubleshoots and Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../notes/intro.html#author">Author</a></li>
 </ul>
-<p class="caption"><span class="caption-text">LIBRI REFERENCE</span></p>
+<p class="caption"><span class="caption-text">LIBRARY REFERENCE</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../Criterion.html">Criterion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../Data.html">Data</a></li>
@@ -213,9 +213,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">eos_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sp</span><span class="o">.</span><span class="n">PieceToId</span><span class="p">(</span><span class="s2">&quot;&lt;eos&gt;&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">blank_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sp</span><span class="o">.</span><span class="n">PieceToId</span><span class="p">(</span><span class="s2">&quot;&lt;blank&gt;&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span> <span class="o">=</span> <span class="n">vocab_size</span>
-
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span>
 
     <span class="k">def</span> <span class="nf">label_to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
