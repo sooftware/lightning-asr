@@ -27,9 +27,9 @@ import logging
 from omegaconf import OmegaConf, DictConfig
 from pytorch_lightning.loggers import TensorBoardLogger
 
-from lasr.data.lit_data_module import LightningLibriDataModule
+from lasr.data.lit_data_module import LitLibriDataModule
 from lasr.metric import WordErrorRate
-from lasr.model.recognizer import LightningSpeechRecognizer
+from lasr.model.recognizer import LitSpeechRecognizer
 from lasr.utils import check_environment
 
 
@@ -46,11 +46,11 @@ def hydra_main(configs: DictConfig) -> None:
     else:
         logger = True
 
-    lit_data_module = LightningLibriDataModule(configs)
+    lit_data_module = LitLibriDataModule(configs)
     vocab = lit_data_module.prepare_data(configs.dataset_download, configs.vocab_size)
     lit_data_module.setup(vocab)
 
-    model = LightningSpeechRecognizer(
+    model = LitSpeechRecognizer(
         configs=configs,
         num_classes=len(vocab),
         vocab=vocab,

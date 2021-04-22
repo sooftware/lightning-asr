@@ -27,7 +27,6 @@ import logging
 import shutil
 import pytorch_lightning as pl
 from typing import Union, List, Tuple
-
 from omegaconf import DictConfig
 from torch.utils.data import DataLoader
 
@@ -65,7 +64,7 @@ def _parse_manifest_file(manifest_file_path: str) -> Tuple[list, list]:
     return audio_paths, transcripts
 
 
-class LightningLibriDataModule(pl.LightningDataModule):
+class LitLibriDataModule(pl.LightningDataModule):
     """
     PyTorch Lightning Data Module for LibriSpeech Dataset.
 
@@ -97,7 +96,7 @@ class LightningLibriDataModule(pl.LightningDataModule):
     ]
 
     def __init__(self, configs: DictConfig) -> None:
-        super(LightningLibriDataModule, self).__init__()
+        super(LitLibriDataModule, self).__init__()
         self.dataset_path = configs.dataset_path
         self.manifest_paths = [
             f"{configs.dataset_path}/train-960.txt",
@@ -134,16 +133,17 @@ class LightningLibriDataModule(pl.LightningDataModule):
     def _download_librispeech(self) -> None:
         base_url = "http://www.openslr.org/resources/12"
         train_dir = "train_960"
+        librispeech_dir = "LibriSpeech"
 
         if not os.path.exists(self.dataset_path):
             os.mkdir(self.dataset_path)
 
         for part in self.librispeech_parts:
-            self.logger.info(f"librispeech-{part} download..")
+            self.logger.info(f"Librispeech-{part} download..")
             url = f"{base_url}/{part}.tar.gz"
             wget.download(url, self.dataset_path)
 
-            self.logger.info(f"un-tarring archive {self.dataset_path}/{part}.tar.gz")
+            self.logger.info(f"Un-tarring archive {self.dataset_path}/{part}.tar.gz")
             tar = tarfile.open(f"{self.dataset_path}/{part}.tar.gz", mode="r:gz")
             tar.extractall()
             tar.close()
@@ -151,23 +151,23 @@ class LightningLibriDataModule(pl.LightningDataModule):
 
         self.logger.info("Merge all train packs into one")
 
-        if not os.path.exists(f"{self.dataset_path}/LibriSpeech/"):
-            os.mkdir(f"{self.dataset_path}/LibriSpeech/")
-        if not os.path.exists(f"{self.dataset_path}/LibriSpeech/{train_dir}/"):
-            os.mkdir(f"{self.dataset_path}/LibriSpeech/{train_dir}/")
+        if not os.path.exists(os.path.join(self.dataset_path, librispeech_dir)):
+            os.mkdir(os.path.join(self.dataset_path, librispeech_dir))
+        if not os.path.exists(os.path.join(self.dataset_path, librispeech_dir, train_dir)):
+            os.mkdir(os.path.join(self.dataset_path, librispeech_dir, train_dir))
 
         for part in self.librispeech_parts[:-3]:    # dev, test
-            path = f"{self.dataset_path}/{part}/"
-            shutil.move(f"{path}/{part}", f"{self.dataset_path}/LibriSpeech/{part}")
+            path = os.path.join(self.dataset_path, part)
+            shutil.move(os.path.join(path, part), os.path.join(self.dataset_path, librispeech_dir, part))
 
         for part in self.librispeech_parts[-3:]:    # train
-            path = f"{self.dataset_path}/{part}/"
+            path = os.path.join(self.dataset_path, part)
             files = os.listdir(path)
             for file in files:
-                shutil.move(f"{path}/{file}", f"{self.dataset_path}/LibriSpeech/{train_dir}/{file}")
+                shutil.move(os.path.join(path, part), os.path.join(self.dataset_path, librispeech_dir, part, file))
 
         # Update dataset path
-        self.dataset_path = f"{self.dataset_path}/LibriSpeech/"
+        self.dataset_path = os.path.join(self.dataset_path, librispeech_dir)
 
     def _generate_manifest_files(self, vocab_size: int) -> None:
         self.logger.info("Generate Manifest Files..")

@@ -30,6 +30,10 @@ class Vocabulary(object):
         self.eos_id = None
         self.pad_id = None
         self.blank_id = None
+        self.vocab_size = None
+
+    def __len__(self):
+        return self.vocab_size
 
     def label_to_string(self, labels):
         raise NotImplementedError

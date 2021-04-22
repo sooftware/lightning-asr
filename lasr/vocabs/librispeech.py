@@ -46,9 +46,6 @@ class LibriSpeechVocabulary(Vocabulary):
         self.blank_id = self.sp.PieceToId("<blank>")
         self.vocab_size = vocab_size
 
-    def __len__(self):
-        return self.vocab_size
-
     def label_to_string(self, labels):
         if len(labels.shape) == 1:
             return self.sp.DecodeIds([l for l in labels])
