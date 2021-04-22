@@ -34,7 +34,7 @@ from lasr.utils import check_environment
 
 
 @hydra.main(config_path=os.path.join('..', "configs"), config_name="train")
-def hydra_main(configs: DictConfig) -> None:
+def hydra_entry(configs: DictConfig) -> None:
     pl.seed_everything(configs.seed)
 
     logger = logging.getLogger(__name__)
@@ -73,4 +73,4 @@ def hydra_main(configs: DictConfig) -> None:
 
 
 if __name__ == '__main__':
-    hydra_main()
+    hydra_entry()

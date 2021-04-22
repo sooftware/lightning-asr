@@ -10,9 +10,17 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+
+import os
+import sys
+from recommonmark.parser import CommonMarkParser
+sys.path.append(os.path.abspath('.'))
+sys.path.append(os.path.abspath('..'))
+sys.path.append(os.path.abspath('../..'))
+cwd = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.abspath(os.path.join(cwd, '../../')))
+sys.path.append(os.path.abspath(os.path.join(cwd, '../../../')))
+import sphinx_rtd_theme
 
 
 # -- Project information -----------------------------------------------------
@@ -45,7 +53,7 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'recommonmark'
+    'recommonmark',
 ]
 
 templates_path = ['_templates']
@@ -74,5 +82,9 @@ texinfo_documents = [
 ]
 epub_title = project
 epub_exclude_files = ['search.html']
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/', None),
+    'numpy': ('http://docs.scipy.org/doc/numpy/', None),
+    'PyTorch': ('http://pytorch.org/docs/master/', None),
+}
 todo_include_todos = True
