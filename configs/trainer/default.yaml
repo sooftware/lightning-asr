@@ -7,3 +7,5 @@ auto_select_gpus: True
 check_val_every_n_epoch: 1
 gradient_clip_val: 5.0
 use_cuda: True
+use_tensorboard: True
+auto_scale_batch_size: 'binsearch'

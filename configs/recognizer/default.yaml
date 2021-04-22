@@ -1,4 +1,3 @@
-input_dim: 80
 encoder_dim: 256
 num_encoder_layers: 17
 num_decoder_layers: 2
@@ -23,5 +22,6 @@ teacher_forcing_ratio: 1.0
 cross_entropy_weight: 0.7
 ctc_weight: 0.3
 joint_ctc_attention: True
+rnn_type: lstm
 optimizer: adam
 lr_scheduler: transformer

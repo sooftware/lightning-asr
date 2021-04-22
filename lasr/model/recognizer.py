@@ -25,6 +25,7 @@ import torch.nn as nn
 import pytorch_lightning as pl
 from torch import Tensor
 from typing import Tuple, List
+from omegaconf import DictConfig
 
 from lasr.metric import WordErrorRate, ErrorRate
 from lasr.model.decoder import DecoderRNN
@@ -42,119 +43,81 @@ class LightningSpeechRecognizer(pl.LightningModule):
     PyTorch Lightning Speech Recognizer. It consist of a conformer encoder and rnn decoder.
 
     Args:
+        configs (DictConfig): configuraion set
+        num_classes (int): number of classification classes
+        vocab (Vocabulary): vocab of training data
+        metric (ErrorRate): performance measurement metrics
+
+    Attributes:
         num_classes (int): Number of classification classes
-        input_dim (int, optional): Dimension of input vector
-        encoder_dim (int, optional): Dimension of model encoder
-        num_encoder_layers (int, optional): Number of model blocks
-        num_decoder_layers (int, optional): Number of decoder layers
-        num_attention_heads (int, optional): Number of attention heads
-        feed_forward_expansion_factor (int, optional): Expansion factor of feed forward module
-        conv_expansion_factor (int, optional): Expansion factor of model convolution module
-        feed_forward_dropout_p (float, optional): Probability of feed forward module dropout
-        attention_dropout_p (float, optional): Probability of attention module dropout
-        conv_dropout_p (float, optional): Probability of model convolution module dropout
-        decoder_dropout_p (float, optional): Probability of model decoder dropout
-        conv_kernel_size (int or tuple, optional): Size of the convolving kernel
-        half_step_residual (bool): Flag indication whether to use half step residual or not
-        max_length (int, optional): max decoding length
+        vocab (Vocabulary): vocab of training data
         peak_lr (float): peak learning rate
         final_lr (float): final learning rate
         init_lr_scale (float): scaling value of initial learning rate
         final_lr_scale (float): scaling value of final learning rate
         warmup_steps (int): warmup steps of learning rate
         decay_steps (int): decay steps of learning rate
-        vocab (Vocabulary): vocab of training data
         teacher_forcing_ratio (float): ratio of teacher forcing (forward label as decoder input)
-        cross_entropy_weight (float): weight of cross entropy loss
-        ctc_weight (float): weight of ctc loss
-        joint_ctc_attention (bool): flag indication joint ctc attention or not
         optimizer (str): name of optimizer (default: adam)
         lr_scheduler (str): name of learning rate scheduler (default: transformer)
     """
     def __init__(
             self,
+            configs: DictConfig,
             num_classes: int,
-            input_dim: int = 80,
-            encoder_dim: int = 512,
-            num_encoder_layers: int = 17,
-            num_decoder_layers: int = 2,
-            num_attention_heads: int = 8,
-            feed_forward_expansion_factor: int = 4,
-            conv_expansion_factor: int = 2,
-            input_dropout_p: float = 0.1,
-            feed_forward_dropout_p: float = 0.1,
-            attention_dropout_p: float = 0.1,
-            conv_dropout_p: float = 0.1,
-            decoder_dropout_p: float = 0.1,
-            conv_kernel_size: int = 31,
-            half_step_residual: bool = True,
-            max_length: int = 128,
-            peak_lr: float = 1e-04,
-            final_lr: float = 1e-07,
-            init_lr_scale: float = 0.01,
-            final_lr_scale: float = 0.01,
-            warmup_steps: int = 10000,
-            decay_steps: int = 200000,
-            max_grad_norm: int = 5.0,
             vocab: Vocabulary = LibriSpeechVocabulary,
             metric: ErrorRate = WordErrorRate,
-            teacher_forcing_ratio: float = 1.0,
-            cross_entropy_weight: float = 0.7,
-            ctc_weight: float = 0.3,
-            joint_ctc_attention: bool = True,
-            optimizer: str = 'adam',
-            lr_scheduler: str = 'transformer',
     ) -> None:
         super(LightningSpeechRecognizer, self).__init__()
 
-        self.peak_lr = peak_lr
-        self.final_lr = final_lr
-        self.init_lr_scale = init_lr_scale
-        self.final_lr_scale = final_lr_scale
-        self.warmup_steps = warmup_steps
-        self.decay_steps = decay_steps
-        self.total_steps = warmup_steps + decay_steps
-        self.max_grad_norm = max_grad_norm
-        self.teacher_forcing_ratio = teacher_forcing_ratio
+        self.peak_lr = configs.peak_lr
+        self.final_lr = configs.final_lr
+        self.init_lr_scale = configs.init_lr_scale
+        self.final_lr_scale = configs.final_lr_scale
+        self.warmup_steps = configs.warmup_steps
+        self.decay_steps = configs.decay_steps
+        self.total_steps = configs.warmup_steps + configs.decay_steps
+        self.max_grad_norm = configs.max_grad_norm
+        self.teacher_forcing_ratio = configs.teacher_forcing_ratio
         self.vocab = vocab
         self.metric = metric
-        self.optimizer = optimizer
-        self.lr_scheduler = lr_scheduler
+        self.optimizer = configs.optimizer
+        self.lr_scheduler = configs.lr_scheduler
         self.criterion = self.configure_criterion(
             num_classes,
             ignore_index=self.vocab.pad_id,
             blank_id=self.vocab.blank_id,
-            ctc_weight=ctc_weight,
-            cross_entropy_weight=cross_entropy_weight,
+            ctc_weight=configs.ctc_weight,
+            cross_entropy_weight=configs.cross_entropy_weight,
         )
 
         self.encoder = ConformerEncoder(
             num_classes=num_classes,
-            input_dim=input_dim,
-            encoder_dim=encoder_dim,
-            num_layers=num_encoder_layers,
-            num_attention_heads=num_attention_heads,
-            feed_forward_expansion_factor=feed_forward_expansion_factor,
-            conv_expansion_factor=conv_expansion_factor,
-            input_dropout_p=input_dropout_p,
-            feed_forward_dropout_p=feed_forward_dropout_p,
-            attention_dropout_p=attention_dropout_p,
-            conv_dropout_p=conv_dropout_p,
-            conv_kernel_size=conv_kernel_size,
-            half_step_residual=half_step_residual,
-            joint_ctc_attention=joint_ctc_attention,
+            input_dim=configs.num_mels,
+            encoder_dim=configs.encoder_dim,
+            num_layers=configs.num_encoder_layers,
+            num_attention_heads=configs.num_attention_heads,
+            feed_forward_expansion_factor=configs.feed_forward_expansion_factor,
+            conv_expansion_factor=configs.conv_expansion_factor,
+            input_dropout_p=configs.input_dropout_p,
+            feed_forward_dropout_p=configs.feed_forward_dropout_p,
+            attention_dropout_p=configs.attention_dropout_p,
+            conv_dropout_p=configs.conv_dropout_p,
+            conv_kernel_size=configs.conv_kernel_size,
+            half_step_residual=configs.half_step_residual,
+            joint_ctc_attention=configs.joint_ctc_attention,
         )
         self.decoder = DecoderRNN(
-            num_classes=num_classes,
-            max_length=max_length,
-            hidden_state_dim=encoder_dim,
+            num_classes=configs.num_classes,
+            max_length=configs.max_length,
+            hidden_state_dim=configs.encoder_dim,
             pad_id=self.vocab.pad_id,
             sos_id=self.vocab.sos_id,
             eos_id=self.vocab.eos_id,
-            num_heads=num_attention_heads,
-            dropout_p=decoder_dropout_p,
-            num_layers=num_decoder_layers,
-            rnn_type="lstm",
+            num_heads=configs.num_attention_heads,
+            dropout_p=configs.decoder_dropout_p,
+            num_layers=configs.num_decoder_layers,
+            rnn_type=configs.rnn_type,
         )
 
     def forward(self, inputs: Tensor, input_lengths: Tensor) -> Tensor:
