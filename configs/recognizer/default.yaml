@@ -16,6 +16,8 @@ peak_lr: 1e-04
 final_lr: 1e-07
 init_lr_scale: 0.01
 final_lr_scale: 0.05
+lr_patience: 1
+lr_factor: 0.3
 warmup_steps: 10000
 decay_steps: 150000
 teacher_forcing_ratio: 1.0
@@ -24,4 +26,4 @@ ctc_weight: 0.3
 joint_ctc_attention: True
 rnn_type: lstm
 optimizer: adam
-lr_scheduler: transformer
+lr_scheduler: reduce_lr_on_plateau

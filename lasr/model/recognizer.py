@@ -26,6 +26,8 @@ import pytorch_lightning as pl
 from torch import Tensor
 from typing import Tuple, List
 from omegaconf import DictConfig
+from torch.optim.lr_scheduler import ReduceLROnPlateau
+from torch.optim import Adam, Adadelta, Adagrad, SGD, Adamax, AdamW, ASGD
 
 from lasr.metric import WordErrorRate, ErrorRate
 from lasr.model.decoder import DecoderRNN
@@ -38,7 +40,7 @@ from lasr.optim.optimizer import Optimizer
 from lasr.vocabs import Vocabulary, LibriSpeechVocabulary
 
 
-class LightningSpeechRecognizer(pl.LightningModule):
+class LitSpeechRecognizer(pl.LightningModule):
     """
     PyTorch Lightning Speech Recognizer. It consist of a conformer encoder and rnn decoder.
 
@@ -68,7 +70,7 @@ class LightningSpeechRecognizer(pl.LightningModule):
             vocab: Vocabulary = LibriSpeechVocabulary,
             metric: ErrorRate = WordErrorRate,
     ) -> None:
-        super(LightningSpeechRecognizer, self).__init__()
+        super(LitSpeechRecognizer, self).__init__()
 
         self.peak_lr = configs.peak_lr
         self.final_lr = configs.final_lr
@@ -83,6 +85,8 @@ class LightningSpeechRecognizer(pl.LightningModule):
         self.metric = metric
         self.optimizer = configs.optimizer
         self.lr_scheduler = configs.lr_scheduler
+        self.lr_patience = configs.lr_patience
+        self.lr_factor = configs.lr_factor
         self.criterion = self.configure_criterion(
             num_classes,
             ignore_index=self.vocab.pad_id,
@@ -159,9 +163,9 @@ class LightningSpeechRecognizer(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        uer = self.metric(targets, y_hats)
+        wer = self.metric(targets, y_hats)
 
-        self.log("train_uer", uer)
+        self.log("train_wer", wer)
         self.log("train_loss", loss)
         self.log("train_cross_entropy_loss", cross_entropy_loss)
         self.log("train_ctc_loss", ctc_loss)
@@ -191,9 +195,9 @@ class LightningSpeechRecognizer(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        uer = self.metric(targets, y_hats)
+        wer = self.metric(targets, y_hats)
 
-        self.log("val_uer", uer)
+        self.log("val_wer", wer)
         self.log("val_loss", loss)
         self.log("val_cross_entropy_loss", cross_entropy_loss)
         self.log("val_ctc_loss", ctc_loss)
@@ -223,9 +227,9 @@ class LightningSpeechRecognizer(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        uer = self.metric(targets, y_hats)
+        wer = self.metric(targets, y_hats)
 
-        self.log("test_uer", uer)
+        self.log("test_wer", wer)
         self.log("test_loss", loss)
         self.log("test_cross_entropy_loss", cross_entropy_loss)
         self.log("test_ctc_loss", ctc_loss)
@@ -234,14 +238,19 @@ class LightningSpeechRecognizer(pl.LightningModule):
 
     def configure_optimizers(self) -> Tuple[List[torch.optim.Optimizer], List[LearningRateScheduler]]:
         """ Configure optimizer """
-        if self.optimizer == 'adam':
-            optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
-        elif self.optimizer == 'adamp':
-            optimizer = AdamP(self.parameters(), lr=self.lr)
-        elif self.optimizer == 'radam':
-            optimizer = RAdam(self.parameters(), lr=self.lr)
-        else:
-            raise ValueError(f"Unsupported optimizer: {self.optimizer}")
+        supported_optimizers = {
+            "adam": Adam,
+            "adamp": AdamP,
+            "radam": RAdam,
+            "adagrad": Adagrad,
+            "adadelta": Adadelta,
+            "adamax": Adamax,
+            "adamw": AdamW,
+            "sgd": SGD,
+            "asgd": ASGD,
+        }
+        assert self.optimizer in supported_optimizers.keys(), f"Unsupported Optimizer: {self.optimizer}"
+        optimizer = supported_optimizers[self.optimizer](self.parameters(), lr=self.lr)
 
         if self.lr_scheduler == 'transformer':
             scheduler = TransformerLRScheduler(
@@ -262,6 +271,12 @@ class LightningSpeechRecognizer(pl.LightningModule):
                 init_lr_scale=self.init_lr_scale,
                 warmup_steps=self.warmup_steps,
                 total_steps=self.warmup_steps + self.decay_steps,
+            )
+        elif self.lr_scheduler == 'reduce_lr_on_plateau':
+            scheduler = ReduceLROnPlateau(
+                optimizer,
+                patience=self.lr_patience,
+                factor=self.lr_factor,
             )
         else:
             raise ValueError(f"Unsupported lr_scheduler: {self.lr_scheduler}")
