@@ -1,7 +1,11 @@
 # <h1 align="center">lasr</h1>
 
-<p align="center">Lightening Automatic Speech Recognition
-<p  align="center">An MIT License ASR research library, built on PyTorch-Lightning, for developing end-to-end ASR models.
+<div align="center">
+
+**Modular and extensible speech recognition library leveraging [Pytorch Lightning](https://github.com/PyTorchLightning/pytorch-lightning)**
+
+  
+</div>
   
 ***
 
