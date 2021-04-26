@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**Modular and extensible speech recognition library leveraging [Pytorch Lightning](https://github.com/PyTorchLightning/pytorch-lightning)**
+**Modular and extensible speech recognition library leveraging [pytorch-lightning](https://github.com/PyTorchLightning/pytorch-lightning)**
 
   
 </div>
