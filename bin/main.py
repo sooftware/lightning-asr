@@ -27,10 +27,10 @@ import logging
 from omegaconf import OmegaConf, DictConfig
 from pytorch_lightning.loggers import TensorBoardLogger
 
-from lasr.data.lit_data_module import LitLibriDataModule
+from lasr.data.librispeech.lightning_module import LightningLibriSpeechModule
 from lasr.metric import WordErrorRate
-from lasr.model.recognizer import LitSpeechRecognizer
-from lasr.utils import check_environment
+from lasr.model.model import LightningASRModel
+from lasr.utilities import check_environment
 
 
 @hydra.main(config_path=os.path.join('..', "configs"), config_name="train")
@@ -46,16 +46,10 @@ def hydra_entry(configs: DictConfig) -> None:
     else:
         logger = True
 
-    lit_data_module = LitLibriDataModule(configs)
-    vocab = lit_data_module.prepare_data(configs.dataset_download, configs.vocab_size)
-    lit_data_module.setup(vocab)
-
-    model = LitSpeechRecognizer(
-        configs=configs,
-        num_classes=len(vocab),
-        vocab=vocab,
-        metric=WordErrorRate(vocab),
-    )
+    data_module = LightningLibriSpeechModule(configs)
+    vocab = data_module.prepare_data(configs.dataset_download, configs.vocab_size)
+    data_module.setup(vocab)
+    model = LightningASRModel(configs, num_classes=len(vocab), vocab=vocab, metric=WordErrorRate(vocab))
 
     trainer = pl.Trainer(
         precision=configs.precision,
@@ -69,7 +63,7 @@ def hydra_entry(configs: DictConfig) -> None:
         logger=logger,
         auto_scale_batch_size=configs.auto_scale_batch_size,
     )
-    trainer.fit(model, lit_data_module)
+    trainer.fit(model, data_module)
 
 
 if __name__ == '__main__':

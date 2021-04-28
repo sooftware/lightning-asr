@@ -40,9 +40,9 @@ from lasr.optim.optimizer import Optimizer
 from lasr.vocabs import Vocabulary, LibriSpeechVocabulary
 
 
-class LitSpeechRecognizer(pl.LightningModule):
+class LightningASRModel(pl.LightningModule):
     """
-    PyTorch Lightning Speech Recognizer. It consist of a conformer encoder and rnn decoder.
+    PyTorch Lightning Automatic Speech Recognition Model. It consist of a conformer encoder and rnn decoder.
 
     Args:
         configs (DictConfig): configuraion set
@@ -70,7 +70,7 @@ class LitSpeechRecognizer(pl.LightningModule):
             vocab: Vocabulary = LibriSpeechVocabulary,
             metric: ErrorRate = WordErrorRate,
     ) -> None:
-        super(LitSpeechRecognizer, self).__init__()
+        super(LightningASRModel, self).__init__()
 
         self.peak_lr = configs.peak_lr
         self.final_lr = configs.final_lr
