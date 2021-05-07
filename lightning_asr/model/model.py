@@ -80,7 +80,7 @@ class LightningASRModel(pl.LightningModule):
         self.warmup_steps = configs.warmup_steps
         self.decay_steps = configs.decay_steps
         self.total_steps = configs.warmup_steps + configs.decay_steps
-        self.max_grad_norm = configs.max_grad_norm
+        self.gradient_clip_val = configs.gradient_clip_val
         self.teacher_forcing_ratio = configs.teacher_forcing_ratio
         self.vocab = vocab
         self.metric = metric
@@ -285,7 +285,7 @@ class LightningASRModel(pl.LightningModule):
         else:
             raise ValueError(f"Unsupported `lr_scheduler`: {self.lr_scheduler}")
 
-        optimizer = Optimizer(optimizer, scheduler, self.total_steps, self.max_grad_norm)
+        optimizer = Optimizer(optimizer, scheduler, self.total_steps, self.gradient_clip_val)
 
         return [optimizer], [scheduler]
 
