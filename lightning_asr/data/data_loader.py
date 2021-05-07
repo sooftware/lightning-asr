@@ -64,6 +64,7 @@ class BucketingSampler(Sampler):
     """ Samples batches assuming they are in order of size to batch similarly sized samples together. """
     def __init__(self, data_source, batch_size: int = 32) -> None:
         super(BucketingSampler, self).__init__(data_source)
+        self.batch_size = batch_size
         self.data_source = data_source
         ids = list(range(0, len(data_source)))
         self.bins = [ids[i:i + batch_size] for i in range(0, len(ids), batch_size)]

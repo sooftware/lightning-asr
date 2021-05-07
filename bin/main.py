@@ -51,7 +51,7 @@ def hydra_entry(configs: DictConfig) -> None:
 
     data_module = LightningLibriSpeechDataModule(configs)
     vocab = data_module.prepare_data(configs.dataset_download, configs.vocab_size)
-    data_module.setup(vocab)
+    data_module.setup(vacab=vocab)
 
     model = LightningASRModel(
         configs=configs,
