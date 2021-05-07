@@ -84,6 +84,7 @@ class LightningASRModel(pl.LightningModule):
         self.vocab = vocab
         self.metric = metric
         self.optimizer = configs.optimizer
+        self.lr = configs.lr
         self.lr_scheduler = configs.lr_scheduler
         self.lr_patience = configs.lr_patience
         self.lr_factor = configs.lr_factor
