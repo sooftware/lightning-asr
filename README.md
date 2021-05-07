@@ -10,6 +10,9 @@
 ***
 
 <p  align="center"> 
+      <a href="https://www.codefactor.io/repository/github/sooftware/lightning-asr">
+        <img src="https://www.codefactor.io/repository/github/sooftware/lightning-asr/badge">
+      </a>
      <a href="https://github.com/sooftware/lightning-asr/blob/latest/LICENSE">
           <img src="http://img.shields.io/badge/license-MIT-informational"> 
      </a>
