@@ -41,7 +41,7 @@ I recommend creating a new virtual environment for this project (using virtual e
 * hydra: `pip install hydra-core --upgrade` (Refer [here](https://github.com/facebookresearch/hydra) for problem installing hydra)
   
 ### Install from source
-Currently we only support installation from source code using setuptools. Checkout the source code and run the   
+Currently I only support installation from source code using setuptools. Checkout the source code and run the   
 following commands:  
 ```
 pip install -e .
@@ -74,7 +74,7 @@ $ pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--c
   
 ## Get Started
   
-I use [Hydra](https://github.com/facebookresearch/hydra) to control all the training configurations. If you are not familiar with Hydra we recommend visiting the [Hydra website](https://hydra.cc/). Generally, Hydra is an open-source framework that simplifies the development of research applications by providing the ability to create a hierarchical configuration dynamically.
+I use [Hydra](https://github.com/facebookresearch/hydra) to control all the training configurations. If you are not familiar with Hydra I recommend visiting the [Hydra website](https://hydra.cc/). Generally, Hydra is an open-source framework that simplifies the development of research applications by providing the ability to create a hierarchical configuration dynamically.
   
 ### Training Speech Recognizer
   
