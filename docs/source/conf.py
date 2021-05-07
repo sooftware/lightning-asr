@@ -25,7 +25,7 @@ import sphinx_rtd_theme
 
 # -- Project information -----------------------------------------------------
 
-project = 'lasr'
+project = 'lightning_asr'
 copyright = '2021, Soohwan Kim'
 author = 'Soohwan Kim'
 
@@ -68,15 +68,15 @@ htmlhelp_basename = 'Sphinx-Tutorialdoc'
 latex_elements = {
 }
 latex_documents = [
-    (master_doc, 'lasr.tex', 'LASR Documentation',
+    (master_doc, 'lightning_asr.tex', 'LASR Documentation',
      'sooftware', 'manual'),
 ]
 man_pages = [
-    (master_doc, 'lasr', 'LASR Documentation',
+    (master_doc, 'lightning_asr', 'LASR Documentation',
      [author], 1)
 ]
 texinfo_documents = [
-    (master_doc, 'lasr', 'LASR Documentation',
+    (master_doc, 'lightning_asr', 'LASR Documentation',
      author, 'LASR', 'One line description of project.',
      'Miscellaneous'),
 ]

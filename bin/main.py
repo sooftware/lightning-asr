@@ -27,10 +27,10 @@ import logging
 from omegaconf import OmegaConf, DictConfig
 from pytorch_lightning.loggers import TensorBoardLogger
 
-from lasr.data.librispeech.lightning_module import LightningLibriSpeechModule
-from lasr.metric import WordErrorRate
-from lasr.model.model import LightningASRModel
-from lasr.utilities import check_environment
+from lightning_asr.data.librispeech.lit_data_module import LightningLibriSpeechDataModule
+from lightning_asr.metric import WordErrorRate
+from lightning_asr.model.model import LightningASRModel
+from lightning_asr.utilities import check_environment
 
 
 @hydra.main(config_path=os.path.join('..', "configs"), config_name="train")
@@ -46,23 +46,43 @@ def hydra_entry(configs: DictConfig) -> None:
     else:
         logger = True
 
-    data_module = LightningLibriSpeechModule(configs)
+    if configs.use_cuda and configs.use_tpu:
+        raise ValueError("configs.use_cuda and configs.use_tpu both are True, Please choose between GPU and TPU.")
+
+    data_module = LightningLibriSpeechDataModule(configs)
     vocab = data_module.prepare_data(configs.dataset_download, configs.vocab_size)
     data_module.setup(vocab)
     model = LightningASRModel(configs, num_classes=len(vocab), vocab=vocab, metric=WordErrorRate(vocab))
 
-    trainer = pl.Trainer(
-        precision=configs.precision,
-        accelerator=configs.accelerator,
-        gpus=num_devices,
-        accumulate_grad_batches=configs.accumulate_grad_batches,
-        amp_backend=configs.amp_backend,
-        auto_select_gpus=configs.auto_select_gpus,
-        check_val_every_n_epoch=configs.check_val_every_n_epoch,
-        gradient_clip_val=configs.gradient_clip_val,
-        logger=logger,
-        auto_scale_batch_size=configs.auto_scale_batch_size,
-    )
+    if configs.use_tpu:
+        trainer = pl.Trainer(
+            tpu_cores=configs.tpu_cores,
+            precision=configs.precision,
+            accelerator=configs.accelerator,
+            accumulate_grad_batches=configs.accumulate_grad_batches,
+            amp_backend=configs.amp_backend,
+            auto_select_gpus=configs.auto_select_gpus,
+            check_val_every_n_epoch=configs.check_val_every_n_epoch,
+            gradient_clip_val=configs.gradient_clip_val,
+            logger=logger,
+            auto_scale_batch_size=configs.auto_scale_batch_size,
+            max_epochs=configs.max_epochs,
+        )
+    else:
+        trainer = pl.Trainer(
+            precision=configs.precision,
+            accelerator=configs.accelerator,
+            gpus=num_devices,
+            accumulate_grad_batches=configs.accumulate_grad_batches,
+            amp_backend=configs.amp_backend,
+            auto_select_gpus=configs.auto_select_gpus,
+            check_val_every_n_epoch=configs.check_val_every_n_epoch,
+            gradient_clip_val=configs.gradient_clip_val,
+            logger=logger,
+            auto_scale_batch_size=configs.auto_scale_batch_size,
+            max_epochs=configs.max_epochs,
+        )
+
     trainer.fit(model, data_module)
 
 

@@ -20,5 +20,5 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from lasr.optim.lr_scheduler.tri_stage_lr_scheduler import TriStageLRScheduler
-from lasr.optim.lr_scheduler.transformer_lr_scheduler import TransformerLRScheduler
+from lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler import TriStageLRScheduler
+from lightning_asr.optim.lr_scheduler.transformer_lr_scheduler import TransformerLRScheduler

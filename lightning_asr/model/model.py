@@ -29,15 +29,15 @@ from omegaconf import DictConfig
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.optim import Adam, Adadelta, Adagrad, SGD, Adamax, AdamW, ASGD
 
-from lasr.metric import WordErrorRate, ErrorRate
-from lasr.model.decoder import DecoderRNN
-from lasr.model.encoder import ConformerEncoder
-from lasr.optim import AdamP, RAdam
-from lasr.optim.lr_scheduler import TransformerLRScheduler, TriStageLRScheduler
-from lasr.criterion.joint_ctc_cross_entropy import JointCTCCrossEntropyLoss
-from lasr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
-from lasr.optim.optimizer import Optimizer
-from lasr.vocabs import Vocabulary, LibriSpeechVocabulary
+from lightning_asr.metric import WordErrorRate, ErrorRate
+from lightning_asr.model.decoder import DecoderRNN
+from lightning_asr.model.encoder import ConformerEncoder
+from lightning_asr.optim import AdamP, RAdam
+from lightning_asr.optim.lr_scheduler import TransformerLRScheduler, TriStageLRScheduler
+from lightning_asr.criterion.joint_ctc_cross_entropy import JointCTCCrossEntropyLoss
+from lightning_asr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
+from lightning_asr.optim.optimizer import Optimizer
+from lightning_asr.vocabs import Vocabulary, LibriSpeechVocabulary
 
 
 class LightningASRModel(pl.LightningModule):
