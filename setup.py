@@ -25,7 +25,7 @@ from distutils.core import setup
 setup(
     name='lightning_asr',
     version='latest',
-    description='Modular and extensible speech recognition library leveraging pytorch-lightning',
+    description='Modular and extensible speech recognition library leveraging pytorch-lightning and hydra',
     author='Soohwan Kim',
     author_email='kaki.ai@tunib.ai',
     url='https://github.com/sooftware/lightning_asr',
