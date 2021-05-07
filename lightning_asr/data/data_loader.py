@@ -55,19 +55,25 @@ def _collate_fn(batch):
 
 class AudioDataLoader(DataLoader):
     """ Audio Data Loader """
-    def __init__(self, *args, **kwargs):
-        super(AudioDataLoader, self).__init__(*args, **kwargs)
+    def __init__(
+            self,
+            dataset: torch.utils.data.Dataset,
+            num_workers: int,
+            batch_sampler: torch.utils.data.sampler.Sampler,
+    ) -> None:
+        super(AudioDataLoader, self).__init__(dataset=dataset, num_workers=num_workers, batch_sampler=batch_sampler)
         self.collate_fn = _collate_fn
 
 
 class BucketingSampler(Sampler):
     """ Samples batches assuming they are in order of size to batch similarly sized samples together. """
-    def __init__(self, data_source, batch_size: int = 32) -> None:
+    def __init__(self, data_source, batch_size: int = 32, drop_last: bool = False) -> None:
         super(BucketingSampler, self).__init__(data_source)
         self.batch_size = batch_size
         self.data_source = data_source
         ids = list(range(0, len(data_source)))
         self.bins = [ids[i:i + batch_size] for i in range(0, len(ids), batch_size)]
+        self.drop_last = drop_last
 
     def __iter__(self):
         for ids in self.bins:
