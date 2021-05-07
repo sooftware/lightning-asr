@@ -34,7 +34,7 @@ from lightning_asr.model.decoder import DecoderRNN
 from lightning_asr.model.encoder import ConformerEncoder
 from lightning_asr.optim import AdamP, RAdam
 from lightning_asr.optim.lr_scheduler import TransformerLRScheduler, TriStageLRScheduler
-from lightning_asr.criterion.joint_ctc_cross_entropy import JointCTCCrossEntropyLoss
+from lightning_asr.criterion import JointCTCCrossEntropyLoss
 from lightning_asr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
 from lightning_asr.optim.optimizer import Optimizer
 from lightning_asr.vocabs import Vocabulary, LibriSpeechVocabulary

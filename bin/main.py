@@ -29,7 +29,7 @@ from pytorch_lightning.loggers import TensorBoardLogger
 
 from lightning_asr.data.librispeech.lit_data_module import LightningLibriSpeechDataModule
 from lightning_asr.metric import WordErrorRate
-from lightning_asr.model.model import LightningASRModel
+from lightning_asr.model import LightningASRModel
 from lightning_asr.utilities import check_environment
 
 

@@ -157,14 +157,13 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
             os.mkdir(os.path.join(self.dataset_path, librispeech_dir, train_dir))
 
         for part in self.librispeech_parts[:-3]:    # dev, test
-            path = os.path.join(self.dataset_path, part)
-            shutil.move(os.path.join(path, part), os.path.join(self.dataset_path, librispeech_dir, part))
+            shutil.move(os.path.join(librispeech_dir, part), os.path.join(self.dataset_path, librispeech_dir, part))
 
         for part in self.librispeech_parts[-3:]:    # train
-            path = os.path.join(self.dataset_path, part)
+            path = os.path.join(librispeech_dir, part)
             files = os.listdir(path)
             for file in files:
-                shutil.move(os.path.join(path, part), os.path.join(self.dataset_path, librispeech_dir, part, file))
+                shutil.move(os.path.join(path, file), os.path.join(self.dataset_path, librispeech_dir, part, file))
 
         # Update dataset path
         self.dataset_path = os.path.join(self.dataset_path, librispeech_dir)
