@@ -88,7 +88,7 @@ I use [Hydra](https://github.com/facebookresearch/hydra) to control all the trai
   
 You can simply train with LibriSpeech dataset like below:
 ```
-$ python ./bin/main.py --dataset_path $DATASET_PATH --dataset_download True
+$ python ./bin/main.py dataset_path=$DATASET_PATH dataset_download=True
 ```
   
 Check configuraions at [[link]](https://github.com/sooftware/lightning-asr/tree/main/configs)
