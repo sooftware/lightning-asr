@@ -1,4 +1,4 @@
-dataset_path: librispeech
+dataset_path: ../../../librispeech
 dataset_download: True
 vocab_size: 5000
 apply_spec_augment: True
