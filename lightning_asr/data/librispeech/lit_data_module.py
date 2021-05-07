@@ -101,11 +101,11 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
         self.dataset_path = configs.dataset_path
         self.librispeech_dir = 'LibriSpeech'
         self.manifest_paths = [
-            f"{configs.dataset_path}/{self.librispeech_dir}/train-960.txt",
-            f"{configs.dataset_path}/{self.librispeech_dir}/dev-clean.txt",
-            f"{configs.dataset_path}/{self.librispeech_dir}/dev-other.txt",
-            f"{configs.dataset_path}/{self.librispeech_dir}/test-clean.txt",
-            f"{configs.dataset_path}/{self.librispeech_dir}/test-other.txt",
+            f"{configs.dataset_path}/train-960.txt",
+            f"{configs.dataset_path}/dev-clean.txt",
+            f"{configs.dataset_path}/dev-other.txt",
+            f"{configs.dataset_path}/test-clean.txt",
+            f"{configs.dataset_path}/test-other.txt",
         ]
         self.dataset = dict()
         self.apply_spec_augment = configs.apply_spec_augment
@@ -192,7 +192,7 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
             None
         """
         self.logger.info("Generate Manifest Files..")
-        transcripts_collection = collect_transcripts(self.dataset_path)
+        transcripts_collection = collect_transcripts(os.path.join(self.dataset_path, self.librispeech_dir))
         prepare_tokenizer(transcripts_collection[0], vocab_size)
 
         for idx, part in enumerate(['train-960', 'dev-clean', 'dev-other', 'test-clean', 'test-other']):
