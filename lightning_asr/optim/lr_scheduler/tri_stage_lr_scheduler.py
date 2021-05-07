@@ -22,7 +22,7 @@
 
 import math
 
-from lasr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
+from lightning_asr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
 
 
 class TriStageLRScheduler(LearningRateScheduler):

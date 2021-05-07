@@ -26,8 +26,8 @@ import torch.nn as nn
 from torch import Tensor, LongTensor
 from typing import Tuple, Optional
 
-from lasr.model.attention import MultiHeadAttention
-from lasr.model.modules import View
+from lightning_asr.model.attention import MultiHeadAttention
+from lightning_asr.model.modules import View
 
 
 class DecoderRNN(nn.Module):

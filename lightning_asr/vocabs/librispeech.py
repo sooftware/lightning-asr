@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from lasr.vocabs import Vocabulary
+from lightning_asr.vocabs import Vocabulary
 
 
 class LibriSpeechVocabulary(Vocabulary):

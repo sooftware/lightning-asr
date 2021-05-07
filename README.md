@@ -1,8 +1,8 @@
-# <h1 align="center">lasr</h1>
+# <h1 align="center">Lightning ASR</h1>
 
 <div align="center">
 
-**Modular and extensible speech recognition library leveraging [pytorch-lightning](https://github.com/PyTorchLightning/pytorch-lightning)**
+**Modular and extensible speech recognition library leveraging [pytorch-lightning](https://github.com/PyTorchLightning/pytorch-lightning) and [hydra](https://github.com/facebookresearch/hydra)**
 
   
 </div>
@@ -10,7 +10,7 @@
 ***
 
 <p  align="center"> 
-     <a href="https://github.com/sooftware/KoSpeech/blob/latest/LICENSE">
+     <a href="https://github.com/sooftware/lightning-asr/blob/latest/LICENSE">
           <img src="http://img.shields.io/badge/license-MIT-informational"> 
      </a>
      <a href="https://github.com/pytorch/pytorch">
@@ -19,10 +19,10 @@
      <a href="https://www.python.org/dev/peps/pep-0008/">
           <img src="http://img.shields.io/badge/codestyle-PEP--8-informational"> 
      </a>
-    <a href="https://sooftware.github.io/lasr/">
+    <a href="https://sooftware.github.io/lightning-asr/">
           <img src="http://img.shields.io/badge/docs-passing-success"> 
      </a>
-  <a href="https://sooftware.github.io/lasr/">
+  <a href="https://sooftware.github.io/lightning-asr/">
           <img src="http://img.shields.io/badge/build-not tested-red">
      </a>
     
@@ -30,7 +30,7 @@
     
 [PyTorch Lightning](https://github.com/PyTorchLightning/pytorch-lightning) is the lightweight [PyTorch](https://github.com/pytorch/pytorch) wrapper for high-performance AI research. PyTorch is extremely easy to use to build complex AI models. But once the research gets complicated and things like multi-GPU training, 16-bit precision and TPU training get mixed in, users are likely to introduce bugs. PyTorch Lightning solves exactly this problem. Lightning structures your PyTorch code so it can abstract the details of training. This makes AI research scalable and fast to iterate on.   
   
-This project is an example that implements the asr project with PyTorch Lightning. In this project, I trained a model consisting of a conformer encoder + LSTM decoder with Joint CTC-Attention. The **lasr** means **l**ighthning **a**utomatic **s**peech **r**ecognition. I hope this could be a guideline for those who research speech recognition.  
+This project is an example that implements the asr project with PyTorch Lightning. In this project, I trained a model consisting of a conformer encoder + LSTM decoder with Joint CTC-Attention. I hope this could be a guideline for those who research speech recognition.  
   
 ## Installation
   
@@ -91,10 +91,10 @@ You can simply train with LibriSpeech dataset like below:
 $ python ./bin/main.py --dataset_path $DATASET_PATH --dataset_download True
 ```
   
-Check configuraions at [[link]](https://github.com/sooftware/lasr/tree/main/configs)
+Check configuraions at [[link]](https://github.com/sooftware/lightning-asr/tree/main/configs)
   
 ## Troubleshoots and Contributing
-If you have any questions, bug reports, and feature requests, please [open an issue](https://github.com/sooftware/lasr/issues) on Github.   
+If you have any questions, bug reports, and feature requests, please [open an issue](https://github.com/sooftware/lightning-asr/issues) on Github.   
   
 I appreciate any kind of feedback or contribution.  Feel free to proceed with small issues like bug fixes, documentation improvement.  For major contributions and new features, please discuss with the collaborators in corresponding issues.  
   
@@ -102,7 +102,7 @@ I appreciate any kind of feedback or contribution.  Feel free to proceed with sm
 I follow [PEP-8](https://www.python.org/dev/peps/pep-0008/) for code style. Especially the style of docstrings is important to generate documentation. 
   
 ### License
-This project is licensed under the MIT LICENSE - see the [LICENSE.md](https://github.com/sooftware/lasr/blob/master/LICENSE) file for details
+This project is licensed under the MIT LICENSE - see the [LICENSE.md](https://github.com/sooftware/lightning-asr/blob/master/LICENSE) file for details
   
 ## Author
   

@@ -25,8 +25,8 @@ import torch.nn as nn
 from torch import Tensor
 from typing import Tuple
 
-from lasr.model.activation import Swish, GLU
-from lasr.model.modules import LayerNorm, Transpose
+from lightning_asr.model.activation import Swish, GLU
+from lightning_asr.model.modules import LayerNorm, Transpose
 
 
 class DepthwiseConv1d(nn.Module):

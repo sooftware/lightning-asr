@@ -25,13 +25,13 @@ import torch.nn as nn
 from torch import Tensor
 from typing import Tuple
 
-from lasr.model.feed_forward import FeedForwardModule
-from lasr.model.attention import MultiHeadedSelfAttentionModule
-from lasr.model.convolution import (
+from lightning_asr.model.feed_forward import FeedForwardModule
+from lightning_asr.model.attention import MultiHeadedSelfAttentionModule
+from lightning_asr.model.convolution import (
     ConformerConvModule,
     Conv2dSubampling,
 )
-from lasr.model.modules import (
+from lightning_asr.model.modules import (
     ResidualConnectionModule,
     LayerNorm,
     Linear, Transpose,

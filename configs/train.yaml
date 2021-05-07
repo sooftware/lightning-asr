@@ -1,4 +1,4 @@
 defaults:
   - data: default
-  - recognizer: default
+  - model: default
   - trainer: default

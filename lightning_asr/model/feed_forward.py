@@ -24,8 +24,8 @@ import torch
 import torch.nn as nn
 from torch import Tensor
 
-from lasr.model.activation import Swish
-from lasr.model.modules import LayerNorm, Linear
+from lightning_asr.model.activation import Swish
+from lightning_asr.model.modules import LayerNorm, Linear
 
 
 class FeedForwardModule(nn.Module):

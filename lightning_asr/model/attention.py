@@ -28,8 +28,8 @@ import torch.nn.functional as F
 from torch import Tensor
 from typing import Optional, Tuple
 
-from lasr.model.embedding import PositionalEncoding
-from lasr.model.modules import Linear, LayerNorm
+from lightning_asr.model.embedding import PositionalEncoding
+from lightning_asr.model.modules import Linear, LayerNorm
 
 
 class ScaledDotProductAttention(nn.Module):

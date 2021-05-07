@@ -23,12 +23,12 @@
 from distutils.core import setup
 
 setup(
-    name='lasr',
+    name='lightning_asr',
     version='latest',
-    description='PyTorch Lightning implementaion of Automatic Speech Recognition',
+    description='Modular and extensible speech recognition library leveraging pytorch-lightning',
     author='Soohwan Kim',
     author_email='kaki.ai@tunib.ai',
-    url='https://github.com/sooftware/lasr',
+    url='https://github.com/sooftware/lightning_asr',
     install_requires=[
         'torch>=1.4.0',
         'python-Levenshtein',

@@ -24,8 +24,8 @@ import torch.nn as nn
 import matplotlib.pyplot as plt
 from torch import optim
 
-from lasr.optim.lr_scheduler import TransformerLRScheduler
-from lasr.optim.optimizer import Optimizer
+from lightning_asr.optim.lr_scheduler import TransformerLRScheduler
+from lightning_asr.optim.optimizer import Optimizer
 
 
 class Model(nn.Module):
