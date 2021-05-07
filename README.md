@@ -16,12 +16,6 @@
      <a href="https://github.com/sooftware/lightning-asr/blob/latest/LICENSE">
           <img src="http://img.shields.io/badge/license-MIT-informational"> 
      </a>
-     <a href="https://github.com/pytorch/pytorch">
-          <img src="http://img.shields.io/badge/framework-PyTorch--Lightning-informational"> 
-     </a>
-     <a href="https://www.python.org/dev/peps/pep-0008/">
-          <img src="http://img.shields.io/badge/codestyle-PEP--8-informational"> 
-     </a>
     <a href="https://sooftware.github.io/lightning-asr/">
           <img src="http://img.shields.io/badge/docs-passing-success"> 
      </a>
