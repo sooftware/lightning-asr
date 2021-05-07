@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Optim &mdash; lasr latest documentation</title>
+  <title>Optim &mdash; lightning_asr latest documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -54,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> lasr
+            <a href="index.html" class="icon icon-home"> lightning_asr
           
 
           
@@ -101,9 +100,9 @@
 <li class="toctree-l1"><a class="reference internal" href="Metric.html">Metric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Model.html">Model</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Optim</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-lasr.optim.optimizer">Optimizer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-lasr.optim.adamp">AdamP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-lasr.optim.radam">RAdam</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lightning_asr.optim.optimizer">Optimizer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lightning_asr.optim.adamp">AdamP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lightning_asr.optim.radam">RAdam</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Vocab.html">Vocabs</a></li>
@@ -122,7 +121,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">lasr</a>
+          <a href="index.html">lightning_asr</a>
         
       </nav>
 
@@ -176,39 +175,39 @@
             
   <div class="section" id="optim">
 <h1>Optim<a class="headerlink" href="#optim" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-lasr.optim.optimizer">
-<span id="optimizer"></span><h2>Optimizer<a class="headerlink" href="#module-lasr.optim.optimizer" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-lightning_asr.optim.optimizer">
+<span id="optimizer"></span><h2>Optimizer<a class="headerlink" href="#module-lightning_asr.optim.optimizer" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="lasr.optim.optimizer.Optimizer">
-<em class="property">class </em><code class="sig-prename descclassname">lasr.optim.optimizer.</code><code class="sig-name descname">Optimizer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optim</span></em>, <em class="sig-param"><span class="n">scheduler</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scheduler_period</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_grad_norm</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/optim/optimizer.html#Optimizer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.optim.optimizer.Optimizer" title="Permalink to this definition">¶</a></dt>
+<dt id="lightning_asr.optim.optimizer.Optimizer">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.optim.optimizer.</span></code><code class="sig-name descname"><span class="pre">Optimizer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler_period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_grad_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/optim/optimizer.html#Optimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.optim.optimizer.Optimizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is wrapper classs of torch.optim.Optimizer.
 This class provides functionalities for learning rate scheduling and gradient norm clipping.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>optim</strong> (<a class="reference external" href="https://pytorch.org/docs/master/optim.html#torch.optim.Optimizer" title="(in PyTorch vmaster (1.9.0a0+gitc797492 ))"><em>torch.optim.Optimizer</em></a>) – optimizer object, the parameters to be optimized
+<li><p><strong>optim</strong> (<em>torch.optim.Optimizer</em>) – optimizer object, the parameters to be optimized
 should be given when instantiating the object, e.g. torch.optim.Adam, torch.optim.SGD</p></li>
 <li><p><strong>scheduler</strong> (<em>kospeech.optim.lr_scheduler</em><em>, </em><em>optional</em>) – learning rate scheduler</p></li>
-<li><p><strong>scheduler_period</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – timestep with learning rate scheduler</p></li>
-<li><p><strong>max_grad_norm</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>, </em><em>optional</em>) – value used for gradient norm clipping</p></li>
+<li><p><strong>scheduler_period</strong> (<em>int</em><em>, </em><em>optional</em>) – timestep with learning rate scheduler</p></li>
+<li><p><strong>max_grad_norm</strong> (<em>int</em><em>, </em><em>optional</em>) – value used for gradient norm clipping</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 </div>
-<div class="section" id="module-lasr.optim.adamp">
-<span id="adamp"></span><h2>AdamP<a class="headerlink" href="#module-lasr.optim.adamp" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-lightning_asr.optim.adamp">
+<span id="adamp"></span><h2>AdamP<a class="headerlink" href="#module-lightning_asr.optim.adamp" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="lasr.optim.adamp.AdamP">
-<em class="property">class </em><code class="sig-prename descclassname">lasr.optim.adamp.</code><code class="sig-name descname">AdamP</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span></em>, <em class="sig-param"><span class="n">lr</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">betas</span><span class="o">=</span><span class="default_value">0.9, 0.999</span></em>, <em class="sig-param"><span class="n">eps</span><span class="o">=</span><span class="default_value">1e-08</span></em>, <em class="sig-param"><span class="n">weight_decay</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">delta</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">wd_ratio</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">nesterov</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/optim/adamp.html#AdamP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.optim.adamp.AdamP" title="Permalink to this definition">¶</a></dt>
+<dt id="lightning_asr.optim.adamp.AdamP">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.optim.adamp.</span></code><code class="sig-name descname"><span class="pre">AdamP</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">betas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.9,</span> <span class="pre">0.999)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_decay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wd_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nesterov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/optim/adamp.html#AdamP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.optim.adamp.AdamP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Paper: “AdamP: Slowing Down the Slowdown for Momentum Optimizers on Scale-invariant Weights”
 Copied from <a class="reference external" href="https://github.com/clovaai/AdamP/">https://github.com/clovaai/AdamP/</a>
 Copyright (c) 2020 Naver Corp.
 MIT License</p>
 <dl class="py method">
-<dt id="lasr.optim.adamp.AdamP.step">
-<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">closure</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/optim/adamp.html#AdamP.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.optim.adamp.AdamP.step" title="Permalink to this definition">¶</a></dt>
+<dt id="lightning_asr.optim.adamp.AdamP.step">
+<code class="sig-name descname"><span class="pre">step</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">closure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/optim/adamp.html#AdamP.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.optim.adamp.AdamP.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs a single optimization step (parameter update).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -226,18 +225,18 @@ returns the loss. Optional for most optimizers.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-lasr.optim.radam">
-<span id="radam"></span><h2>RAdam<a class="headerlink" href="#module-lasr.optim.radam" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-lightning_asr.optim.radam">
+<span id="radam"></span><h2>RAdam<a class="headerlink" href="#module-lightning_asr.optim.radam" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="lasr.optim.radam.RAdam">
-<em class="property">class </em><code class="sig-prename descclassname">lasr.optim.radam.</code><code class="sig-name descname">RAdam</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span></em>, <em class="sig-param"><span class="n">lr</span><span class="o">=</span><span class="default_value">0.001</span></em>, <em class="sig-param"><span class="n">betas</span><span class="o">=</span><span class="default_value">0.9, 0.999</span></em>, <em class="sig-param"><span class="n">eps</span><span class="o">=</span><span class="default_value">1e-08</span></em>, <em class="sig-param"><span class="n">weight_decay</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">degenerated_to_sgd</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/optim/radam.html#RAdam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.optim.radam.RAdam" title="Permalink to this definition">¶</a></dt>
+<dt id="lightning_asr.optim.radam.RAdam">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.optim.radam.</span></code><code class="sig-name descname"><span class="pre">RAdam</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">betas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.9,</span> <span class="pre">0.999)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_decay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degenerated_to_sgd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/optim/radam.html#RAdam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.optim.radam.RAdam" title="Permalink to this definition">¶</a></dt>
 <dd><p>Paper: “On the Variance of the Adaptive Learning Rate and Beyond”
 Refer to <a class="reference external" href="https://github.com/LiyuanLucasLiu/RAdam">https://github.com/LiyuanLucasLiu/RAdam</a>
 Copyright (c) LiyuanLucasLiu
 Apache 2.0 License</p>
 <dl class="py method">
-<dt id="lasr.optim.radam.RAdam.step">
-<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">closure</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/optim/radam.html#RAdam.step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.optim.radam.RAdam.step" title="Permalink to this definition">¶</a></dt>
+<dt id="lightning_asr.optim.radam.RAdam.step">
+<code class="sig-name descname"><span class="pre">step</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">closure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/optim/radam.html#RAdam.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.optim.radam.RAdam.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs a single optimization step (parameter update).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

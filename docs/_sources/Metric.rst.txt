@@ -3,5 +3,5 @@ Metric
 
 Metric
 --------------------------------------------
-.. automodule:: lasr.metric
+.. automodule:: lightning_asr.metric
     :members:

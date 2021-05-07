@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>lasr.data.data_loader &mdash; lasr latest documentation</title>
+  <title>lightning_asr.data.data_loader &mdash; lightning_asr latest documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -52,7 +51,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> lasr
+            <a href="../../../index.html" class="icon icon-home"> lightning_asr
           
 
           
@@ -115,7 +114,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">lasr</a>
+          <a href="../../../index.html">lightning_asr</a>
         
       </nav>
 
@@ -150,7 +149,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>lasr.data.data_loader</li>
+      <li>lightning_asr.data.data_loader</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -165,7 +164,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for lasr.data.data_loader</h1><div class="highlight"><pre>
+  <h1>Source code for lightning_asr.data.data_loader</h1><div class="highlight"><pre>
 <span></span><span class="c1"># MIT License</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright (c) 2021 Soohwan Kim</span>
@@ -221,14 +220,14 @@
     <span class="k">return</span> <span class="n">seqs</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">seq_lengths</span><span class="p">,</span> <span class="n">target_lengths</span>
 
 
-<div class="viewcode-block" id="AudioDataLoader"><a class="viewcode-back" href="../../../Data.html#lasr.data.data_loader.AudioDataLoader">[docs]</a><span class="k">class</span> <span class="nc">AudioDataLoader</span><span class="p">(</span><span class="n">DataLoader</span><span class="p">):</span>
+<div class="viewcode-block" id="AudioDataLoader"><a class="viewcode-back" href="../../../Data.html#lightning_asr.data.data_loader.AudioDataLoader">[docs]</a><span class="k">class</span> <span class="nc">AudioDataLoader</span><span class="p">(</span><span class="n">DataLoader</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Audio Data Loader &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">AudioDataLoader</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">collate_fn</span> <span class="o">=</span> <span class="n">_collate_fn</span></div>
 
 
-<div class="viewcode-block" id="BucketingSampler"><a class="viewcode-back" href="../../../Data.html#lasr.data.data_loader.BucketingSampler">[docs]</a><span class="k">class</span> <span class="nc">BucketingSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
+<div class="viewcode-block" id="BucketingSampler"><a class="viewcode-back" href="../../../Data.html#lightning_asr.data.data_loader.BucketingSampler">[docs]</a><span class="k">class</span> <span class="nc">BucketingSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Samples batches assuming they are in order of size to batch similarly sized samples together. &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_source</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">BucketingSampler</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">data_source</span><span class="p">)</span>

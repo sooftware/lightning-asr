@@ -3,45 +3,45 @@ Model
 
 Activation
 --------------------------------------------
-.. automodule:: lasr.model.activation
+.. automodule:: lightning_asr.model.activation
     :members:
 
 Attention
 --------------------------------------------
-.. automodule:: lasr.model.attention
+.. automodule:: lightning_asr.model.attention
     :members:
 
 Convolution
 --------------------------------------------
-.. automodule:: lasr.model.convolution
+.. automodule:: lightning_asr.model.convolution
     :members:
 
 Decoder
 --------------------------------------------
-.. automodule:: lasr.model.Decoder
+.. automodule:: lightning_asr.model.Decoder
     :members:
 
 Embedding
 --------------------------------------------
-.. automodule:: lasr.model.embedding
+.. automodule:: lightning_asr.model.embedding
     :members:
 
 Encoder
 --------------------------------------------
-.. automodule:: lasr.model.encoder
+.. automodule:: lightning_asr.model.encoder
     :members:
 
 Feed Forward
 --------------------------------------------
-.. automodule:: lasr.model.feed_forward
+.. automodule:: lightning_asr.model.feed_forward
     :members:
 
 Modules
 --------------------------------------------
-.. automodule:: lasr.model.modules
+.. automodule:: lightning_asr.model.modules
     :members:
 
-Recognizer
+Model
 --------------------------------------------
-.. automodule:: lasr.model.recognizer
+.. automodule:: lightning_asr.model.model
     :members:

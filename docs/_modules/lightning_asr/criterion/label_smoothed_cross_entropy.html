@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>lasr.criterion.joint_ctc_cross_entropy &mdash; lasr latest documentation</title>
+  <title>lightning_asr.criterion.label_smoothed_cross_entropy &mdash; lightning_asr latest documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -52,7 +51,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> lasr
+            <a href="../../../index.html" class="icon icon-home"> lightning_asr
           
 
           
@@ -115,7 +114,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">lasr</a>
+          <a href="../../../index.html">lightning_asr</a>
         
       </nav>
 
@@ -150,7 +149,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>lasr.criterion.joint_ctc_cross_entropy</li>
+      <li>lightning_asr.criterion.label_smoothed_cross_entropy</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -165,7 +164,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for lasr.criterion.joint_ctc_cross_entropy</h1><div class="highlight"><pre>
+  <h1>Source code for lightning_asr.criterion.label_smoothed_cross_entropy</h1><div class="highlight"><pre>
 <span></span><span class="c1"># MIT License</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright (c) 2021 Soohwan Kim</span>
@@ -188,56 +187,63 @@
 <span class="c1"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
 <span class="c1"># SOFTWARE.</span>
 
+<span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
 
 
-<div class="viewcode-block" id="JointCTCCrossEntropyLoss"><a class="viewcode-back" href="../../../Criterion.html#lasr.criterion.joint_ctc_cross_entropy.JointCTCCrossEntropyLoss">[docs]</a><span class="k">class</span> <span class="nc">JointCTCCrossEntropyLoss</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="LabelSmoothedCrossEntropyLoss"><a class="viewcode-back" href="../../../Criterion.html#lightning_asr.criterion.label_smoothed_cross_entropy.LabelSmoothedCrossEntropyLoss">[docs]</a><span class="k">class</span> <span class="nc">LabelSmoothedCrossEntropyLoss</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Privides Joint CTC-CrossEntropy Loss function</span>
+<span class="sd">    Label smoothed cross entropy loss function.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        num_classes (int): the number of classification</span>
-<span class="sd">        ignore_index (int): indexes that are ignored when calculating loss</span>
+<span class="sd">        num_classes (int): the number of classfication</span>
+<span class="sd">        ignore_index (int): Indexes that are ignored when calculating loss</span>
+<span class="sd">        smoothing (float): ratio of smoothing (confidence = 1.0 - smoothing)</span>
 <span class="sd">        dim (int): dimension of calculation loss</span>
-<span class="sd">        reduction (str): reduction method [sum, mean] (default: mean)</span>
-<span class="sd">        ctc_weight (float): weight of ctc loss</span>
-<span class="sd">        cross_entropy_weight (float): weight of cross entropy loss</span>
-<span class="sd">        blank_id (int): identification of blank for ctc</span>
+<span class="sd">        reduction (str): reduction method [sum, mean] (default: sum)</span>
+
+<span class="sd">    Inputs: logits, target</span>
+<span class="sd">        logits (torch.Tensor): probability distribution value from model and it has a logarithm shape</span>
+<span class="sd">        target (torch.Tensor): ground-thruth encoded to integers which directly point a word in label</span>
+
+<span class="sd">    Returns: label_smoothed</span>
+<span class="sd">        - **label_smoothed** (float): sum of loss</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
             <span class="n">ignore_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">smoothing</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
             <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span>
-            <span class="n">ctc_weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span>
-            <span class="n">cross_entropy_weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span>
-            <span class="n">blank_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">JointCTCCrossEntropyLoss</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LabelSmoothedCrossEntropyLoss</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">confidence</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">smoothing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">smoothing</span> <span class="o">=</span> <span class="n">smoothing</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span> <span class="o">=</span> <span class="n">num_classes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="n">dim</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ignore_index</span> <span class="o">=</span> <span class="n">ignore_index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reduction</span> <span class="o">=</span> <span class="n">reduction</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ctc_weight</span> <span class="o">=</span> <span class="n">ctc_weight</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cross_entropy_weight</span> <span class="o">=</span> <span class="n">cross_entropy_weight</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ctc_loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CTCLoss</span><span class="p">(</span><span class="n">blank</span><span class="o">=</span><span class="n">blank_id</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reduction</span><span class="p">,</span> <span class="n">zero_infinity</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cross_entropy_loss</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">(</span><span class="n">reduction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reduction</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ignore_index</span><span class="p">)</span>
 
-<div class="viewcode-block" id="JointCTCCrossEntropyLoss.forward"><a class="viewcode-back" href="../../../Criterion.html#lasr.criterion.joint_ctc_cross_entropy.JointCTCCrossEntropyLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">encoder_log_probs</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
-            <span class="n">decoder_log_probs</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
-            <span class="n">output_lengths</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
-            <span class="n">targets</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
-            <span class="n">target_lengths</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
-        <span class="n">ctc_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctc_loss</span><span class="p">(</span><span class="n">encoder_log_probs</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">output_lengths</span><span class="p">,</span> <span class="n">target_lengths</span><span class="p">)</span>
-        <span class="n">cross_entropy_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cross_entropy_loss</span><span class="p">(</span><span class="n">decoder_log_probs</span><span class="p">,</span> <span class="n">targets</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">loss</span> <span class="o">=</span> <span class="n">cross_entropy_loss</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cross_entropy_weight</span> <span class="o">+</span> <span class="n">ctc_loss</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctc_weight</span>
-        <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">ctc_loss</span><span class="p">,</span> <span class="n">cross_entropy_loss</span></div></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reduction</span> <span class="o">==</span> <span class="s1">&#39;sum&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reduction_method</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">reduction</span> <span class="o">==</span> <span class="s1">&#39;mean&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reduction_method</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mean</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported reduction method </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reduction</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logits</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">smoothing</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="n">label_smoothed</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span>
+                <span class="n">label_smoothed</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">smoothing</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">label_smoothed</span><span class="o">.</span><span class="n">scatter_</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">targets</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">confidence</span><span class="p">)</span>
+                <span class="n">label_smoothed</span><span class="p">[</span><span class="n">targets</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_index</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reduction_method</span><span class="p">(</span><span class="o">-</span><span class="n">label_smoothed</span> <span class="o">*</span> <span class="n">logits</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">F</span><span class="o">.</span><span class="n">cross_entropy</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ignore_index</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reduction</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

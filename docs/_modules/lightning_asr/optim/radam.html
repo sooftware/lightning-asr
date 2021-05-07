@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>lasr.optim.radam &mdash; lasr latest documentation</title>
+  <title>lightning_asr.optim.radam &mdash; lightning_asr latest documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -52,7 +51,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> lasr
+            <a href="../../../index.html" class="icon icon-home"> lightning_asr
           
 
           
@@ -115,7 +114,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">lasr</a>
+          <a href="../../../index.html">lightning_asr</a>
         
       </nav>
 
@@ -150,7 +149,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>lasr.optim.radam</li>
+      <li>lightning_asr.optim.radam</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -165,7 +164,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for lasr.optim.radam</h1><div class="highlight"><pre>
+  <h1>Source code for lightning_asr.optim.radam</h1><div class="highlight"><pre>
 <span></span><span class="c1"># Copyright (c) 2020, LiyuanLucasLiu. All rights reserved.</span>
 <span class="c1">#</span>
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
@@ -185,7 +184,7 @@
 <span class="kn">from</span> <span class="nn">torch.optim.optimizer</span> <span class="kn">import</span> <span class="n">Optimizer</span>
 
 
-<div class="viewcode-block" id="RAdam"><a class="viewcode-back" href="../../../Optim.html#lasr.optim.radam.RAdam">[docs]</a><span class="k">class</span> <span class="nc">RAdam</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
+<div class="viewcode-block" id="RAdam"><a class="viewcode-back" href="../../../Optim.html#lightning_asr.optim.radam.RAdam">[docs]</a><span class="k">class</span> <span class="nc">RAdam</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Paper: &quot;On the Variance of the Adaptive Learning Rate and Beyond&quot;</span>
 <span class="sd">    Refer to https://github.com/LiyuanLucasLiu/RAdam</span>
@@ -214,7 +213,7 @@
     <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RAdam</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__setstate__</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RAdam.step"><a class="viewcode-back" href="../../../Optim.html#lasr.optim.radam.RAdam.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">closure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RAdam.step"><a class="viewcode-back" href="../../../Optim.html#lightning_asr.optim.radam.RAdam.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">closure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
         <span class="n">loss</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">closure</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

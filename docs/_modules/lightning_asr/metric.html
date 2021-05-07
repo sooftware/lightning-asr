@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>lasr.metric &mdash; lasr latest documentation</title>
+  <title>lightning_asr.metric &mdash; lightning_asr latest documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-        <script src="../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -52,7 +51,7 @@
           
 
           
-            <a href="../../index.html" class="icon icon-home"> lasr
+            <a href="../../index.html" class="icon icon-home"> lightning_asr
           
 
           
@@ -115,7 +114,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">lasr</a>
+          <a href="../../index.html">lightning_asr</a>
         
       </nav>
 
@@ -150,7 +149,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>lasr.metric</li>
+      <li>lightning_asr.metric</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -165,7 +164,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for lasr.metric</h1><div class="highlight"><pre>
+  <h1>Source code for lightning_asr.metric</h1><div class="highlight"><pre>
 <span></span><span class="c1"># MIT License</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright (c) 2021 Soohwan Kim</span>
@@ -191,7 +190,7 @@
 <span class="kn">import</span> <span class="nn">Levenshtein</span> <span class="k">as</span> <span class="nn">Lev</span>
 
 
-<div class="viewcode-block" id="ErrorRate"><a class="viewcode-back" href="../../Metric.html#lasr.metric.ErrorRate">[docs]</a><span class="k">class</span> <span class="nc">ErrorRate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="ErrorRate"><a class="viewcode-back" href="../../Metric.html#lightning_asr.metric.ErrorRate">[docs]</a><span class="k">class</span> <span class="nc">ErrorRate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Provides inteface of error rate calcuation.</span>
 
@@ -241,13 +240,13 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
-<div class="viewcode-block" id="WordErrorRate"><a class="viewcode-back" href="../../Metric.html#lasr.metric.WordErrorRate">[docs]</a><span class="k">class</span> <span class="nc">WordErrorRate</span><span class="p">(</span><span class="n">ErrorRate</span><span class="p">):</span>
+<div class="viewcode-block" id="WordErrorRate"><a class="viewcode-back" href="../../Metric.html#lightning_asr.metric.WordErrorRate">[docs]</a><span class="k">class</span> <span class="nc">WordErrorRate</span><span class="p">(</span><span class="n">ErrorRate</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Provides word error rate calcuation. &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vocab</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">WordErrorRate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">vocab</span><span class="p">)</span>
 
-<div class="viewcode-block" id="WordErrorRate.metric"><a class="viewcode-back" href="../../Metric.html#lasr.metric.WordErrorRate.metric">[docs]</a>    <span class="k">def</span> <span class="nf">metric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">):</span>
+<div class="viewcode-block" id="WordErrorRate.metric"><a class="viewcode-back" href="../../Metric.html#lightning_asr.metric.WordErrorRate.metric">[docs]</a>    <span class="k">def</span> <span class="nf">metric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes the Unit Error Rate, defined as the edit distance between the</span>
 <span class="sd">        two provided sentences after tokenizing to words.</span>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>lasr.optim.lr_scheduler.tri_stage_lr_scheduler &mdash; lasr latest documentation</title>
+  <title>lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler &mdash; lightning_asr latest documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../../_static/jquery.js"></script>
         <script src="../../../../_static/underscore.js"></script>
         <script src="../../../../_static/doctools.js"></script>
-        <script src="../../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
 
@@ -52,7 +51,7 @@
           
 
           
-            <a href="../../../../index.html" class="icon icon-home"> lasr
+            <a href="../../../../index.html" class="icon icon-home"> lightning_asr
           
 
           
@@ -115,7 +114,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../../index.html">lasr</a>
+          <a href="../../../../index.html">lightning_asr</a>
         
       </nav>
 
@@ -150,7 +149,7 @@
         
           <li><a href="../../../index.html">Module code</a> &raquo;</li>
         
-      <li>lasr.optim.lr_scheduler.tri_stage_lr_scheduler</li>
+      <li>lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -165,7 +164,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for lasr.optim.lr_scheduler.tri_stage_lr_scheduler</h1><div class="highlight"><pre>
+  <h1>Source code for lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler</h1><div class="highlight"><pre>
 <span></span><span class="c1"># MIT License</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright (c) 2021 Soohwan Kim</span>
@@ -190,10 +189,10 @@
 
 <span class="kn">import</span> <span class="nn">math</span>
 
-<span class="kn">from</span> <span class="nn">lasr.optim.lr_scheduler.lr_scheduler</span> <span class="kn">import</span> <span class="n">LearningRateScheduler</span>
+<span class="kn">from</span> <span class="nn">lightning_asr.optim.lr_scheduler.lr_scheduler</span> <span class="kn">import</span> <span class="n">LearningRateScheduler</span>
 
 
-<div class="viewcode-block" id="TriStageLRScheduler"><a class="viewcode-back" href="../../../../Lr_scheduler.html#lasr.optim.lr_scheduler.tri_stage_lr_scheduler.TriStageLRScheduler">[docs]</a><span class="k">class</span> <span class="nc">TriStageLRScheduler</span><span class="p">(</span><span class="n">LearningRateScheduler</span><span class="p">):</span>
+<div class="viewcode-block" id="TriStageLRScheduler"><a class="viewcode-back" href="../../../../Lr_scheduler.html#lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler.TriStageLRScheduler">[docs]</a><span class="k">class</span> <span class="nc">TriStageLRScheduler</span><span class="p">(</span><span class="n">LearningRateScheduler</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Implement the learning rate scheduler in https://arxiv.org/pdf/1904.08779.pdf</span>
 <span class="sd">    Similar to inverse_squre_root scheduler,</span>

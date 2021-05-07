@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>lasr.model.feed_forward &mdash; lasr latest documentation</title>
+  <title>lightning_asr.vocabs.vocab &mdash; lightning_asr latest documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -52,7 +51,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> lasr
+            <a href="../../../index.html" class="icon icon-home"> lightning_asr
           
 
           
@@ -115,7 +114,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">lasr</a>
+          <a href="../../../index.html">lightning_asr</a>
         
       </nav>
 
@@ -150,7 +149,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>lasr.model.feed_forward</li>
+      <li>lightning_asr.vocabs.vocab</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -165,7 +164,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for lasr.model.feed_forward</h1><div class="highlight"><pre>
+  <h1>Source code for lightning_asr.vocabs.vocab</h1><div class="highlight"><pre>
 <span></span><span class="c1"># MIT License</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright (c) 2021 Soohwan Kim</span>
@@ -188,49 +187,24 @@
 <span class="c1"># OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
 <span class="c1"># SOFTWARE.</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">Tensor</span>
 
-<span class="kn">from</span> <span class="nn">lasr.model.activation</span> <span class="kn">import</span> <span class="n">Swish</span>
-<span class="kn">from</span> <span class="nn">lasr.model.modules</span> <span class="kn">import</span> <span class="n">LayerNorm</span><span class="p">,</span> <span class="n">Linear</span>
-
-
-<div class="viewcode-block" id="FeedForwardModule"><a class="viewcode-back" href="../../../Model.html#lasr.model.feed_forward.FeedForwardModule">[docs]</a><span class="k">class</span> <span class="nc">FeedForwardModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<div class="viewcode-block" id="Vocabulary"><a class="viewcode-back" href="../../../Vocab.html#lightning_asr.vocabs.vocab.Vocabulary">[docs]</a><span class="k">class</span> <span class="nc">Vocabulary</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Conformer Feed Forward Module follow pre-norm residual units and apply layer normalization within the residual unit</span>
-<span class="sd">    and on the input before the first linear layer. This module also apply Swish activation and dropout, which helps</span>
-<span class="sd">    regularizing the network.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        encoder_dim (int): Dimension of model encoder</span>
-<span class="sd">        expansion_factor (int): Expansion factor of feed forward module.</span>
-<span class="sd">        dropout_p (float): Ratio of dropout</span>
-
-<span class="sd">    Inputs: inputs</span>
-<span class="sd">        - **inputs** (batch, time, dim): Tensor contains input sequences</span>
-
-<span class="sd">    Outputs: outputs</span>
-<span class="sd">        - **outputs** (batch, time, dim): Tensor produces by feed forward module.</span>
+<span class="sd">    Note:</span>
+<span class="sd">        Do not use this class directly, use one of the sub classes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span>
-            <span class="n">encoder_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span>
-            <span class="n">expansion_factor</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
-            <span class="n">dropout_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">FeedForwardModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sequential</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
-            <span class="n">LayerNorm</span><span class="p">(</span><span class="n">encoder_dim</span><span class="p">),</span>
-            <span class="n">Linear</span><span class="p">(</span><span class="n">encoder_dim</span><span class="p">,</span> <span class="n">encoder_dim</span> <span class="o">*</span> <span class="n">expansion_factor</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-            <span class="n">Swish</span><span class="p">(),</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">dropout_p</span><span class="p">),</span>
-            <span class="n">Linear</span><span class="p">(</span><span class="n">encoder_dim</span> <span class="o">*</span> <span class="n">expansion_factor</span><span class="p">,</span> <span class="n">encoder_dim</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-            <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">dropout_p</span><span class="p">),</span>
-        <span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sos_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eos_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pad_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blank_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="FeedForwardModule.forward"><a class="viewcode-back" href="../../../Model.html#lasr.model.feed_forward.FeedForwardModule.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequential</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span></div></div>
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vocab_size</span>
+
+    <span class="k">def</span> <span class="nf">label_to_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 </pre></div>
 
            </div>

@@ -3,20 +3,20 @@ Data
 
 Data Loader
 --------------------------------------------
-.. automodule:: lasr.data.data_loader
+.. automodule:: lightning_asr.data.data_loader
     :members:
 
 Dataset
 --------------------------------------------
-.. automodule:: lasr.data.dataset
+.. automodule:: lightning_asr.data.dataset
     :members:
 
 Librispeech Preprocess
 --------------------------------------------
-.. automodule:: lasr.data.libri_preprocess
+.. automodule:: lightning_asr.data.librispeech.preprocess
     :members:
 
 Lightning Data Module
 --------------------------------------------
-.. automodule:: lasr.data.lit_data_module
+.. automodule:: lightning_asr.data.librispeech.lit_data_module
     :members:

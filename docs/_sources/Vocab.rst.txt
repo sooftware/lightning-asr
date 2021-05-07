@@ -3,10 +3,10 @@ Vocabs
 
 Vocab
 --------------------------------------------
-.. automodule:: lasr.vocabs.__init__
+.. automodule:: lightning_asr.vocabs.vocab
     :members:
 
 LibriSpeech Vocab
 --------------------------------------------
-.. automodule:: lasr.vocabs.librispeech
+.. automodule:: lightning_asr.vocabs.librispeech
     :members:

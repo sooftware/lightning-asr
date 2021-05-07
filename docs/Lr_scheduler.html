@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>LR Scheduler &mdash; lasr latest documentation</title>
+  <title>LR Scheduler &mdash; lightning_asr latest documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -54,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> lasr
+            <a href="index.html" class="icon icon-home"> lightning_asr
           
 
           
@@ -99,8 +98,8 @@
 <li class="toctree-l1"><a class="reference internal" href="Data.html">Data</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">LR Scheduler</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id1">LR Scheduler</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-lasr.optim.lr_scheduler.transformer_lr_scheduler">Transformer LR Scheduler</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-lasr.optim.lr_scheduler.tri_stage_lr_scheduler">Tri-Stage LR Scheduler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lightning_asr.optim.lr_scheduler.transformer_lr_scheduler">Transformer LR Scheduler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler">Tri-Stage LR Scheduler</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Metric.html">Metric</a></li>
@@ -122,7 +121,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">lasr</a>
+          <a href="index.html">lightning_asr</a>
         
       </nav>
 
@@ -178,9 +177,9 @@
 <h1>LR Scheduler<a class="headerlink" href="#lr-scheduler" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
 <h2>LR Scheduler<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-lasr.optim.lr_scheduler.lr_scheduler"></span><dl class="py class">
-<dt id="lasr.optim.lr_scheduler.lr_scheduler.LearningRateScheduler">
-<em class="property">class </em><code class="sig-prename descclassname">lasr.optim.lr_scheduler.lr_scheduler.</code><code class="sig-name descname">LearningRateScheduler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span></em>, <em class="sig-param"><span class="n">init_lr</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/optim/lr_scheduler/lr_scheduler.html#LearningRateScheduler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.optim.lr_scheduler.lr_scheduler.LearningRateScheduler" title="Permalink to this definition">¶</a></dt>
+<span class="target" id="module-lightning_asr.optim.lr_scheduler.lr_scheduler"></span><dl class="py class">
+<dt id="lightning_asr.optim.lr_scheduler.lr_scheduler.LearningRateScheduler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.optim.lr_scheduler.lr_scheduler.</span></code><code class="sig-name descname"><span class="pre">LearningRateScheduler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_lr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/optim/lr_scheduler/lr_scheduler.html#LearningRateScheduler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.optim.lr_scheduler.lr_scheduler.LearningRateScheduler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides inteface of learning rate scheduler.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -189,20 +188,20 @@
 </dd></dl>
 
 </div>
-<div class="section" id="module-lasr.optim.lr_scheduler.transformer_lr_scheduler">
-<span id="transformer-lr-scheduler"></span><h2>Transformer LR Scheduler<a class="headerlink" href="#module-lasr.optim.lr_scheduler.transformer_lr_scheduler" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-lightning_asr.optim.lr_scheduler.transformer_lr_scheduler">
+<span id="transformer-lr-scheduler"></span><h2>Transformer LR Scheduler<a class="headerlink" href="#module-lightning_asr.optim.lr_scheduler.transformer_lr_scheduler" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="lasr.optim.lr_scheduler.transformer_lr_scheduler.TransformerLRScheduler">
-<em class="property">class </em><code class="sig-prename descclassname">lasr.optim.lr_scheduler.transformer_lr_scheduler.</code><code class="sig-name descname">TransformerLRScheduler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span></em>, <em class="sig-param"><span class="n">peak_lr</span></em>, <em class="sig-param"><span class="n">final_lr</span></em>, <em class="sig-param"><span class="n">final_lr_scale</span></em>, <em class="sig-param"><span class="n">warmup_steps</span></em>, <em class="sig-param"><span class="n">decay_steps</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/optim/lr_scheduler/transformer_lr_scheduler.html#TransformerLRScheduler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.optim.lr_scheduler.transformer_lr_scheduler.TransformerLRScheduler" title="Permalink to this definition">¶</a></dt>
+<dt id="lightning_asr.optim.lr_scheduler.transformer_lr_scheduler.TransformerLRScheduler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.optim.lr_scheduler.transformer_lr_scheduler.</span></code><code class="sig-name descname"><span class="pre">TransformerLRScheduler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_lr_scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay_steps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/optim/lr_scheduler/transformer_lr_scheduler.html#TransformerLRScheduler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.optim.lr_scheduler.transformer_lr_scheduler.TransformerLRScheduler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implement the learning rate scheduler in <a class="reference external" href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-lasr.optim.lr_scheduler.tri_stage_lr_scheduler">
-<span id="tri-stage-lr-scheduler"></span><h2>Tri-Stage LR Scheduler<a class="headerlink" href="#module-lasr.optim.lr_scheduler.tri_stage_lr_scheduler" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler">
+<span id="tri-stage-lr-scheduler"></span><h2>Tri-Stage LR Scheduler<a class="headerlink" href="#module-lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="lasr.optim.lr_scheduler.tri_stage_lr_scheduler.TriStageLRScheduler">
-<em class="property">class </em><code class="sig-prename descclassname">lasr.optim.lr_scheduler.tri_stage_lr_scheduler.</code><code class="sig-name descname">TriStageLRScheduler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">optimizer</span></em>, <em class="sig-param"><span class="n">init_lr</span></em>, <em class="sig-param"><span class="n">peak_lr</span></em>, <em class="sig-param"><span class="n">final_lr</span></em>, <em class="sig-param"><span class="n">init_lr_scale</span></em>, <em class="sig-param"><span class="n">final_lr_scale</span></em>, <em class="sig-param"><span class="n">warmup_steps</span></em>, <em class="sig-param"><span class="n">total_steps</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/optim/lr_scheduler/tri_stage_lr_scheduler.html#TriStageLRScheduler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.optim.lr_scheduler.tri_stage_lr_scheduler.TriStageLRScheduler" title="Permalink to this definition">¶</a></dt>
+<dt id="lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler.TriStageLRScheduler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler.</span></code><code class="sig-name descname"><span class="pre">TriStageLRScheduler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_lr_scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_lr_scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_steps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/optim/lr_scheduler/tri_stage_lr_scheduler.html#TriStageLRScheduler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler.TriStageLRScheduler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implement the learning rate scheduler in <a class="reference external" href="https://arxiv.org/pdf/1904.08779.pdf">https://arxiv.org/pdf/1904.08779.pdf</a>
 Similar to inverse_squre_root scheduler,
 but tri_stage learning rate employs three stages LR scheduling:</p>

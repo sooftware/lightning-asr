@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Vocabs &mdash; lasr latest documentation</title>
+  <title>Vocabs &mdash; lightning_asr latest documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -53,7 +52,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> lasr
+            <a href="index.html" class="icon icon-home"> lightning_asr
           
 
           
@@ -101,8 +100,8 @@
 <li class="toctree-l1"><a class="reference internal" href="Model.html">Model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Optim.html">Optim</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Vocabs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-lasr.vocabs.__init__">Vocab</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-lasr.vocabs.librispeech">LibriSpeech Vocab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lightning_asr.vocabs.vocab">Vocab</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lightning_asr.vocabs.librispeech">LibriSpeech Vocab</a></li>
 </ul>
 </li>
 </ul>
@@ -120,7 +119,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">lasr</a>
+          <a href="index.html">lightning_asr</a>
         
       </nav>
 
@@ -174,11 +173,11 @@
             
   <div class="section" id="vocabs">
 <h1>Vocabs<a class="headerlink" href="#vocabs" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-lasr.vocabs.__init__">
-<span id="vocab"></span><h2>Vocab<a class="headerlink" href="#module-lasr.vocabs.__init__" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-lightning_asr.vocabs.vocab">
+<span id="vocab"></span><h2>Vocab<a class="headerlink" href="#module-lightning_asr.vocabs.vocab" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="lasr.vocabs.__init__.Vocabulary">
-<em class="property">class </em><code class="sig-prename descclassname">lasr.vocabs.__init__.</code><code class="sig-name descname">Vocabulary</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/vocabs/__init__.html#Vocabulary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.vocabs.__init__.Vocabulary" title="Permalink to this definition">¶</a></dt>
+<dt id="lightning_asr.vocabs.vocab.Vocabulary">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.vocabs.vocab.</span></code><code class="sig-name descname"><span class="pre">Vocabulary</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/vocabs/vocab.html#Vocabulary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.vocabs.vocab.Vocabulary" title="Permalink to this definition">¶</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Do not use this class directly, use one of the sub classes.</p>
@@ -186,17 +185,17 @@
 </dd></dl>
 
 </div>
-<div class="section" id="module-lasr.vocabs.librispeech">
-<span id="librispeech-vocab"></span><h2>LibriSpeech Vocab<a class="headerlink" href="#module-lasr.vocabs.librispeech" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-lightning_asr.vocabs.librispeech">
+<span id="librispeech-vocab"></span><h2>LibriSpeech Vocab<a class="headerlink" href="#module-lightning_asr.vocabs.librispeech" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="lasr.vocabs.librispeech.LibriSpeechVocabulary">
-<em class="property">class </em><code class="sig-prename descclassname">lasr.vocabs.librispeech.</code><code class="sig-name descname">LibriSpeechVocabulary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">vocab_size</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/vocabs/librispeech.html#LibriSpeechVocabulary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.vocabs.librispeech.LibriSpeechVocabulary" title="Permalink to this definition">¶</a></dt>
+<dt id="lightning_asr.vocabs.librispeech.LibriSpeechVocabulary">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.vocabs.librispeech.</span></code><code class="sig-name descname"><span class="pre">LibriSpeechVocabulary</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vocab_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/vocabs/librispeech.html#LibriSpeechVocabulary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.vocabs.librispeech.LibriSpeechVocabulary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts label to string for librispeech dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path of sentencepiece model</p></li>
-<li><p><strong>vocab_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – size of vocab</p></li>
+<li><p><strong>model_path</strong> (<em>str</em>) – path of sentencepiece model</p></li>
+<li><p><strong>vocab_size</strong> (<em>int</em>) – size of vocab</p></li>
 </ul>
 </dd>
 </dl>

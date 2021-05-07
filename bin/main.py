@@ -52,7 +52,13 @@ def hydra_entry(configs: DictConfig) -> None:
     data_module = LightningLibriSpeechDataModule(configs)
     vocab = data_module.prepare_data(configs.dataset_download, configs.vocab_size)
     data_module.setup(vocab)
-    model = LightningASRModel(configs, num_classes=len(vocab), vocab=vocab, metric=WordErrorRate(vocab))
+
+    model = LightningASRModel(
+        configs=configs,
+        num_classes=len(vocab),
+        vocab=vocab,
+        metric=WordErrorRate(vocab),
+    )
 
     if configs.use_tpu:
         trainer = pl.Trainer(

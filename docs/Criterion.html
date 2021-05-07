@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Criterion &mdash; lasr latest documentation</title>
+  <title>Criterion &mdash; lightning_asr latest documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -54,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> lasr
+            <a href="index.html" class="icon icon-home"> lightning_asr
           
 
           
@@ -96,7 +95,8 @@
 <p class="caption"><span class="caption-text">LIBRARY REFERENCE</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Criterion</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-lasr.criterion.joint_ctc_cross_entropy">Joint CTC-CrossEntropy Loss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lightning_asr.criterion.joint_ctc_cross_entropy">Joint CTC-CrossEntropy Loss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lightning_asr.criterion.label_smoothed_cross_entropy">Label Smoothed CrossEntropy Loss</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="Data.html">Data</a></li>
@@ -120,7 +120,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">lasr</a>
+          <a href="index.html">lightning_asr</a>
         
       </nav>
 
@@ -174,39 +174,54 @@
             
   <div class="section" id="criterion">
 <h1>Criterion<a class="headerlink" href="#criterion" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-lasr.criterion.joint_ctc_cross_entropy">
-<span id="joint-ctc-crossentropy-loss"></span><h2>Joint CTC-CrossEntropy Loss<a class="headerlink" href="#module-lasr.criterion.joint_ctc_cross_entropy" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-lightning_asr.criterion.joint_ctc_cross_entropy">
+<span id="joint-ctc-crossentropy-loss"></span><h2>Joint CTC-CrossEntropy Loss<a class="headerlink" href="#module-lightning_asr.criterion.joint_ctc_cross_entropy" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
-<dt id="lasr.criterion.joint_ctc_cross_entropy.JointCTCCrossEntropyLoss">
-<em class="property">class </em><code class="sig-prename descclassname">lasr.criterion.joint_ctc_cross_entropy.</code><code class="sig-name descname">JointCTCCrossEntropyLoss</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">num_classes</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">ignore_index</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">dim</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">reduction</span><span class="o">=</span><span class="default_value">'mean'</span></em>, <em class="sig-param"><span class="n">ctc_weight</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.3</span></em>, <em class="sig-param"><span class="n">cross_entropy_weight</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">0.7</span></em>, <em class="sig-param"><span class="n">blank_id</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/criterion/joint_ctc_cross_entropy.html#JointCTCCrossEntropyLoss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.criterion.joint_ctc_cross_entropy.JointCTCCrossEntropyLoss" title="Permalink to this definition">¶</a></dt>
+<dt id="lightning_asr.criterion.joint_ctc_cross_entropy.JointCTCCrossEntropyLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.criterion.joint_ctc_cross_entropy.</span></code><code class="sig-name descname"><span class="pre">JointCTCCrossEntropyLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctc_weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_entropy_weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blank_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/criterion/joint_ctc_cross_entropy.html#JointCTCCrossEntropyLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.criterion.joint_ctc_cross_entropy.JointCTCCrossEntropyLoss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Privides Joint CTC-CrossEntropy Loss function</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>num_classes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – the number of classification</p></li>
-<li><p><strong>ignore_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – indexes that are ignored when calculating loss</p></li>
-<li><p><strong>dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – dimension of calculation loss</p></li>
-<li><p><strong>reduction</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – reduction method [sum, mean] (default: mean)</p></li>
-<li><p><strong>ctc_weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – weight of ctc loss</p></li>
-<li><p><strong>cross_entropy_weight</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a>) – weight of cross entropy loss</p></li>
-<li><p><strong>blank_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – identification of blank for ctc</p></li>
+<li><p><strong>num_classes</strong> (<em>int</em>) – the number of classification</p></li>
+<li><p><strong>ignore_index</strong> (<em>int</em>) – indexes that are ignored when calculating loss</p></li>
+<li><p><strong>dim</strong> (<em>int</em>) – dimension of calculation loss</p></li>
+<li><p><strong>reduction</strong> (<em>str</em>) – reduction method [sum, mean] (default: mean)</p></li>
+<li><p><strong>ctc_weight</strong> (<em>float</em>) – weight of ctc loss</p></li>
+<li><p><strong>cross_entropy_weight</strong> (<em>float</em>) – weight of cross entropy loss</p></li>
+<li><p><strong>blank_id</strong> (<em>int</em>) – identification of blank for ctc</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="lasr.criterion.joint_ctc_cross_entropy.JointCTCCrossEntropyLoss.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">encoder_log_probs</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+gitc797492 ))">torch.Tensor</a></span></em>, <em class="sig-param"><span class="n">decoder_log_probs</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+gitc797492 ))">torch.Tensor</a></span></em>, <em class="sig-param"><span class="n">output_lengths</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+gitc797492 ))">torch.Tensor</a></span></em>, <em class="sig-param"><span class="n">targets</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+gitc797492 ))">torch.Tensor</a></span></em>, <em class="sig-param"><span class="n">target_lengths</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+gitc797492 ))">torch.Tensor</a></span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+gitc797492 ))">torch.Tensor</a><span class="p">, </span><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+gitc797492 ))">torch.Tensor</a><span class="p">, </span><a class="reference external" href="https://pytorch.org/docs/master/tensors.html#torch.Tensor" title="(in PyTorch vmaster (1.9.0a0+gitc797492 ))">torch.Tensor</a><span class="p">]</span><a class="reference internal" href="_modules/lasr/criterion/joint_ctc_cross_entropy.html#JointCTCCrossEntropyLoss.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.criterion.joint_ctc_cross_entropy.JointCTCCrossEntropyLoss.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines the computation performed at every call.</p>
-<p>Should be overridden by all subclasses.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Although the recipe for forward pass needs to be defined within
-this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
-instead of this since the former takes care of running the
-registered hooks while the latter silently ignores them.</p>
-</div>
 </dd></dl>
 
+</div>
+<div class="section" id="module-lightning_asr.criterion.label_smoothed_cross_entropy">
+<span id="label-smoothed-crossentropy-loss"></span><h2>Label Smoothed CrossEntropy Loss<a class="headerlink" href="#module-lightning_asr.criterion.label_smoothed_cross_entropy" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lightning_asr.criterion.label_smoothed_cross_entropy.LabelSmoothedCrossEntropyLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.criterion.label_smoothed_cross_entropy.</span></code><code class="sig-name descname"><span class="pre">LabelSmoothedCrossEntropyLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothing</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/criterion/label_smoothed_cross_entropy.html#LabelSmoothedCrossEntropyLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.criterion.label_smoothed_cross_entropy.LabelSmoothedCrossEntropyLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Label smoothed cross entropy loss function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_classes</strong> (<em>int</em>) – the number of classfication</p></li>
+<li><p><strong>ignore_index</strong> (<em>int</em>) – Indexes that are ignored when calculating loss</p></li>
+<li><p><strong>smoothing</strong> (<em>float</em>) – ratio of smoothing (confidence = 1.0 - smoothing)</p></li>
+<li><p><strong>dim</strong> (<em>int</em>) – dimension of calculation loss</p></li>
+<li><p><strong>reduction</strong> (<em>str</em>) – reduction method [sum, mean] (default: sum)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Inputs: logits, target</dt><dd><p>logits (torch.Tensor): probability distribution value from model and it has a logarithm shape
+target (torch.Tensor): ground-thruth encoded to integers which directly point a word in label</p>
+</dd>
+<dt>Returns: label_smoothed</dt><dd><ul class="simple">
+<li><p><strong>label_smoothed</strong> (float): sum of loss</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

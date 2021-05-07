@@ -3,15 +3,15 @@ Optim
 
 Optimizer
 --------------------------------------------
-.. automodule:: lasr.optim.optimizer
+.. automodule:: lightning_asr.optim.optimizer
     :members:
 
 AdamP
 --------------------------------------------
-.. automodule:: lasr.optim.adamp
+.. automodule:: lightning_asr.optim.adamp
     :members:
 
 RAdam
 --------------------------------------------
-.. automodule:: lasr.optim.radam
+.. automodule:: lightning_asr.optim.radam
     :members:

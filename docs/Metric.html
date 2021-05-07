@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Metric &mdash; lasr latest documentation</title>
+  <title>Metric &mdash; lightning_asr latest documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -54,7 +53,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> lasr
+            <a href="index.html" class="icon icon-home"> lightning_asr
           
 
           
@@ -120,7 +119,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">lasr</a>
+          <a href="index.html">lightning_asr</a>
         
       </nav>
 
@@ -176,9 +175,9 @@
 <h1>Metric<a class="headerlink" href="#metric" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
 <h2>Metric<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-lasr.metric"></span><dl class="py class">
-<dt id="lasr.metric.ErrorRate">
-<em class="property">class </em><code class="sig-prename descclassname">lasr.metric.</code><code class="sig-name descname">ErrorRate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vocab</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/metric.html#ErrorRate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.metric.ErrorRate" title="Permalink to this definition">¶</a></dt>
+<span class="target" id="module-lightning_asr.metric"></span><dl class="py class">
+<dt id="lightning_asr.metric.ErrorRate">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.metric.</span></code><code class="sig-name descname"><span class="pre">ErrorRate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vocab</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/metric.html#ErrorRate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.metric.ErrorRate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides inteface of error rate calcuation.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -187,12 +186,12 @@
 </dd></dl>
 
 <dl class="py class">
-<dt id="lasr.metric.WordErrorRate">
-<em class="property">class </em><code class="sig-prename descclassname">lasr.metric.</code><code class="sig-name descname">WordErrorRate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vocab</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/metric.html#WordErrorRate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.metric.WordErrorRate" title="Permalink to this definition">¶</a></dt>
+<dt id="lightning_asr.metric.WordErrorRate">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.metric.</span></code><code class="sig-name descname"><span class="pre">WordErrorRate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vocab</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/metric.html#WordErrorRate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.metric.WordErrorRate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides word error rate calcuation.</p>
 <dl class="py method">
-<dt id="lasr.metric.WordErrorRate.metric">
-<code class="sig-name descname">metric</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s1</span></em>, <em class="sig-param"><span class="n">s2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lasr/metric.html#WordErrorRate.metric"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#lasr.metric.WordErrorRate.metric" title="Permalink to this definition">¶</a></dt>
+<dt id="lightning_asr.metric.WordErrorRate.metric">
+<code class="sig-name descname"><span class="pre">metric</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/metric.html#WordErrorRate.metric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.metric.WordErrorRate.metric" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the Unit Error Rate, defined as the edit distance between the
 two provided sentences after tokenizing to words.</p>
 <dl class="field-list simple">

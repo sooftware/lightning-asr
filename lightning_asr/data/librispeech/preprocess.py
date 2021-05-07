@@ -24,7 +24,7 @@ import os
 import sentencepiece as spm
 
 LIBRI_SPEECH_DATASETS = [
-    'train_960',
+    'train-960',
     'dev-clean',
     'dev-other',
     'test-clean',
@@ -68,9 +68,8 @@ def prepare_tokenizer(train_transcripts, vocab_size):
         for transcript in train_transcripts:
             f.write('{}\n'.format(transcript.split('|')[-1]))
 
-    input_args = '--user_defined_symbols=<blank> --pad_id=0 --bos_id=1 --eos_id=2 ' \
-                 '--input=%s --model_prefix=%s --vocab_size=%s --model_type=%s'
-    cmd = input_args % (input_file, model_name, vocab_size, model_type)
+    cmd = f"--input={input_file} --model_prefix={model_name} --vocab_size={vocab_size} " \
+          f"--model_type={model_type} --user_defined_symbols=<blank>"
     spm.SentencePieceTrainer.Train(cmd)
 
 
@@ -81,8 +80,8 @@ def generate_manifest_file(dataset_path: str, part: str, transcripts: list):
 
     with open(f"{dataset_path}/{part}.txt", 'w') as f:
         for transcript in transcripts:
-            audio, transcript = transcript.split('|')
+            audio_path, transcript = transcript.split('|')
             text = " ".join(sp.EncodeAsPieces(transcript))
             label = " ".join([str(item) for item in sp.EncodeAsIds(transcript)])
 
-            f.write('%s\t%s\t%s\n' % (audio, text, label))
+            f.write('%s\t%s\t%s\n' % (audio_path, text, label))

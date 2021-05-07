@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>lasr.data.dataset &mdash; lasr latest documentation</title>
+  <title>lightning_asr.data.dataset &mdash; lightning_asr latest documentation</title>
   
 
   
@@ -32,7 +32,6 @@
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-        <script src="../../../_static/language_data.js"></script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -52,7 +51,7 @@
           
 
           
-            <a href="../../../index.html" class="icon icon-home"> lasr
+            <a href="../../../index.html" class="icon icon-home"> lightning_asr
           
 
           
@@ -115,7 +114,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">lasr</a>
+          <a href="../../../index.html">lightning_asr</a>
         
       </nav>
 
@@ -150,7 +149,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>lasr.data.dataset</li>
+      <li>lightning_asr.data.dataset</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -165,7 +164,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for lasr.data.dataset</h1><div class="highlight"><pre>
+  <h1>Source code for lightning_asr.data.dataset</h1><div class="highlight"><pre>
 <span></span><span class="c1"># MIT License</span>
 <span class="c1">#</span>
 <span class="c1"># Copyright (c) 2021 Soohwan Kim</span>
@@ -198,7 +197,7 @@
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Dataset</span>
 
 
-<div class="viewcode-block" id="AudioDataset"><a class="viewcode-back" href="../../../Data.html#lasr.data.dataset.AudioDataset">[docs]</a><span class="k">class</span> <span class="nc">AudioDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+<div class="viewcode-block" id="AudioDataset"><a class="viewcode-back" href="../../../Data.html#lightning_asr.data.dataset.AudioDataset">[docs]</a><span class="k">class</span> <span class="nc">AudioDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dataset for audio &amp; transcript matching</span>
 
@@ -361,7 +360,7 @@
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">audio_paths</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="FBankDataset"><a class="viewcode-back" href="../../../Data.html#lasr.data.dataset.FBankDataset">[docs]</a><span class="k">class</span> <span class="nc">FBankDataset</span><span class="p">(</span><span class="n">AudioDataset</span><span class="p">):</span>
+<div class="viewcode-block" id="FBankDataset"><a class="viewcode-back" href="../../../Data.html#lightning_asr.data.dataset.FBankDataset">[docs]</a><span class="k">class</span> <span class="nc">FBankDataset</span><span class="p">(</span><span class="n">AudioDataset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Dataset for filter bank &amp; transcript matching &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">_get_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">torchaudio</span><span class="o">.</span><span class="n">compliance</span><span class="o">.</span><span class="n">kaldi</span><span class="o">.</span><span class="n">fbank</span><span class="p">(</span>
@@ -372,7 +371,7 @@
         <span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="SpectrogramDataset"><a class="viewcode-back" href="../../../Data.html#lasr.data.dataset.SpectrogramDataset">[docs]</a><span class="k">class</span> <span class="nc">SpectrogramDataset</span><span class="p">(</span><span class="n">AudioDataset</span><span class="p">):</span>
+<div class="viewcode-block" id="SpectrogramDataset"><a class="viewcode-back" href="../../../Data.html#lightning_asr.data.dataset.SpectrogramDataset">[docs]</a><span class="k">class</span> <span class="nc">SpectrogramDataset</span><span class="p">(</span><span class="n">AudioDataset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Dataset for spectrogram &amp; transcript matching &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">_get_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="n">spectrogram</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stft</span><span class="p">(</span>
@@ -385,7 +384,7 @@
         <span class="k">return</span> <span class="n">spectrogram</span></div>
 
 
-<div class="viewcode-block" id="MelSpectrogramDataset"><a class="viewcode-back" href="../../../Data.html#lasr.data.dataset.MelSpectrogramDataset">[docs]</a><span class="k">class</span> <span class="nc">MelSpectrogramDataset</span><span class="p">(</span><span class="n">AudioDataset</span><span class="p">):</span>
+<div class="viewcode-block" id="MelSpectrogramDataset"><a class="viewcode-back" href="../../../Data.html#lightning_asr.data.dataset.MelSpectrogramDataset">[docs]</a><span class="k">class</span> <span class="nc">MelSpectrogramDataset</span><span class="p">(</span><span class="n">AudioDataset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Dataset for mel-spectrogram &amp; transcript matching &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">_get_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="n">melspectrogram</span> <span class="o">=</span> <span class="n">librosa</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">melspectrogram</span><span class="p">(</span>
@@ -399,7 +398,7 @@
         <span class="k">return</span> <span class="n">melspectrogram</span></div>
 
 
-<div class="viewcode-block" id="MFCCDataset"><a class="viewcode-back" href="../../../Data.html#lasr.data.dataset.MFCCDataset">[docs]</a><span class="k">class</span> <span class="nc">MFCCDataset</span><span class="p">(</span><span class="n">AudioDataset</span><span class="p">):</span>
+<div class="viewcode-block" id="MFCCDataset"><a class="viewcode-back" href="../../../Data.html#lightning_asr.data.dataset.MFCCDataset">[docs]</a><span class="k">class</span> <span class="nc">MFCCDataset</span><span class="p">(</span><span class="n">AudioDataset</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Dataset for MFCC &amp; transcript matching &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">_get_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">librosa</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">mfcc</span><span class="p">(</span>
