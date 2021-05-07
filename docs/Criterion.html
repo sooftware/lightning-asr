@@ -1,0 +1,278 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Criterion &mdash; lightning_asr latest documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Data" href="Data.html" />
+    <link rel="prev" title="Introduction" href="notes/intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> lightning_asr
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">GETTING STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html#get-started">Get Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html#troubleshoots-and-contributing">Troubleshoots and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html#author">Author</a></li>
+</ul>
+<p class="caption"><span class="caption-text">LIBRARY REFERENCE</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Criterion</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-lightning_asr.criterion.joint_ctc_cross_entropy">Joint CTC-CrossEntropy Loss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lightning_asr.criterion.label_smoothed_cross_entropy">Label Smoothed CrossEntropy Loss</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Lr_scheduler.html">LR Scheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Metric.html">Metric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Model.html">Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Optim.html">Optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Vocab.html">Vocabs</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">lightning_asr</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Criterion</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/Criterion.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="criterion">
+<h1>Criterion<a class="headerlink" href="#criterion" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-lightning_asr.criterion.joint_ctc_cross_entropy">
+<span id="joint-ctc-crossentropy-loss"></span><h2>Joint CTC-CrossEntropy Loss<a class="headerlink" href="#module-lightning_asr.criterion.joint_ctc_cross_entropy" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lightning_asr.criterion.joint_ctc_cross_entropy.JointCTCCrossEntropyLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.criterion.joint_ctc_cross_entropy.</span></code><code class="sig-name descname"><span class="pre">JointCTCCrossEntropyLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctc_weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_entropy_weight</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blank_id</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/criterion/joint_ctc_cross_entropy.html#JointCTCCrossEntropyLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.criterion.joint_ctc_cross_entropy.JointCTCCrossEntropyLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Privides Joint CTC-CrossEntropy Loss function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_classes</strong> (<em>int</em>) – the number of classification</p></li>
+<li><p><strong>ignore_index</strong> (<em>int</em>) – indexes that are ignored when calculating loss</p></li>
+<li><p><strong>dim</strong> (<em>int</em>) – dimension of calculation loss</p></li>
+<li><p><strong>reduction</strong> (<em>str</em>) – reduction method [sum, mean] (default: mean)</p></li>
+<li><p><strong>ctc_weight</strong> (<em>float</em>) – weight of ctc loss</p></li>
+<li><p><strong>cross_entropy_weight</strong> (<em>float</em>) – weight of cross entropy loss</p></li>
+<li><p><strong>blank_id</strong> (<em>int</em>) – identification of blank for ctc</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lightning_asr.criterion.label_smoothed_cross_entropy">
+<span id="label-smoothed-crossentropy-loss"></span><h2>Label Smoothed CrossEntropy Loss<a class="headerlink" href="#module-lightning_asr.criterion.label_smoothed_cross_entropy" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lightning_asr.criterion.label_smoothed_cross_entropy.LabelSmoothedCrossEntropyLoss">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.criterion.label_smoothed_cross_entropy.</span></code><code class="sig-name descname"><span class="pre">LabelSmoothedCrossEntropyLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smoothing</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/criterion/label_smoothed_cross_entropy.html#LabelSmoothedCrossEntropyLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.criterion.label_smoothed_cross_entropy.LabelSmoothedCrossEntropyLoss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Label smoothed cross entropy loss function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num_classes</strong> (<em>int</em>) – the number of classfication</p></li>
+<li><p><strong>ignore_index</strong> (<em>int</em>) – Indexes that are ignored when calculating loss</p></li>
+<li><p><strong>smoothing</strong> (<em>float</em>) – ratio of smoothing (confidence = 1.0 - smoothing)</p></li>
+<li><p><strong>dim</strong> (<em>int</em>) – dimension of calculation loss</p></li>
+<li><p><strong>reduction</strong> (<em>str</em>) – reduction method [sum, mean] (default: sum)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Inputs: logits, target</dt><dd><p>logits (torch.Tensor): probability distribution value from model and it has a logarithm shape
+target (torch.Tensor): ground-thruth encoded to integers which directly point a word in label</p>
+</dd>
+<dt>Returns: label_smoothed</dt><dd><ul class="simple">
+<li><p><strong>label_smoothed</strong> (float): sum of loss</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="Data.html" class="btn btn-neutral float-right" title="Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="notes/intro.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Soohwan Kim.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

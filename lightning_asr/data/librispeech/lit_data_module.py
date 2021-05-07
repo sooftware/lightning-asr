@@ -99,12 +99,13 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
     def __init__(self, configs: DictConfig) -> None:
         super(LightningLibriSpeechDataModule, self).__init__()
         self.dataset_path = configs.dataset_path
+        self.librispeech_dir = 'LibriSpeech'
         self.manifest_paths = [
-            f"{configs.dataset_path}/train-960.txt",
-            f"{configs.dataset_path}/dev-clean.txt",
-            f"{configs.dataset_path}/dev-other.txt",
-            f"{configs.dataset_path}/test-clean.txt",
-            f"{configs.dataset_path}/test-other.txt",
+            f"{configs.dataset_path}/{self.librispeech_dir}/train-960.txt",
+            f"{configs.dataset_path}/{self.librispeech_dir}/dev-clean.txt",
+            f"{configs.dataset_path}/{self.librispeech_dir}/dev-other.txt",
+            f"{configs.dataset_path}/{self.librispeech_dir}/test-clean.txt",
+            f"{configs.dataset_path}/{self.librispeech_dir}/test-other.txt",
         ]
         self.dataset = dict()
         self.apply_spec_augment = configs.apply_spec_augment
@@ -141,8 +142,7 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
             - test-other
         """
         base_url = "http://www.openslr.org/resources/12"
-        train_dir = "train_960"
-        librispeech_dir = "LibriSpeech"
+        train_dir = "train-960"
 
         if not os.path.exists(self.dataset_path):
             os.mkdir(self.dataset_path)
@@ -160,22 +160,25 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
 
         self.logger.info("Merge all train packs into one")
 
-        if not os.path.exists(os.path.join(self.dataset_path, librispeech_dir)):
-            os.mkdir(os.path.join(self.dataset_path, librispeech_dir))
-        if not os.path.exists(os.path.join(self.dataset_path, librispeech_dir, train_dir)):
-            os.mkdir(os.path.join(self.dataset_path, librispeech_dir, train_dir))
+        if not os.path.exists(os.path.join(self.dataset_path, self.librispeech_dir)):
+            os.mkdir(os.path.join(self.dataset_path, self.librispeech_dir))
+        if not os.path.exists(os.path.join(self.dataset_path, self.librispeech_dir, train_dir)):
+            os.mkdir(os.path.join(self.dataset_path, self.librispeech_dir, train_dir))
 
         for part in self.librispeech_parts[:-3]:    # dev, test
-            shutil.move(os.path.join(librispeech_dir, part), os.path.join(self.dataset_path, librispeech_dir, part))
+            shutil.move(
+                os.path.join(self.librispeech_dir, part),
+                os.path.join(self.dataset_path, self.librispeech_dir, part),
+            )
 
         for part in self.librispeech_parts[-3:]:    # train
-            path = os.path.join(librispeech_dir, part)
-            files = os.listdir(path)
-            for file in files:
-                shutil.move(os.path.join(path, file), os.path.join(self.dataset_path, librispeech_dir, part, file))
-
-        # Update dataset path
-        self.dataset_path = os.path.join(self.dataset_path, librispeech_dir)
+            path = os.path.join(self.librispeech_dir, part)
+            subfolders = os.listdir(path)
+            for subfolder in subfolders:
+                shutil.move(
+                    os.path.join(path, subfolder),
+                    os.path.join(self.dataset_path, self.librispeech_dir, train_dir, subfolder),
+                )
 
     def _generate_manifest_files(self, vocab_size: int) -> None:
         """
@@ -189,10 +192,10 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
             None
         """
         self.logger.info("Generate Manifest Files..")
-        transcripts_collection = collect_transcripts(f"{self.dataset_path}/LibriSpeech/")
+        transcripts_collection = collect_transcripts(self.dataset_path)
         prepare_tokenizer(transcripts_collection[0], vocab_size)
 
-        for idx, part in enumerate(['train_960', 'dev-clean', 'dev-other', 'test-clean', 'test-other']):
+        for idx, part in enumerate(['train-960', 'dev-clean', 'dev-other', 'test-clean', 'test-other']):
             generate_manifest_file(self.dataset_path, part, transcripts_collection[idx])
 
     def prepare_data(self, download: bool = False, vocab_size: int = 5000) -> Vocabulary:

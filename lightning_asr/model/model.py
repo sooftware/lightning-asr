@@ -138,6 +138,7 @@ class LightningASRModel(pl.LightningModule):
         self.log(f"{stage}_loss", loss)
         self.log(f"{stage}_cross_entropy_loss", cross_entropy_loss)
         self.log(f"{stage}_ctc_loss", ctc_loss)
+        return
 
     def forward(self, inputs: Tensor, input_lengths: Tensor) -> Tensor:
         """

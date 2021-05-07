@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>LR Scheduler &mdash; lightning_asr latest documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Metric" href="Metric.html" />
+    <link rel="prev" title="Data" href="Data.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> lightning_asr
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">GETTING STARTED</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html#get-started">Get Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html#troubleshoots-and-contributing">Troubleshoots and Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes/intro.html#author">Author</a></li>
+</ul>
+<p class="caption"><span class="caption-text">LIBRARY REFERENCE</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Criterion.html">Criterion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data.html">Data</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">LR Scheduler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">LR Scheduler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lightning_asr.optim.lr_scheduler.transformer_lr_scheduler">Transformer LR Scheduler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler">Tri-Stage LR Scheduler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Metric.html">Metric</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Model.html">Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Optim.html">Optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Vocab.html">Vocabs</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">lightning_asr</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>LR Scheduler</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/Lr_scheduler.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="lr-scheduler">
+<h1>LR Scheduler<a class="headerlink" href="#lr-scheduler" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>LR Scheduler<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-lightning_asr.optim.lr_scheduler.lr_scheduler"></span><dl class="py class">
+<dt id="lightning_asr.optim.lr_scheduler.lr_scheduler.LearningRateScheduler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.optim.lr_scheduler.lr_scheduler.</span></code><code class="sig-name descname"><span class="pre">LearningRateScheduler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_lr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/optim/lr_scheduler/lr_scheduler.html#LearningRateScheduler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.optim.lr_scheduler.lr_scheduler.LearningRateScheduler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides inteface of learning rate scheduler.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Do not use this class directly, use one of the sub classes.</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lightning_asr.optim.lr_scheduler.transformer_lr_scheduler">
+<span id="transformer-lr-scheduler"></span><h2>Transformer LR Scheduler<a class="headerlink" href="#module-lightning_asr.optim.lr_scheduler.transformer_lr_scheduler" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lightning_asr.optim.lr_scheduler.transformer_lr_scheduler.TransformerLRScheduler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.optim.lr_scheduler.transformer_lr_scheduler.</span></code><code class="sig-name descname"><span class="pre">TransformerLRScheduler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_lr_scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay_steps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/optim/lr_scheduler/transformer_lr_scheduler.html#TransformerLRScheduler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.optim.lr_scheduler.transformer_lr_scheduler.TransformerLRScheduler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement the learning rate scheduler in <a class="reference external" href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler">
+<span id="tri-stage-lr-scheduler"></span><h2>Tri-Stage LR Scheduler<a class="headerlink" href="#module-lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler.TriStageLRScheduler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler.</span></code><code class="sig-name descname"><span class="pre">TriStageLRScheduler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak_lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_lr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_lr_scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_lr_scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warmup_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_steps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/lightning_asr/optim/lr_scheduler/tri_stage_lr_scheduler.html#TriStageLRScheduler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#lightning_asr.optim.lr_scheduler.tri_stage_lr_scheduler.TriStageLRScheduler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implement the learning rate scheduler in <a class="reference external" href="https://arxiv.org/pdf/1904.08779.pdf">https://arxiv.org/pdf/1904.08779.pdf</a>
+Similar to inverse_squre_root scheduler,
+but tri_stage learning rate employs three stages LR scheduling:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>warmup stage, starting from <cite>lr</cite> * <cite>init_lr_scale</cite>, linearly
+increased to <cite>lr</cite> in <cite>warmup_steps</cite> iterations</p></li>
+<li><p>hold stage, after <cite>warmup_steps</cite>, keep the LR as <cite>lr</cite> for <cite>hold_steps</cite>
+iterations</p></li>
+<li><p>decay stage, after hold stage, decay LR exponetially to
+<cite>lr</cite> * <cite>final_lr_scale</cite> in <cite>decay_steps</cite>;
+after that LR is keep as <cite>final_lr_scale</cite> * <cite>lr</cite></p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="Metric.html" class="btn btn-neutral float-right" title="Metric" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Data.html" class="btn btn-neutral float-left" title="Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Soohwan Kim.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
