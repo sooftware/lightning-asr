@@ -12,6 +12,7 @@ decoder_dropout_p: 0.1
 conv_kernel_size: 31
 half_step_residual: True
 max_length: 128
+lr: 1e-04
 peak_lr: 1e-04
 final_lr: 1e-07
 init_lr_scale: 0.01
