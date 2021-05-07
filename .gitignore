@@ -9,7 +9,6 @@ venv/*
 *.pyc
 .idea
 .ipynb_checkpoints
-librispeech/
 
 .DS_Store
 
