@@ -86,9 +86,18 @@ I use [Hydra](https://github.com/facebookresearch/hydra) to control all the trai
   
 ### Training Speech Recognizer
   
-You can simply train with LibriSpeech dataset like below:
+You can simply train with LibriSpeech dataset like below:  
+  
+- On GPU:
+  
 ```
-$ python ./bin/main.py dataset_path=$DATASET_PATH dataset_download=True
+$ python ./bin/main.py dataset_path=$DATASET_PATH dataset_download=True use_cuda=True use_tpu=False
+```
+
+- On TPU:
+  
+```
+$ python ./bin/main.py dataset_path=$DATASET_PATH dataset_download=True use_cuda=False use_tpu=True tpu_cores=8
 ```
   
 Check configuraions at [[link]](https://github.com/sooftware/lightning-asr/tree/main/configs)
