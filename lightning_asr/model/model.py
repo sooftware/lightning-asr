@@ -37,7 +37,8 @@ from lightning_asr.optim.lr_scheduler import TransformerLRScheduler, TriStageLRS
 from lightning_asr.criterion import JointCTCCrossEntropyLoss
 from lightning_asr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
 from lightning_asr.optim.optimizer import Optimizer
-from lightning_asr.vocabs import Vocabulary, LibriSpeechVocabulary
+from lightning_asr.vocabs import LibriSpeechVocabulary
+from lightning_asr.vocabs.vocab import Vocabulary
 
 
 class LightningASRModel(pl.LightningModule):
@@ -125,6 +126,19 @@ class LightningASRModel(pl.LightningModule):
             rnn_type=configs.rnn_type,
         )
 
+    def _log_states(
+            self,
+            stage: str,
+            wer: float,
+            loss: float,
+            cross_entropy_loss: float,
+            ctc_loss: float,
+    ) -> None:
+        self.log(f"{stage}_wer", wer)
+        self.log(f"{stage}_loss", loss)
+        self.log(f"{stage}_cross_entropy_loss", cross_entropy_loss)
+        self.log(f"{stage}_ctc_loss", ctc_loss)
+
     def forward(self, inputs: Tensor, input_lengths: Tensor) -> Tensor:
         """
         Forward propagate a `inputs` and `targets` pair for inference.
@@ -165,11 +179,7 @@ class LightningASRModel(pl.LightningModule):
             target_lengths=target_lengths,
         )
         wer = self.metric(targets, y_hats)
-
-        self.log("train_wer", wer)
-        self.log("train_loss", loss)
-        self.log("train_cross_entropy_loss", cross_entropy_loss)
-        self.log("train_ctc_loss", ctc_loss)
+        self._log_states('train', wer, loss, cross_entropy_loss, ctc_loss)
 
         return loss
 
@@ -197,11 +207,7 @@ class LightningASRModel(pl.LightningModule):
             target_lengths=target_lengths,
         )
         wer = self.metric(targets, y_hats)
-
-        self.log("val_wer", wer)
-        self.log("val_loss", loss)
-        self.log("val_cross_entropy_loss", cross_entropy_loss)
-        self.log("val_ctc_loss", ctc_loss)
+        self._log_states('valid', wer, loss, cross_entropy_loss, ctc_loss)
 
         return loss
 
@@ -229,11 +235,7 @@ class LightningASRModel(pl.LightningModule):
             target_lengths=target_lengths,
         )
         wer = self.metric(targets, y_hats)
-
-        self.log("test_wer", wer)
-        self.log("test_loss", loss)
-        self.log("test_cross_entropy_loss", cross_entropy_loss)
-        self.log("test_ctc_loss", ctc_loss)
+        self._log_states('test', wer, loss, cross_entropy_loss, ctc_loss)
 
         return loss
 
@@ -280,7 +282,7 @@ class LightningASRModel(pl.LightningModule):
                 factor=self.lr_factor,
             )
         else:
-            raise ValueError(f"Unsupported lr_scheduler: {self.lr_scheduler}")
+            raise ValueError(f"Unsupported `lr_scheduler`: {self.lr_scheduler}")
 
         optimizer = Optimizer(optimizer, scheduler, self.total_steps, self.max_grad_norm)
 

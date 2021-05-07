@@ -81,8 +81,8 @@ def generate_manifest_file(dataset_path: str, part: str, transcripts: list):
 
     with open(f"{dataset_path}/{part}.txt", 'w') as f:
         for transcript in transcripts:
-            audio, transcript = transcript.split('|')
+            audio_path, transcript = transcript.split('|')
             text = " ".join(sp.EncodeAsPieces(transcript))
             label = " ".join([str(item) for item in sp.EncodeAsIds(transcript)])
 
-            f.write('%s\t%s\t%s\n' % (audio, text, label))
+            f.write('%s\t%s\t%s\n' % (audio_path, text, label))

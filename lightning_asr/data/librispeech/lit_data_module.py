@@ -30,7 +30,8 @@ from typing import Union, List, Tuple
 from omegaconf import DictConfig
 from torch.utils.data import DataLoader
 
-from lightning_asr.vocabs import Vocabulary, LibriSpeechVocabulary
+from lightning_asr.vocabs.vocab import Vocabulary
+from lightning_asr.vocabs import LibriSpeechVocabulary
 from lightning_asr.data.dataset import (
     SpectrogramDataset,
     MelSpectrogramDataset,
@@ -131,6 +132,14 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
             raise ValueError(f"Unsupported `feature_extract_method`: {configs.feature_extract_method}")
 
     def _download_librispeech(self) -> None:
+        """
+        Download librispeech dataset.
+            - train-960(train-clean-100, train-clean-360, train-other-500)
+            - dev-clean
+            - dev-other
+            - test-clean
+            - test-other
+        """
         base_url = "http://www.openslr.org/resources/12"
         train_dir = "train_960"
         librispeech_dir = "LibriSpeech"
@@ -169,6 +178,16 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
         self.dataset_path = os.path.join(self.dataset_path, librispeech_dir)
 
     def _generate_manifest_files(self, vocab_size: int) -> None:
+        """
+        Generate manifest files.
+        Format: {audio_path}\t{transcript}\t{numerical_label}
+
+        Args:
+            vocab_size (int): size of subword vocab
+
+        Returns:
+            None
+        """
         self.logger.info("Generate Manifest Files..")
         transcripts_collection = collect_transcripts(f"{self.dataset_path}/LibriSpeech/")
         prepare_tokenizer(transcripts_collection[0], vocab_size)
@@ -193,6 +212,7 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
         return LibriSpeechVocabulary("tokenizer.model", vocab_size)
 
     def setup(self, vocab: Vocabulary) -> None:
+        """ Split dataset into train, valid, and test. """
         splits = ['train', 'val-clean', 'val-other', 'test-clean', 'test-other']
 
         for idx, (path, split) in enumerate(zip(self.manifest_paths, splits)):
