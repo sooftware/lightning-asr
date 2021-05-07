@@ -1,7 +1,7 @@
 dataset_path: librispeech
 dataset_download: True
 vocab_size: 5000
-spec_augment: True
+apply_spec_augment: True
 num_epochs: 20
 batch_size: 32
 num_workers: 4
