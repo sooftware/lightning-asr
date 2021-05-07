@@ -26,7 +26,7 @@ import tarfile
 import logging
 import shutil
 import pytorch_lightning as pl
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, Optional
 from omegaconf import DictConfig
 from torch.utils.data import DataLoader
 
@@ -214,7 +214,7 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
         self._generate_manifest_files(vocab_size)
         return LibriSpeechVocabulary("tokenizer.model", vocab_size)
 
-    def setup(self, vocab: Vocabulary) -> None:
+    def setup(self, stage: Optional[str] = None, vocab: Vocabulary = None) -> None:
         """ Split dataset into train, valid, and test. """
         splits = ['train', 'val-clean', 'val-other', 'test-clean', 'test-other']
 

@@ -24,7 +24,7 @@ import torch
 import torch.nn as nn
 import pytorch_lightning as pl
 from torch import Tensor
-from typing import Tuple, List
+from typing import Dict, Union
 from omegaconf import DictConfig
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.optim import Adam, Adadelta, Adagrad, SGD, Adamax, AdamW, ASGD
@@ -35,8 +35,6 @@ from lightning_asr.model.encoder import ConformerEncoder
 from lightning_asr.optim import AdamP, RAdam
 from lightning_asr.optim.lr_scheduler import TransformerLRScheduler, TriStageLRScheduler
 from lightning_asr.criterion import JointCTCCrossEntropyLoss
-from lightning_asr.optim.lr_scheduler.lr_scheduler import LearningRateScheduler
-from lightning_asr.optim.optimizer import Optimizer
 from lightning_asr.vocabs import LibriSpeechVocabulary
 from lightning_asr.vocabs.vocab import Vocabulary
 
@@ -114,7 +112,7 @@ class LightningASRModel(pl.LightningModule):
             joint_ctc_attention=configs.joint_ctc_attention,
         )
         self.decoder = DecoderRNN(
-            num_classes=configs.num_classes,
+            num_classes=num_classes,
             max_length=configs.max_length,
             hidden_state_dim=configs.encoder_dim,
             pad_id=self.vocab.pad_id,
@@ -240,7 +238,7 @@ class LightningASRModel(pl.LightningModule):
 
         return loss
 
-    def configure_optimizers(self) -> Tuple[List[torch.optim.Optimizer], List[LearningRateScheduler]]:
+    def configure_optimizers(self) -> Dict[str, Union[torch.optim.Optimizer, object, str]]:
         """ Configure optimizer """
         supported_optimizers = {
             "adam": Adam,
@@ -285,9 +283,11 @@ class LightningASRModel(pl.LightningModule):
         else:
             raise ValueError(f"Unsupported `lr_scheduler`: {self.lr_scheduler}")
 
-        optimizer = Optimizer(optimizer, scheduler, self.total_steps, self.gradient_clip_val)
-
-        return [optimizer], [scheduler]
+        return {
+            'optimizer': optimizer,
+            'scheduler': scheduler,
+            'monitor': 'metric_to_track',
+        }
 
     def configure_criterion(
             self,
