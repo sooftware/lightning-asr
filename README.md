@@ -5,23 +5,17 @@
 **Modular and extensible speech recognition library leveraging [pytorch-lightning](https://github.com/PyTorchLightning/pytorch-lightning) and [hydra](https://github.com/facebookresearch/hydra)**
 
   
-</div>
-  
-***
+---
 
-<p  align="center"> 
-      <a href="https://www.codefactor.io/repository/github/sooftware/lightning-asr">
-        <img src="https://www.codefactor.io/repository/github/sooftware/lightning-asr/badge">
-      </a>
-     <a href="https://github.com/sooftware/lightning-asr/blob/latest/LICENSE">
-          <img src="http://img.shields.io/badge/license-MIT-informational"> 
-     </a>
-    <a href="https://sooftware.github.io/lightning-asr/">
-          <img src="http://img.shields.io/badge/docs-passing-success"> 
-     </a>
-  <a href="https://sooftware.github.io/lightning-asr/">
-          <img src="http://img.shields.io/badge/build-not tested-red">
-     </a>
+<p align="center">
+  <a href="https://github.com/sooftware/lightning-asr#introduction">What is Lightning ASR</a> •
+  <a href="https://github.com/sooftware/lightning-asr#installation">Installation</a> •
+  <a href="https://sooftware.github.io/lightning-asr/">Docs</a> •
+  <a href="https://www.codefactor.io/repository/github/sooftware/lightning-asr">Codefactor</a> •
+  <a href="https://github.com/sooftware/lightning-asr/blob/main/LICENSE">License</a>
+</p>
+
+---
     
 ## Introduction
     
