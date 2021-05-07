@@ -20,4 +20,5 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from lightning_asr.vocabs.librispeech import LibriSpeechVocabulary
+from lightning_asr.criterion.joint_ctc_cross_entropy import JointCTCCrossEntropyLoss
+from lightning_asr.criterion.label_smoothed_cross_entropy import LabelSmoothedCrossEntropyLoss

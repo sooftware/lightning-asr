@@ -20,4 +20,4 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from lightning_asr.vocabs.librispeech import LibriSpeechVocabulary
+from lightning_asr.model.model import LightningASRModel
