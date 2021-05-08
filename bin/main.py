@@ -23,35 +23,22 @@
 import os
 import hydra
 import pytorch_lightning as pl
-import logging
-from omegaconf import OmegaConf, DictConfig
-from pytorch_lightning.loggers import TensorBoardLogger
+from omegaconf import DictConfig
 
 from lightning_asr.data.librispeech.lit_data_module import LightningLibriSpeechDataModule
 from lightning_asr.metric import WordErrorRate
 from lightning_asr.model import LightningASRModel
-from lightning_asr.utilities import check_environment
+from lightning_asr.utilities import parse_configs
 
 
 @hydra.main(config_path=os.path.join('..', "configs"), config_name="train")
 def hydra_entry(configs: DictConfig) -> None:
     pl.seed_everything(configs.seed)
-
-    logger = logging.getLogger(__name__)
-    num_devices = check_environment(configs.use_cuda, logger)
-    logger.info(OmegaConf.to_yaml(configs))
-
-    if configs.use_tensorboard:
-        logger = TensorBoardLogger("tensorboard", name="Lightning Automatic Speech Recognition")
-    else:
-        logger = True
-
-    if configs.use_cuda and configs.use_tpu:
-        raise ValueError("configs.use_cuda and configs.use_tpu both are True, Please choose between GPU and TPU.")
+    logger, num_devices = parse_configs(configs)
 
     data_module = LightningLibriSpeechDataModule(configs)
     vocab = data_module.prepare_data(configs.dataset_download, configs.vocab_size)
-    data_module.setup(vacab=vocab)
+    data_module.setup(vocab=vocab)
 
     model = LightningASRModel(
         configs=configs,

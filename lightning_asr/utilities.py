@@ -19,12 +19,14 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
+import logging
 import torch
 import platform
+from omegaconf import DictConfig, OmegaConf
+from pytorch_lightning.loggers import TensorBoardLogger
 
 
-def check_environment(use_cuda: bool, logger) -> int:
+def _check_environment(use_cuda: bool, logger) -> int:
     """
     Check execution envirionment.
     OS, Processor, CUDA version, Pytorch version, ... etc.
@@ -49,3 +51,19 @@ def check_environment(use_cuda: bool, logger) -> int:
         logger.info(f"PyTorch version : {torch.__version__}")
 
     return num_devices
+
+
+def parse_configs(configs: DictConfig):
+    logger = logging.getLogger(__name__)
+    logger.info(OmegaConf.to_yaml(configs))
+    num_devices = _check_environment(configs.use_cuda, logger)
+
+    if configs.use_tensorboard:
+        logger = TensorBoardLogger("tensorboard", name="Lightning Automatic Speech Recognition")
+    else:
+        logger = True
+
+    if configs.use_cuda and configs.use_tpu:
+        raise ValueError("configs.use_cuda and configs.use_tpu both are True, Please choose between GPU and TPU.")
+
+    return logger, num_devices
