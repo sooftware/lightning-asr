@@ -10,6 +10,7 @@
 <p align="center">
   <a href="https://github.com/sooftware/lightning-asr#introduction">What is Lightning ASR</a> •
   <a href="https://github.com/sooftware/lightning-asr#installation">Installation</a> •
+  <a href="https://github.com/sooftware/lightning-asr#get-started">Get Started</a> •
   <a href="https://sooftware.github.io/lightning-asr/">Docs</a> •
   <a href="https://www.codefactor.io/repository/github/sooftware/lightning-asr">Codefactor</a> •
   <a href="https://github.com/sooftware/lightning-asr/blob/main/LICENSE">License</a>
