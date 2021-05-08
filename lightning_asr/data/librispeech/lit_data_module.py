@@ -192,7 +192,10 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
             None
         """
         self.logger.info("Generate Manifest Files..")
-        transcripts_collection = collect_transcripts(os.path.join(self.dataset_path, self.librispeech_dir))
+        transcripts_collection = collect_transcripts(
+            os.path.join(self.dataset_path, self.librispeech_dir),
+            self.librispeech_dir,
+        )
         prepare_tokenizer(transcripts_collection[0], vocab_size)
 
         for idx, part in enumerate(['train-960', 'dev-clean', 'dev-other', 'test-clean', 'test-other']):
