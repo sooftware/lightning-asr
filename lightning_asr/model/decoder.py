@@ -121,8 +121,8 @@ class DecoderRNN(nn.Module):
 
     def forward(
             self,
-            targets: Optional[Tensor],
-            encoder_outputs: Tensor,
+            targets: Optional[Tensor] = None,
+            encoder_outputs: Tensor = None,
             teacher_forcing_ratio: float = 1.0,
     ) -> Tensor:
         """

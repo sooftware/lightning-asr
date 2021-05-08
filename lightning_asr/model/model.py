@@ -196,7 +196,7 @@ class LightningASRModel(pl.LightningModule):
         inputs, input_lengths, targets, target_lengths = val_batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
-        y_hats = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=0.0)
+        y_hats = self.decoder(gencoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
 
         loss, ctc_loss, cross_entropy_loss = self.criterion(
             encoder_log_probs=encoder_log_probs.transpose(0, 1),
@@ -224,7 +224,7 @@ class LightningASRModel(pl.LightningModule):
         inputs, input_lengths, targets, target_lengths = test_batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
-        y_hats = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=0.0)
+        y_hats = self.decoder(encoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
 
         loss, ctc_loss, cross_entropy_loss = self.criterion(
             encoder_log_probs=encoder_log_probs.transpose(0, 1),
