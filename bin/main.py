@@ -26,7 +26,7 @@ import pytorch_lightning as pl
 from omegaconf import DictConfig
 
 from lightning_asr.data.librispeech.lit_data_module import LightningLibriSpeechDataModule
-from lightning_asr.metric import WordErrorRate
+from lightning_asr.metric import WordErrorRate, CharacterErrorRate
 from lightning_asr.model import LightningASRModel
 from lightning_asr.utilities import parse_configs
 
@@ -44,7 +44,8 @@ def hydra_entry(configs: DictConfig) -> None:
         configs=configs,
         num_classes=len(vocab),
         vocab=vocab,
-        metric=WordErrorRate(vocab),
+        wer=WordErrorRate(vocab),
+        cer=CharacterErrorRate(vocab),
     )
 
     if configs.use_tpu:
