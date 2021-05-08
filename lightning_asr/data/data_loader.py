@@ -60,8 +60,14 @@ class AudioDataLoader(DataLoader):
             dataset: torch.utils.data.Dataset,
             num_workers: int,
             batch_sampler: torch.utils.data.sampler.Sampler,
+            **kwargs,
     ) -> None:
-        super(AudioDataLoader, self).__init__(dataset=dataset, num_workers=num_workers, batch_sampler=batch_sampler)
+        super(AudioDataLoader, self).__init__(
+            dataset=dataset,
+            num_workers=num_workers,
+            batch_sampler=batch_sampler,
+            **kwargs,
+        )
         self.collate_fn = _collate_fn
 
 
