@@ -50,11 +50,8 @@ def hydra_entry(configs: DictConfig) -> None:
     if configs.use_tpu:
         trainer = pl.Trainer(
             tpu_cores=configs.tpu_cores,
-            precision=configs.precision,
             accelerator=configs.accelerator,
             accumulate_grad_batches=configs.accumulate_grad_batches,
-            amp_backend=configs.amp_backend,
-            auto_select_gpus=configs.auto_select_gpus,
             check_val_every_n_epoch=configs.check_val_every_n_epoch,
             gradient_clip_val=configs.gradient_clip_val,
             logger=logger,
