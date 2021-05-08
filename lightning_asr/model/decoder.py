@@ -23,6 +23,7 @@
 import random
 import torch
 import torch.nn as nn
+import torch_xla.core.xla_model as xm
 from torch import Tensor, LongTensor
 from typing import Tuple, Optional
 
@@ -65,6 +66,7 @@ class DecoderRNN(nn.Module):
             num_layers: int = 2,
             rnn_type: str = 'lstm',
             dropout_p: float = 0.3,
+            use_tpu: bool = False,
     ) -> None:
         super(DecoderRNN, self).__init__()
         self.hidden_state_dim = hidden_state_dim
@@ -75,6 +77,7 @@ class DecoderRNN(nn.Module):
         self.eos_id = eos_id
         self.sos_id = sos_id
         self.pad_id = pad_id
+        self.use_tpu = use_tpu
         self.embedding = nn.Embedding(num_classes, hidden_state_dim)
         self.input_dropout = nn.Dropout(dropout_p)
         rnn_cell = self.supported_rnns[rnn_type.lower()]
@@ -102,6 +105,10 @@ class DecoderRNN(nn.Module):
             encoder_outputs: Tensor,
     ) -> Tuple[Tensor, Tensor, Tensor]:
         batch_size, output_lengths = input_var.size(0), input_var.size(1)
+
+        if self.use_tpu:
+            xla_device = xm.xla_device()
+            targets = input_var.to(xla_device)
 
         embedded = self.embedding(input_var)
         embedded = self.input_dropout(embedded)
