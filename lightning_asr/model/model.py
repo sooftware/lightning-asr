@@ -29,7 +29,7 @@ from omegaconf import DictConfig
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.optim import Adam, Adadelta, Adagrad, SGD, Adamax, AdamW, ASGD
 
-from lightning_asr.metric import WordErrorRate, ErrorRate
+from lightning_asr.metric import WordErrorRate, ErrorRate, CharacterErrorRate
 from lightning_asr.model.decoder import DecoderRNN
 from lightning_asr.model.encoder import ConformerEncoder
 from lightning_asr.optim import AdamP, RAdam
@@ -67,7 +67,8 @@ class LightningASRModel(pl.LightningModule):
             configs: DictConfig,
             num_classes: int,
             vocab: Vocabulary = LibriSpeechVocabulary,
-            metric: ErrorRate = WordErrorRate,
+            wer: ErrorRate = WordErrorRate,
+            cer: ErrorRate = CharacterErrorRate,
     ) -> None:
         super(LightningASRModel, self).__init__()
 
@@ -81,7 +82,8 @@ class LightningASRModel(pl.LightningModule):
         self.gradient_clip_val = configs.gradient_clip_val
         self.teacher_forcing_ratio = configs.teacher_forcing_ratio
         self.vocab = vocab
-        self.metric = metric
+        self.wer = wer
+        self.cer = cer
         self.optimizer = configs.optimizer
         self.lr = configs.lr
         self.lr_scheduler = configs.lr_scheduler
@@ -129,11 +131,13 @@ class LightningASRModel(pl.LightningModule):
             self,
             stage: str,
             wer: float,
+            cer: float,
             loss: float,
             cross_entropy_loss: float,
             ctc_loss: float,
     ) -> None:
         self.log(f"{stage}_wer", wer)
+        self.log(f"{stage}_cer", cer)
         self.log(f"{stage}_loss", loss)
         self.log(f"{stage}_cross_entropy_loss", cross_entropy_loss)
         self.log(f"{stage}_ctc_loss", ctc_loss)
@@ -160,7 +164,7 @@ class LightningASRModel(pl.LightningModule):
         Forward propagate a `inputs` and `targets` pair for training.
 
         Inputs:
-            train_batch (tuple): A train batch contains `inputs`, `input_lengths`, `targets`, `target_lengths`
+            train_batch (tuple): A train batch contains `inputs`, `targets`, `input_lengths`, `target_lengths`
             batch_idx (int): The index of batch
 
         Returns:
@@ -178,8 +182,10 @@ class LightningASRModel(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        wer = self.metric(targets, y_hats)
-        self._log_states('train', wer, loss, cross_entropy_loss, ctc_loss)
+        wer = self.wer(targets, y_hats)
+        cer = self.cer(targets, y_hats)
+
+        self._log_states('train', wer, cer, loss, cross_entropy_loss, ctc_loss)
 
         return loss
 
@@ -188,7 +194,7 @@ class LightningASRModel(pl.LightningModule):
         Forward propagate a `inputs` and `targets` pair for validation.
 
         Inputs:
-            train_batch (tuple): A train batch contains `inputs`, `input_lengths`, `targets`, `target_lengths`
+            train_batch (tuple): A train batch contains `inputs`, `targets`, `input_lengths`, `target_lengths`
             batch_idx (int): The index of batch
 
         Returns:
@@ -206,8 +212,10 @@ class LightningASRModel(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        wer = self.metric(targets, y_hats)
-        self._log_states('valid', wer, loss, cross_entropy_loss, ctc_loss)
+        wer = self.wer(targets, y_hats)
+        cer = self.cer(targets, y_hats)
+
+        self._log_states('valid', wer, cer, loss, cross_entropy_loss, ctc_loss)
 
         return loss
 
@@ -216,7 +224,7 @@ class LightningASRModel(pl.LightningModule):
         Forward propagate a `inputs` and `targets` pair for test.
 
         Inputs:
-            train_batch (tuple): A train batch contains `inputs`, `input_lengths`, `targets`, `target_lengths`
+            train_batch (tuple): A train batch contains `inputs`, `targets`, `input_lengths`, `target_lengths`
             batch_idx (int): The index of batch
 
         Returns:
@@ -234,8 +242,10 @@ class LightningASRModel(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        wer = self.metric(targets, y_hats)
-        self._log_states('test', wer, loss, cross_entropy_loss, ctc_loss)
+        wer = self.wer(targets, y_hats)
+        cer = self.cer(targets, y_hats)
+
+        self._log_states('test', wer, cer, loss, cross_entropy_loss, ctc_loss)
 
         return loss
 

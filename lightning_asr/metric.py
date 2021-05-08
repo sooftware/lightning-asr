@@ -97,3 +97,36 @@ class WordErrorRate(ErrorRate):
         w2 = [chr(unit2char[w]) for w in s2.split()]
 
         return Lev.distance(''.join(w1), ''.join(w2))
+
+
+class CharacterErrorRate(ErrorRate):
+    """
+    Computes the Character Error Rate, defined as the edit distance between the
+    two provided sentences after tokenizing to characters.
+    """
+    def __init__(self, vocab):
+        super(CharacterErrorRate, self).__init__(vocab)
+
+    def metric(self, s1: str, s2: str):
+        """
+        Computes the Character Error Rate, defined as the edit distance between the
+        two provided sentences after tokenizing to characters.
+
+        Args:
+            s1 (string): space-separated sentence
+            s2 (string): space-separated sentence
+        """
+        s1 = s1.replace(' ', '')
+        s2 = s2.replace(' ', '')
+
+        # if '_' in sentence, means subword-unit, delete '_'
+        if '_' in s1:
+            s1 = s1.replace('_', '')
+
+        if '_' in s2:
+            s2 = s2.replace('_', '')
+
+        dist = Lev.distance(s2, s1)
+        length = len(s1.replace(' ', ''))
+
+        return dist, length
