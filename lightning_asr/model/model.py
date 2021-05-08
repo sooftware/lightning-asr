@@ -182,7 +182,7 @@ class LightningASRModel(pl.LightningModule):
 
         return loss
 
-    def validation_step(self, val_batch: tuple, batch_idx: int) -> Tensor:
+    def validation_step(self, val_batch: tuple, batch_idx: int, dataset_idx: int) -> Tensor:
         """
         Forward propagate a `inputs` and `targets` pair for validation.
 
@@ -210,7 +210,7 @@ class LightningASRModel(pl.LightningModule):
 
         return loss
 
-    def test_step(self, test_batch: tuple, batch_idx: int) -> Tensor:
+    def test_step(self, test_batch: tuple, batch_idx: int, dataset_idx: int) -> Tensor:
         """
         Forward propagate a `inputs` and `targets` pair for test.
 
