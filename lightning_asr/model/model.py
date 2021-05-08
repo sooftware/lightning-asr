@@ -166,7 +166,7 @@ class LightningASRModel(pl.LightningModule):
         Returns:
             loss (torch.FloatTensor): Loss for training.
         """
-        inputs, input_lengths, targets, target_lengths = train_batch
+        inputs, targets, input_lengths, target_lengths = train_batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
         y_hats = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=self.teacher_forcing_ratio)
@@ -194,7 +194,7 @@ class LightningASRModel(pl.LightningModule):
         Returns:
             loss (torch.FloatTensor): Loss for training.
         """
-        inputs, input_lengths, targets, target_lengths = val_batch
+        inputs, targets, input_lengths, target_lengths = val_batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
         y_hats = self.decoder(encoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
@@ -222,7 +222,7 @@ class LightningASRModel(pl.LightningModule):
         Returns:
             loss (torch.FloatTensor): Loss for training.
         """
-        inputs, input_lengths, targets, target_lengths = test_batch
+        inputs, targets, input_lengths, target_lengths = test_batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
         y_hats = self.decoder(encoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
