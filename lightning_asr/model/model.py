@@ -185,8 +185,8 @@ class LightningASRModel(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        wer = self.wer(targets, y_hats)
-        cer = self.cer(targets, y_hats)
+        wer = self.wer(targets[:, 1:], y_hats)
+        cer = self.cer(targets[:, 1:], y_hats)
 
         self._log_states('train', wer, cer, loss, cross_entropy_loss, ctc_loss)
 
@@ -218,8 +218,8 @@ class LightningASRModel(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        wer = self.wer(targets, y_hats)
-        cer = self.cer(targets, y_hats)
+        wer = self.wer(targets[:, 1:], y_hats)
+        cer = self.cer(targets[:, 1:], y_hats)
 
         self._log_states('valid', wer, cer, loss, cross_entropy_loss, ctc_loss)
 
@@ -251,8 +251,8 @@ class LightningASRModel(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        wer = self.wer(targets, y_hats)
-        cer = self.cer(targets, y_hats)
+        wer = self.wer(targets[:, 1:], y_hats)
+        cer = self.cer(targets[:, 1:], y_hats)
 
         self._log_states('test', wer, cer, loss, cross_entropy_loss, ctc_loss)
 

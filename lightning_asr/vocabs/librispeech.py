@@ -50,10 +50,13 @@ class LibriSpeechVocabulary(Vocabulary):
         if len(labels.shape) == 1:
             return self.sp.DecodeIds([l.item() for l in labels])
 
-        sentences = list()
-        for batch in labels:
-            sentence = str()
-            for label in batch:
-                sentence = self.sp.DecodeIds([l.item() for l in label])
-            sentences.append(sentence)
-        return sentences
+        elif len(labels.shape) == 2:
+            sentences = list()
+            for batch in labels:
+                sentence = str()
+                for label in batch:
+                    sentence = self.sp.DecodeIds([l for l in label])
+                sentences.append(sentence)
+            return sentences
+        else:
+            raise ValueError("Unsupported label's shape")
