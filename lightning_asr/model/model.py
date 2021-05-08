@@ -205,6 +205,9 @@ class LightningASRModel(pl.LightningModule):
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
         y_hats = self.decoder(encoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
 
+        max_target_length = targets.size(1)
+        y_hats = y_hats[:, :max_target_length, :]
+
         loss, ctc_loss, cross_entropy_loss = self.criterion(
             encoder_log_probs=encoder_log_probs.transpose(0, 1),
             decoder_log_probs=y_hats.contiguous().view(-1, y_hats.size(-1)),
@@ -234,6 +237,9 @@ class LightningASRModel(pl.LightningModule):
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
         y_hats = self.decoder(encoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
+
+        max_target_length = targets.size(1)
+        y_hats = y_hats[:, :max_target_length, :]
 
         loss, ctc_loss, cross_entropy_loss = self.criterion(
             encoder_log_probs=encoder_log_probs.transpose(0, 1),
