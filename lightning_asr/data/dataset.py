@@ -26,7 +26,7 @@ import librosa
 import torch
 import torchaudio
 import numpy as np
-from torch import Tensor, FloatTensor
+from torch import Tensor
 from torch.utils.data import Dataset
 
 
@@ -141,13 +141,13 @@ class AudioDataset(Dataset):
         Returns:
             feature (np.ndarray): feature extract by sub-class
         """
-        signal = librosa.load(audio_path, sr=self.sample_rate)
+        signal, sr = librosa.load(audio_path, sr=self.sample_rate)
         feature = self._get_feature(signal)
 
         feature -= feature.mean()
         feature /= np.std(feature)
 
-        feature = FloatTensor(feature).transpose(0, 1)
+        feature = torch.FloatTensor(feature).transpose(0, 1)
 
         if apply_spec_augment:
             feature = self._spec_augment(feature)
