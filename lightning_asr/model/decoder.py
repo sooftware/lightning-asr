@@ -108,7 +108,9 @@ class DecoderRNN(nn.Module):
 
         if self.use_tpu:
             xla_device = xm.xla_device()
-            targets = input_var.to(xla_device)
+            input_var = input_var.to(xla_device)
+        elif torch.cuda.is_available():
+            input_var = input_var.cuda()
 
         embedded = self.embedding(input_var)
         embedded = self.input_dropout(embedded)
