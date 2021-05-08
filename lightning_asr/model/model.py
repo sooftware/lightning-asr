@@ -23,7 +23,6 @@
 import torch
 import torch.nn as nn
 import pytorch_lightning as pl
-import torch_xla.core.xla_model as xm
 from torch import Tensor
 from typing import Dict, Union
 from omegaconf import DictConfig
@@ -88,7 +87,6 @@ class LightningASRModel(pl.LightningModule):
         self.lr_scheduler = configs.lr_scheduler
         self.lr_patience = configs.lr_patience
         self.lr_factor = configs.lr_factor
-        self.use_tpu = configs.use_tpu
         self.criterion = self.configure_criterion(
             num_classes,
             ignore_index=self.vocab.pad_id,
@@ -124,6 +122,7 @@ class LightningASRModel(pl.LightningModule):
             dropout_p=configs.decoder_dropout_p,
             num_layers=configs.num_decoder_layers,
             rnn_type=configs.rnn_type,
+            use_tpu=configs.use_tpu,
         )
 
     def _log_states(
@@ -168,10 +167,6 @@ class LightningASRModel(pl.LightningModule):
             loss (torch.FloatTensor): Loss for training.
         """
         inputs, input_lengths, targets, target_lengths = train_batch
-
-        if self.use_tpu:
-            xla_device = xm.xla_device()
-            targets = targets.to(xla_device)
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
         y_hats = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=self.teacher_forcing_ratio)
