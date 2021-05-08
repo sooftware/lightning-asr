@@ -76,6 +76,10 @@ $ pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--c
   
 I use [Hydra](https://github.com/facebookresearch/hydra) to control all the training configurations. If you are not familiar with Hydra I recommend visiting the [Hydra website](https://hydra.cc/). Generally, Hydra is an open-source framework that simplifies the development of research applications by providing the ability to create a hierarchical configuration dynamically.
   
+### Download LibriSpeech dataset
+  
+You have to download [LibriSpeech](https://www.openslr.org/12) dataset that contains 1000h English speech corpus. But you can download simply by `dataset_download` option. If this option is True, download the dataset and start training. If you already have a dataset, you can set option `dataset_download` to False and specify `dataset_path`.
+  
 ### Training Speech Recognizer
   
 You can simply train with LibriSpeech dataset like below:  
