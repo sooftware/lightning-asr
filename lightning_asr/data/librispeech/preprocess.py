@@ -32,7 +32,7 @@ LIBRI_SPEECH_DATASETS = [
 ]
 
 
-def collect_transcripts(dataset_path):
+def collect_transcripts(dataset_path, librispeech_dir: str = 'LibriSpeech'):
     """ Collect librispeech transcripts """
     transcripts_collection = list()
 
@@ -46,9 +46,10 @@ def collect_transcripts(dataset_path):
                         with open(os.path.join(dataset_path, dataset, subfolder1, subfolder2, file)) as f:
                             for line in f.readlines():
                                 tokens = line.split()
-                                audio = '%s.flac' % os.path.join(dataset, subfolder1, subfolder2, tokens[0])
+                                audio_path = os.path.join(librispeech_dir, dataset, subfolder1, subfolder2, tokens[0])
+                                audio_path = f"{audio_path}.flac"
                                 transcript = " ".join(tokens[1:])
-                                dataset_transcripts.append('%s|%s' % (audio, transcript))
+                                dataset_transcripts.append('%s|%s' % (audio_path, transcript))
 
                     else:
                         continue
