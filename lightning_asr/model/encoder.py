@@ -213,7 +213,7 @@ class ConformerEncoder(nn.Module):
         for layer in self.layers:
             outputs = layer(outputs)
 
-        if self.joint_ctc_attention and self.training:
+        if self.joint_ctc_attention:
             encoder_log_probs = self.fc(outputs.transpose(1, 2)).log_softmax(dim=2)
 
         return encoder_log_probs, outputs, output_lengths
