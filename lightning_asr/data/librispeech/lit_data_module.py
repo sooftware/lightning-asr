@@ -108,6 +108,7 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
             f"{configs.dataset_path}/test-other.txt",
         ]
         self.dataset = dict()
+        self.batch_size = configs.batch_size
         self.apply_spec_augment = configs.apply_spec_augment
         self.max_epochs = configs.max_epochs
         self.batch_size = configs.batch_size
@@ -245,6 +246,7 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
             dataset=self.dataset['train'],
             num_workers=self.num_workers,
             batch_sampler=train_sampler,
+            batch_size=self.batch_size,
         )
 
     def val_dataloader(self) -> Union[DataLoader, List[DataLoader]]:
@@ -255,11 +257,13 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
                 dataset=self.dataset['val-clean'],
                 num_workers=self.num_workers,
                 batch_sampler=val_clean_sampler,
+                batch_size=self.batch_size,
             ),
             AudioDataLoader(
                 dataset=self.dataset['val-other'],
                 num_workers=self.num_workers,
                 batch_sampler=val_other_sampler,
+                batch_size=self.batch_size,
             ),
         ]
 
@@ -271,10 +275,12 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
                 dataset=self.dataset['test-clean'],
                 num_workers=self.num_workers,
                 batch_sampler=test_clean_sampler,
+                batch_size=self.batch_size,
             ),
             AudioDataLoader(
                 dataset=self.dataset['test-other'],
                 num_workers=self.num_workers,
                 batch_sampler=test_other_sampler,
+                batch_size=self.batch_size,
             ),
         ]
