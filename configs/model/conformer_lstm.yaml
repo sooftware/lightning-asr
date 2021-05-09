@@ -18,4 +18,3 @@ ctc_weight: 0.3
 joint_ctc_attention: True
 rnn_type: lstm
 optimizer: adam
-lr_scheduler: reduce_lr_on_plateau

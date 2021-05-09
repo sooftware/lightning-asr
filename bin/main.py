@@ -22,6 +22,7 @@
 
 import os
 import hydra
+import warnings
 import pytorch_lightning as pl
 from omegaconf import DictConfig
 from hydra.core.config_store import ConfigStore
@@ -62,6 +63,8 @@ cs.store(group="trainer", name="tpu", node=TrainerTPUConfigs)
 @hydra.main(config_path=os.path.join('..', "configs"), config_name="train")
 def hydra_entry(configs: DictConfig) -> None:
     pl.seed_everything(configs.seed)
+    warnings.filterwarnings('ignore')
+
     logger, num_devices = parse_configs(configs)
 
     data_module = LightningLibriSpeechDataModule(configs)
