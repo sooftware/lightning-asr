@@ -125,7 +125,7 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
             self.audio_dataset = SpectrogramDataset
         elif configs.feature_extract_method == 'melspectrogram':
             self.audio_dataset = MelSpectrogramDataset
-        elif configs.feature_extract_method == 'mfcc':
+        elif configs.feature_extract_method == 'mfcc.yaml':
             self.audio_dataset = MFCCDataset
         elif configs.feature_extract_method == 'fbank':
             self.audio_dataset = FBankDataset

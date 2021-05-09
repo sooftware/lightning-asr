@@ -9,6 +9,5 @@ gradient_clip_val: 5.0
 use_cuda: True
 use_tpu: False
 use_tensorboard: True
-tpu_cores: 8
 max_epochs: 20
 auto_scale_batch_size: 'binsearch'

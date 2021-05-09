@@ -1,0 +1,9 @@
+sample_rate: 16000
+frame_length: 25.0
+frame_shift: 10.0
+apply_spec_augment: True
+freq_mask_para: 27
+freq_mask_num: 2
+time_mask_num: 4
+num_mels: 161
+feature_extract_method: spectrogram
