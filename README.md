@@ -45,7 +45,8 @@ I recommend creating a new virtual environment for this project (using virtual e
 Currently I only support installation from source code using setuptools. Checkout the source code and run the   
 following commands:  
 ```
-pip install -e .
+$ pip install -e .
+$ ./setup.sh
 ```
   
 ### Install Apex (for 16-bit training) 
@@ -84,21 +85,19 @@ You have to download [LibriSpeech](https://www.openslr.org/12) dataset that cont
 ### Training Speech Recognizer
   
 You can simply train with LibriSpeech dataset like below:  
-  
-- On GPU:
-  
-```
-$ python ./bin/main.py dataset_path=$DATASET_PATH dataset_download=True use_cuda=True use_tpu=False
-```
 
-- On TPU:
+- Example2: Train the `conformer-lstm` model with `mel-spectrogram` features On TPU:
   
 ```
-$ python ./bin/main.py dataset_path=$DATASET_PATH dataset_download=True use_cuda=False use_tpu=True tpu_cores=8
+$ python ./bin/main.py \
+data=default \
+dataset_download=True \
+audio=melspectrogram \
+model=conformer_lstm \
+lr_scheduler=reduce_lr_on_plateau \
+trainer=tpu
 ```
-  
-Check configuraions at [[link]](https://github.com/sooftware/lightning-asr/tree/main/configs)
-  
+ 
 ## Troubleshoots and Contributing
 If you have any questions, bug reports, and feature requests, please [open an issue](https://github.com/sooftware/lightning-asr/issues) on Github.   
   

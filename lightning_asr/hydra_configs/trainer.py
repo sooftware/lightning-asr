@@ -20,26 +20,34 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from distutils.core import setup
+from dataclasses import dataclass
 
-setup(
-    name='lightning_asr',
-    version='latest',
-    description='Modular and extensible speech recognition library leveraging pytorch-lightning and hydra',
-    author='Soohwan Kim',
-    author_email='kaki.ai@tunib.ai',
-    url='https://github.com/sooftware/lightning_asr',
-    install_requires=[
-        'torch>=1.4.0',
-        'python-Levenshtein',
-        'numpy',
-        'pandas',
-        'astropy',
-        'sentencepiece',
-        'pytorch-lightning',
-        'hydra-core',
-        'wget',
-    ],
-    keywords=['asr', 'speech_recognition', 'pytorch-lightning'],
-    python_requires='>=3.7',
-)
+
+@dataclass
+class BaseTrainerConfigs:
+    seed: int = 1
+    accelerator: str = "dp"
+    precision: int = 16
+    accumulate_grad_batches: int = 4
+    amp_backend: str = "apex"
+    num_workers: int = 4
+    batch_size: int = 32
+    check_val_every_n_epoch: int = 1
+    gradient_clip_val: float = 5.0
+    use_tensorboard: bool = True
+    max_epochs: int = 20
+    auto_scale_batch_size: str = "binsearch"
+
+
+@dataclass
+class TrainerGPUConfigs(BaseTrainerConfigs):
+    use_cuda: bool = True
+    use_tpu: bool = False
+    auto_select_gpus: bool = True
+
+
+@dataclass
+class TrainerTPUConfigs(BaseTrainerConfigs):
+    use_cuda: bool = False
+    use_tpu: bool = True
+    tpu_cores: int = 8
