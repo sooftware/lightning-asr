@@ -1,0 +1,4 @@
+lr: 1e-04
+lr_scheduler: reduce_lr_on_plateau
+lr_patience: 1
+lr_factor: 0.3

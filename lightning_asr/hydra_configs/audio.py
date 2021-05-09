@@ -41,7 +41,7 @@ class SpecAugmentConfigs:
 @dataclass
 class SpectrogramConfigs(AudioConfigs, SpecAugmentConfigs):
     num_mels: int = 161
-    feature_extract_method: str = "fbank"
+    feature_extract_method: str = "spectrogram"
 
 
 @dataclass

@@ -1,0 +1,13 @@
+seed: 1
+accelerator: dp
+precision: 16
+accumulate_grad_batches: 4
+amp_backend: apex
+check_val_every_n_epoch: 1
+gradient_clip_val: 5.0
+use_cuda: False
+use_tpu: True
+use_tensorboard: True
+tpu_cores: 8
+max_epochs: 20
+auto_scale_batch_size: 'binsearch'

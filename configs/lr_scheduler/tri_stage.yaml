@@ -1,0 +1,9 @@
+lr: 1e-04
+lr_scheduler: tri_stage
+init_lr: 1e-10
+peak_lr: 1e-04
+final_lr: 1e-07
+init_lr_scale: 0.01
+final_lr_scale: 0.05
+warmup_steps: 10000
+decay_steps: 150000

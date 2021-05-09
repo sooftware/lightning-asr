@@ -1,0 +1,7 @@
+lr: 1e-04
+lr_scheduler: transformer
+peak_lr: 1e-04
+final_lr: 1e-07
+final_lr_scale: 0.05
+warmup_steps: 10000
+decay_steps: 150000
