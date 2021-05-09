@@ -75,7 +75,7 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
     Attributes:
         dataset_path (str): path of librispeech dataset
         apply_spec_augment (bool): flag indication whether to apply spec augment or not
-        num_epochs (int): the number of epochs
+        max_epochs (int): the number of max epochs
         batch_size (int): the size of batch samples
         num_workers (int): the number of cpu workers
         sample_rate (int): sampling rate of audio
@@ -109,7 +109,7 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
         ]
         self.dataset = dict()
         self.apply_spec_augment = configs.apply_spec_augment
-        self.num_epochs = configs.num_epochs
+        self.max_epochs = configs.max_epochs
         self.batch_size = configs.batch_size
         self.num_workers = configs.num_workers
         self.sample_rate = configs.sample_rate
