@@ -10,4 +10,5 @@ use_tpu: True
 use_tensorboard: True
 tpu_cores: 8
 max_epochs: 20
+batch_size: 32
 auto_scale_batch_size: 'binsearch'
