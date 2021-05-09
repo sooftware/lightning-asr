@@ -5,26 +5,19 @@
 **Modular and extensible speech recognition library leveraging [pytorch-lightning](https://github.com/PyTorchLightning/pytorch-lightning) and [hydra](https://github.com/facebookresearch/hydra)**
 
   
-</div>
-  
-***
+---
 
-<p  align="center"> 
-     <a href="https://github.com/sooftware/lightning-asr/blob/latest/LICENSE">
-          <img src="http://img.shields.io/badge/license-MIT-informational"> 
-     </a>
-     <a href="https://github.com/pytorch/pytorch">
-          <img src="http://img.shields.io/badge/framework-PyTorch--Lightning-informational"> 
-     </a>
-     <a href="https://www.python.org/dev/peps/pep-0008/">
-          <img src="http://img.shields.io/badge/codestyle-PEP--8-informational"> 
-     </a>
-    <a href="https://sooftware.github.io/lightning-asr/">
-          <img src="http://img.shields.io/badge/docs-passing-success"> 
-     </a>
-  <a href="https://sooftware.github.io/lightning-asr/">
-          <img src="http://img.shields.io/badge/build-not tested-red">
-     </a>
+<p align="center">
+  <a href="https://github.com/sooftware/lightning-asr#introduction">What is Lightning ASR</a> •
+  <a href="https://github.com/sooftware/lightning-asr#installation">Installation</a> •
+  <a href="https://github.com/sooftware/lightning-asr#get-started">Get Started</a> •
+  <a href="https://sooftware.github.io/lightning-asr/">Docs</a> •
+  <a href="https://www.codefactor.io/repository/github/sooftware/lightning-asr">Codefactor</a> •
+  <a href="https://github.com/sooftware/lightning-asr/blob/main/LICENSE">License</a>
+</p>
+
+---
+</div>
     
 ## Introduction
     
@@ -40,8 +33,8 @@ I recommend creating a new virtual environment for this project (using virtual e
 
 ### Prerequisites
   
-* Numpy: `pip install numpy` (Refer [here](https://github.com/numpy/numpy) for problem installing Numpy).
-* Pytorch: Refer to [PyTorch website](http://pytorch.org/) to install the version w.r.t. your environment.   
+* numpy: `pip install numpy` (Refer [here](https://github.com/numpy/numpy) for problem installing Numpy).
+* pytorch: Refer to [PyTorch website](http://pytorch.org/) to install the version w.r.t. your environment.   
 * librosa: `conda install -c conda-forge librosa` (Refer [here](https://github.com/librosa/librosa) for problem installing librosa)
 * torchaudio: `pip install torchaudio==0.6.0` (Refer [here](https://github.com/pytorch/pytorch) for problem installing torchaudio)
 * sentencepiece: `pip install sentencepiece` (Refer [here](https://github.com/google/sentencepiece) for problem installing sentencepiece)
@@ -49,10 +42,11 @@ I recommend creating a new virtual environment for this project (using virtual e
 * hydra: `pip install hydra-core --upgrade` (Refer [here](https://github.com/facebookresearch/hydra) for problem installing hydra)
   
 ### Install from source
-Currently we only support installation from source code using setuptools. Checkout the source code and run the   
+Currently I only support installation from source code using setuptools. Checkout the source code and run the   
 following commands:  
 ```
-pip install -e .
+$ pip install -e .
+$ ./setup.sh
 ```
   
 ### Install Apex (for 16-bit training) 
@@ -82,17 +76,40 @@ $ pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--c
   
 ## Get Started
   
-I use [Hydra](https://github.com/facebookresearch/hydra) to control all the training configurations. If you are not familiar with Hydra we recommend visiting the [Hydra website](https://hydra.cc/). Generally, Hydra is an open-source framework that simplifies the development of research applications by providing the ability to create a hierarchical configuration dynamically.
+I use [Hydra](https://github.com/facebookresearch/hydra) to control all the training configurations. If you are not familiar with Hydra I recommend visiting the [Hydra website](https://hydra.cc/). Generally, Hydra is an open-source framework that simplifies the development of research applications by providing the ability to create a hierarchical configuration dynamically.
+  
+### Download LibriSpeech dataset
+  
+You have to download [LibriSpeech](https://www.openslr.org/12) dataset that contains 1000h English speech corpus. But you can download simply by `dataset_download` option. If this option is True, download the dataset and start training. If you already have a dataset, you can set option `dataset_download` to False and specify `dataset_path`.
   
 ### Training Speech Recognizer
   
-You can simply train with LibriSpeech dataset like below:
-```
-$ python ./bin/main.py --dataset_path $DATASET_PATH --dataset_download True
-```
+You can simply train with LibriSpeech dataset like below:  
   
-Check configuraions at [[link]](https://github.com/sooftware/lightning-asr/tree/main/configs)
+- Example1: Train the `conformer-lstm` model with `filter-bank` features on GPU.
   
+```
+$ python ./bin/main.py \
+data=default \
+dataset_download=True \
+audio=fbank \
+model=conformer_lstm \
+lr_scheduler=reduce_lr_on_plateau \
+trainer=gpu
+```
+
+- Example2: Train the `conformer-lstm` model with `mel-spectrogram` features On TPU:
+  
+```
+$ python ./bin/main.py \
+data=default \
+dataset_download=True \
+audio=melspectrogram \
+model=conformer_lstm \
+lr_scheduler=reduce_lr_on_plateau \
+trainer=tpu
+```
+ 
 ## Troubleshoots and Contributing
 If you have any questions, bug reports, and feature requests, please [open an issue](https://github.com/sooftware/lightning-asr/issues) on Github.   
   

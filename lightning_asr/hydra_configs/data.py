@@ -20,26 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from distutils.core import setup
+from dataclasses import dataclass
 
-setup(
-    name='lightning_asr',
-    version='latest',
-    description='Modular and extensible speech recognition library leveraging pytorch-lightning and hydra',
-    author='Soohwan Kim',
-    author_email='kaki.ai@tunib.ai',
-    url='https://github.com/sooftware/lightning_asr',
-    install_requires=[
-        'torch>=1.4.0',
-        'python-Levenshtein',
-        'numpy',
-        'pandas',
-        'astropy',
-        'sentencepiece',
-        'pytorch-lightning',
-        'hydra-core',
-        'wget',
-    ],
-    keywords=['asr', 'speech_recognition', 'pytorch-lightning'],
-    python_requires='>=3.7',
-)
+
+@dataclass
+class DataConfigs:
+    dataset_path: str = "../../../librispeech"
+    dataset_download: bool = True
+    vocab_size: int = 5000

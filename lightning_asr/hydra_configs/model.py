@@ -20,26 +20,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from distutils.core import setup
+from dataclasses import dataclass
 
-setup(
-    name='lightning_asr',
-    version='latest',
-    description='Modular and extensible speech recognition library leveraging pytorch-lightning and hydra',
-    author='Soohwan Kim',
-    author_email='kaki.ai@tunib.ai',
-    url='https://github.com/sooftware/lightning_asr',
-    install_requires=[
-        'torch>=1.4.0',
-        'python-Levenshtein',
-        'numpy',
-        'pandas',
-        'astropy',
-        'sentencepiece',
-        'pytorch-lightning',
-        'hydra-core',
-        'wget',
-    ],
-    keywords=['asr', 'speech_recognition', 'pytorch-lightning'],
-    python_requires='>=3.7',
-)
+
+@dataclass
+class ConformerLSTMConfigs:
+    encoder_dim: int = 256
+    num_encoder_layers: int = 17
+    num_decoder_layers: int = 2
+    num_attention_heads: int = 8
+    feed_forward_expansion_factor: int = 4
+    conv_expansion_factor: int = 2
+    input_dropout_p: float = 0.1
+    feed_forward_dropout_p: float = 0.1
+    attention_dropout_p: float = 0.1
+    conv_dropout_p: float = 0.1
+    decoder_dropout_p: float = 0.1
+    conv_kernel_size: int = 31
+    half_step_residual: bool = True
+    max_length: int = 128
+    teacher_forcing_ratio: float = 1.0
+    cross_entropy_weight: float = 0.7
+    ctc_weight: float = 0.3
+    joint_ctc_attention: bool = True
+    rnn_type: str = "lstm"
+    optimizer: str = "adam"

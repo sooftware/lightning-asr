@@ -20,26 +20,43 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from distutils.core import setup
+from dataclasses import dataclass
 
-setup(
-    name='lightning_asr',
-    version='latest',
-    description='Modular and extensible speech recognition library leveraging pytorch-lightning and hydra',
-    author='Soohwan Kim',
-    author_email='kaki.ai@tunib.ai',
-    url='https://github.com/sooftware/lightning_asr',
-    install_requires=[
-        'torch>=1.4.0',
-        'python-Levenshtein',
-        'numpy',
-        'pandas',
-        'astropy',
-        'sentencepiece',
-        'pytorch-lightning',
-        'hydra-core',
-        'wget',
-    ],
-    keywords=['asr', 'speech_recognition', 'pytorch-lightning'],
-    python_requires='>=3.7',
-)
+
+@dataclass
+class AudioConfigs:
+    sample_rate: int = 16000
+    frame_length: float = 25.0
+    frame_shift: float = 10.0
+
+
+@dataclass
+class SpecAugmentConfigs:
+    apply_spec_augment: bool = True
+    freq_mask_para: int = 27
+    freq_mask_num: int = 2
+    time_mask_num: int = 4
+
+
+@dataclass
+class SpectrogramConfigs(AudioConfigs, SpecAugmentConfigs):
+    num_mels: int = 161
+    feature_extract_method: str = "fbank"
+
+
+@dataclass
+class MelSpectrogramConfigs(AudioConfigs, SpecAugmentConfigs):
+    num_mels: int = 80
+    feature_extract_method: str = "melspectrogram"
+
+
+@dataclass
+class FBankConfigs(AudioConfigs, SpecAugmentConfigs):
+    num_mels: int = 80
+    feature_extract_method: str = "fbank"
+
+
+@dataclass
+class MFCCConfigs(AudioConfigs, SpecAugmentConfigs):
+    num_mels: int = 40
+    feature_extract_method: str = "mfcc"

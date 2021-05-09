@@ -29,7 +29,7 @@ from omegaconf import DictConfig
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.optim import Adam, Adadelta, Adagrad, SGD, Adamax, AdamW, ASGD
 
-from lightning_asr.metric import WordErrorRate, ErrorRate, CharacterErrorRate
+from lightning_asr.metric import WordErrorRate, CharacterErrorRate
 from lightning_asr.model.decoder import DecoderRNN
 from lightning_asr.model.encoder import ConformerEncoder
 from lightning_asr.optim import AdamP, RAdam
@@ -39,7 +39,7 @@ from lightning_asr.vocabs import LibriSpeechVocabulary
 from lightning_asr.vocabs.vocab import Vocabulary
 
 
-class LightningASRModel(pl.LightningModule):
+class ConformerLSTMModel(pl.LightningModule):
     """
     PyTorch Lightning Automatic Speech Recognition Model. It consist of a conformer encoder and rnn decoder.
 
@@ -47,48 +47,30 @@ class LightningASRModel(pl.LightningModule):
         configs (DictConfig): configuraion set
         num_classes (int): number of classification classes
         vocab (Vocabulary): vocab of training data
-        metric (ErrorRate): performance measurement metrics
+        wer (WordErrorRate): metric for measuring speech-to-text accuracy of ASR systems (word-level)
+        cer (CharacterErrorRate): metric for measuring speech-to-text accuracy of ASR systems (character-level)
 
     Attributes:
         num_classes (int): Number of classification classes
         vocab (Vocabulary): vocab of training data
-        peak_lr (float): peak learning rate
-        final_lr (float): final learning rate
-        init_lr_scale (float): scaling value of initial learning rate
-        final_lr_scale (float): scaling value of final learning rate
-        warmup_steps (int): warmup steps of learning rate
-        decay_steps (int): decay steps of learning rate
         teacher_forcing_ratio (float): ratio of teacher forcing (forward label as decoder input)
-        optimizer (str): name of optimizer (default: adam)
-        lr_scheduler (str): name of learning rate scheduler (default: transformer)
     """
     def __init__(
             self,
             configs: DictConfig,
             num_classes: int,
             vocab: Vocabulary = LibriSpeechVocabulary,
-            wer: ErrorRate = WordErrorRate,
-            cer: ErrorRate = CharacterErrorRate,
+            wer: WordErrorRate = WordErrorRate,
+            cer: CharacterErrorRate = CharacterErrorRate,
     ) -> None:
-        super(LightningASRModel, self).__init__()
-
-        self.peak_lr = configs.peak_lr
-        self.final_lr = configs.final_lr
-        self.init_lr_scale = configs.init_lr_scale
-        self.final_lr_scale = configs.final_lr_scale
-        self.warmup_steps = configs.warmup_steps
-        self.decay_steps = configs.decay_steps
+        super(ConformerLSTMModel, self).__init__()
+        self.configs = configs
         self.total_steps = configs.warmup_steps + configs.decay_steps
         self.gradient_clip_val = configs.gradient_clip_val
         self.teacher_forcing_ratio = configs.teacher_forcing_ratio
         self.vocab = vocab
         self.wer = wer
         self.cer = cer
-        self.optimizer = configs.optimizer
-        self.lr = configs.lr
-        self.lr_scheduler = configs.lr_scheduler
-        self.lr_patience = configs.lr_patience
-        self.lr_factor = configs.lr_factor
         self.criterion = self.configure_criterion(
             num_classes,
             ignore_index=self.vocab.pad_id,
@@ -271,37 +253,40 @@ class LightningASRModel(pl.LightningModule):
             "sgd": SGD,
             "asgd": ASGD,
         }
-        assert self.optimizer in supported_optimizers.keys(), f"Unsupported Optimizer: {self.optimizer}"
-        optimizer = supported_optimizers[self.optimizer](self.parameters(), lr=self.lr)
+        assert self.configs.optimizer in supported_optimizers.keys(), \
+            f"Unsupported Optimizer: {self.configs.optimizer}\n" \
+            f"Supported Optimizers: {supported_optimizers.keys()}"
+        optimizer = supported_optimizers[self.configs.optimizer](self.parameters(), lr=self.configs.lr)
 
-        if self.lr_scheduler == 'transformer':
+        if self.configs.lr_scheduler == 'transformer':
             scheduler = TransformerLRScheduler(
                 optimizer,
-                peak_lr=self.peak_lr,
-                final_lr=self.final_lr,
-                final_lr_scale=self.final_lr_scale,
-                warmup_steps=self.warmup_steps,
-                decay_steps=self.decay_steps,
+                peak_lr=self.configs.peak_lr,
+                final_lr=self.configs.final_lr,
+                final_lr_scale=self.configs.final_lr_scale,
+                warmup_steps=self.configs.warmup_steps,
+                decay_steps=self.configs.decay_steps,
             )
-        elif self.lr_scheduler == 'tri_stage':
+        elif self.configs.lr_scheduler == 'tri_stage':
             scheduler = TriStageLRScheduler(
                 optimizer,
-                init_lr=1e-10,
-                peak_lr=self.peak_lr,
-                final_lr=self.final_lr,
-                final_lr_scale=self.final_lr_scale,
-                init_lr_scale=self.init_lr_scale,
-                warmup_steps=self.warmup_steps,
-                total_steps=self.warmup_steps + self.decay_steps,
+                init_lr=self.configs.init_lr,
+                peak_lr=self.configs.peak_lr,
+                final_lr=self.configs.final_lr,
+                final_lr_scale=self.configs.final_lr_scale,
+                init_lr_scale=self.configs.init_lr_scale,
+                warmup_steps=self.configs.warmup_steps,
+                total_steps=self.configs.warmup_steps + self.configs.decay_steps,
             )
-        elif self.lr_scheduler == 'reduce_lr_on_plateau':
+        elif self.configs.lr_scheduler == 'reduce_lr_on_plateau':
             scheduler = ReduceLROnPlateau(
                 optimizer,
-                patience=self.lr_patience,
-                factor=self.lr_factor,
+                patience=self.configs.lr_patience,
+                factor=self.configs.lr_factor,
             )
         else:
-            raise ValueError(f"Unsupported `lr_scheduler`: {self.lr_scheduler}")
+            raise ValueError(f"Unsupported `lr_scheduler`: {self.configs.lr_scheduler}\n"
+                             f"Supported `lr_scheduler`: transformer, tri_stage, reduce_lr_on_plateau")
 
         return {
             'optimizer': optimizer,
