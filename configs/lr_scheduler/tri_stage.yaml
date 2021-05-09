@@ -1,5 +1,5 @@
 lr: 1e-04
-lr_scheduler: tri_stage
+scheduler: tri_stage
 init_lr: 1e-10
 peak_lr: 1e-04
 final_lr: 1e-07
