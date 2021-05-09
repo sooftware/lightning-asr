@@ -85,18 +85,6 @@ You have to download [LibriSpeech](https://www.openslr.org/12) dataset that cont
 ### Training Speech Recognizer
   
 You can simply train with LibriSpeech dataset like below:  
-  
-- Example1: Train the `conformer-lstm` model with `filter-bank` features on GPU.
-  
-```
-$ python ./bin/main.py \
-data=default \
-dataset_download=True \
-audio=fbank \
-model=conformer_lstm \
-lr_scheduler=reduce_lr_on_plateau \
-trainer=gpu
-```
 
 - Example2: Train the `conformer-lstm` model with `mel-spectrogram` features On TPU:
   
