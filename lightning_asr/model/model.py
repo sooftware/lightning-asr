@@ -258,7 +258,7 @@ class ConformerLSTMModel(pl.LightningModule):
             f"Supported Optimizers: {supported_optimizers.keys()}"
         optimizer = supported_optimizers[self.configs.optimizer](self.parameters(), lr=self.configs.lr)
 
-        if self.configs.lr_scheduler == 'transformer':
+        if self.configs.scheduler == 'transformer':
             scheduler = TransformerLRScheduler(
                 optimizer,
                 peak_lr=self.configs.peak_lr,
@@ -267,7 +267,7 @@ class ConformerLSTMModel(pl.LightningModule):
                 warmup_steps=self.configs.warmup_steps,
                 decay_steps=self.configs.decay_steps,
             )
-        elif self.configs.lr_scheduler == 'tri_stage':
+        elif self.configs.scheduler == 'tri_stage':
             scheduler = TriStageLRScheduler(
                 optimizer,
                 init_lr=self.configs.init_lr,
@@ -278,15 +278,15 @@ class ConformerLSTMModel(pl.LightningModule):
                 warmup_steps=self.configs.warmup_steps,
                 total_steps=self.configs.warmup_steps + self.configs.decay_steps,
             )
-        elif self.configs.lr_scheduler == 'reduce_lr_on_plateau':
+        elif self.configs.scheduler == 'reduce_lr_on_plateau':
             scheduler = ReduceLROnPlateau(
                 optimizer,
                 patience=self.configs.lr_patience,
                 factor=self.configs.lr_factor,
             )
         else:
-            raise ValueError(f"Unsupported `lr_scheduler`: {self.configs.lr_scheduler}\n"
-                             f"Supported `lr_scheduler`: transformer, tri_stage, reduce_lr_on_plateau")
+            raise ValueError(f"Unsupported `scheduler`: {self.configs.scheduler}\n"
+                             f"Supported `scheduler`: transformer, tri_stage, reduce_lr_on_plateau")
 
         return {
             'optimizer': optimizer,

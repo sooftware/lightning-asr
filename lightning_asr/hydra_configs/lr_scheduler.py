@@ -30,14 +30,14 @@ class LRSchedulerConfigs:
 
 @dataclass
 class ReduceLROnPlateauLRSchedulerConfigs(LRSchedulerConfigs):
-    lr_scheduler: str = "reduce_lr_on_plateau"
+    scheduler: str = "reduce_lr_on_plateau"
     lr_patience: int = 1
     lr_factor: float = 0.3
 
 
 @dataclass
 class TriStageLRSchedulerConfigs(LRSchedulerConfigs):
-    lr_scheduler: str = "tri_stage"
+    scheduler: str = "tri_stage"
     init_lr: float = 1e-10
     peak_lr: float = 1e-04
     final_lr: float = 1e-07
@@ -49,7 +49,7 @@ class TriStageLRSchedulerConfigs(LRSchedulerConfigs):
 
 @dataclass
 class TransformerLRSchedulerConfigs(LRSchedulerConfigs):
-    lr_scheduler: str = "transformer"
+    scheduler: str = "transformer"
     peak_lr: float = 1e-04
     final_lr: float = 1e-07
     final_lr_scale: float = 0.05
