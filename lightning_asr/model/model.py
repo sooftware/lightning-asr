@@ -65,7 +65,6 @@ class ConformerLSTMModel(pl.LightningModule):
     ) -> None:
         super(ConformerLSTMModel, self).__init__()
         self.configs = configs
-        self.total_steps = configs.warmup_steps + configs.decay_steps
         self.gradient_clip_val = configs.gradient_clip_val
         self.teacher_forcing_ratio = configs.teacher_forcing_ratio
         self.vocab = vocab

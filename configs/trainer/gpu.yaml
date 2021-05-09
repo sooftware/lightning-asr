@@ -1,6 +1,7 @@
 seed: 1
 accelerator: dp
 precision: 16
+num_workers: 4
 accumulate_grad_batches: 4
 amp_backend: apex
 auto_select_gpus: True
