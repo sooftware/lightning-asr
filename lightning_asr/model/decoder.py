@@ -20,9 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import random
 import torch
 import torch.nn as nn
+import random
 import torch_xla.core.xla_model as xm
 from torch import Tensor, LongTensor
 from typing import Tuple, Optional
@@ -152,7 +152,6 @@ class DecoderRNN(nn.Module):
         use_teacher_forcing = True if random.random() < teacher_forcing_ratio else False
 
         if use_teacher_forcing:
-            targets = targets[targets != self.eos_id].view(batch_size, -1)
             step_outputs, hidden_states, attn = self.forward_step(targets, hidden_states, encoder_outputs)
 
             for di in range(step_outputs.size(1)):
