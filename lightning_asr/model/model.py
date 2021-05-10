@@ -47,8 +47,8 @@ class ConformerLSTMModel(pl.LightningModule):
         configs (DictConfig): configuraion set
         num_classes (int): number of classification classes
         vocab (Vocabulary): vocab of training data
-        wer (WordErrorRate): metric for measuring speech-to-text accuracy of ASR systems (word-level)
-        cer (CharacterErrorRate): metric for measuring speech-to-text accuracy of ASR systems (character-level)
+        wer_metric (WordErrorRate): metric for measuring speech-to-text accuracy of ASR systems (word-level)
+        cer_metric (CharacterErrorRate): metric for measuring speech-to-text accuracy of ASR systems (character-level)
 
     Attributes:
         num_classes (int): Number of classification classes
@@ -60,16 +60,16 @@ class ConformerLSTMModel(pl.LightningModule):
             configs: DictConfig,
             num_classes: int,
             vocab: Vocabulary = LibriSpeechVocabulary,
-            wer: WordErrorRate = WordErrorRate,
-            cer: CharacterErrorRate = CharacterErrorRate,
+            wer_metric: WordErrorRate = WordErrorRate,
+            cer_metric: CharacterErrorRate = CharacterErrorRate,
     ) -> None:
         super(ConformerLSTMModel, self).__init__()
         self.configs = configs
         self.gradient_clip_val = configs.gradient_clip_val
         self.teacher_forcing_ratio = configs.teacher_forcing_ratio
         self.vocab = vocab
-        self.wer = wer
-        self.cer = cer
+        self.wer_metric = wer_metric
+        self.cer_metric = cer_metric
         self.criterion = self.configure_criterion(
             num_classes,
             ignore_index=self.vocab.pad_id,
@@ -166,8 +166,8 @@ class ConformerLSTMModel(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        # wer = self.wer(targets[:, 1:], y_hats)
-        # cer = self.cer(targets[:, 1:], y_hats)
+        # wer = self.wer_metric(targets[:, 1:], y_hats)
+        # cer = self.cer_metric(targets[:, 1:], y_hats)
         #
         # self._log_states('train', wer, cer, loss, cross_entropy_loss, ctc_loss)
 
@@ -199,8 +199,8 @@ class ConformerLSTMModel(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        # wer = self.wer(targets[:, 1:], y_hats)
-        # cer = self.cer(targets[:, 1:], y_hats)
+        # wer = self.wer_metric(targets[:, 1:], y_hats)
+        # cer = self.cer_metric(targets[:, 1:], y_hats)
         #
         # self._log_states('valid', wer, cer, loss, cross_entropy_loss, ctc_loss)
 
@@ -232,8 +232,8 @@ class ConformerLSTMModel(pl.LightningModule):
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        # wer = self.wer(targets[:, 1:], y_hats)
-        # cer = self.cer(targets[:, 1:], y_hats)
+        # wer = self.wer_metric(targets[:, 1:], y_hats)
+        # cer = self.cer_metric(targets[:, 1:], y_hats)
         #
         # self._log_states('test', wer, cer, loss, cross_entropy_loss, ctc_loss)
 

@@ -74,8 +74,8 @@ def hydra_entry(configs: DictConfig) -> None:
     model = ConformerLSTMModel(configs=configs,
                                num_classes=len(vocab),
                                vocab=vocab,
-                               wer=WordErrorRate(vocab),
-                               cer=CharacterErrorRate(vocab))
+                               wer_metric=WordErrorRate(vocab),
+                               cer_metric=CharacterErrorRate(vocab))
 
     if configs.use_tpu:
         trainer = pl.Trainer(tpu_cores=configs.tpu_cores,
