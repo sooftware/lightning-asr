@@ -185,7 +185,7 @@ class Conv2dSubampling(nn.Module):
         outputs = self.sequential(inputs.unsqueeze(1))
         batch_size, channels, subsampled_lengths, sumsampled_dim = outputs.size()
 
-        outputs = outputs.permute(0, 2, 1, 3)
+        outputs = outputs.transpose(1, 2)
         outputs = outputs.contiguous().view(batch_size, subsampled_lengths, channels * sumsampled_dim)
 
         output_lengths = input_lengths >> 2
