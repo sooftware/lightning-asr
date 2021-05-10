@@ -80,8 +80,7 @@ class DecoderRNN(nn.Module):
         self.use_tpu = use_tpu
         self.embedding = nn.Embedding(num_classes, hidden_state_dim)
         self.input_dropout = nn.Dropout(dropout_p)
-        rnn_cell = self.supported_rnns[rnn_type.lower()]
-        self.rnn = rnn_cell(
+        self.rnn = self.supported_rnns[rnn_type.lower()](
             input_size=hidden_state_dim,
             hidden_size=hidden_state_dim,
             num_layers=num_layers,

@@ -126,7 +126,7 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
             self.audio_dataset = SpectrogramDataset
         elif configs.feature_extract_method == 'melspectrogram':
             self.audio_dataset = MelSpectrogramDataset
-        elif configs.feature_extract_method == 'mfcc.yaml':
+        elif configs.feature_extract_method == 'mfcc':
             self.audio_dataset = MFCCDataset
         elif configs.feature_extract_method == 'fbank':
             self.audio_dataset = FBankDataset
@@ -246,7 +246,6 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
             dataset=self.dataset['train'],
             num_workers=self.num_workers,
             batch_sampler=train_sampler,
-            batch_size=self.batch_size,
         )
 
     def val_dataloader(self) -> Union[DataLoader, List[DataLoader]]:
@@ -257,13 +256,11 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
                 dataset=self.dataset['val-clean'],
                 num_workers=self.num_workers,
                 batch_sampler=val_clean_sampler,
-                batch_size=self.batch_size,
             ),
             AudioDataLoader(
                 dataset=self.dataset['val-other'],
                 num_workers=self.num_workers,
                 batch_sampler=val_other_sampler,
-                batch_size=self.batch_size,
             ),
         ]
 
@@ -275,12 +272,10 @@ class LightningLibriSpeechDataModule(pl.LightningDataModule):
                 dataset=self.dataset['test-clean'],
                 num_workers=self.num_workers,
                 batch_sampler=test_clean_sampler,
-                batch_size=self.batch_size,
             ),
             AudioDataLoader(
                 dataset=self.dataset['test-other'],
                 num_workers=self.num_workers,
                 batch_sampler=test_other_sampler,
-                batch_size=self.batch_size,
             ),
         ]
