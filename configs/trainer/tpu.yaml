@@ -3,7 +3,6 @@ accelerator: dp
 precision: 16
 num_workers: 4
 accumulate_grad_batches: 4
-amp_backend: apex
 check_val_every_n_epoch: 1
 gradient_clip_val: 5.0
 use_cuda: False
