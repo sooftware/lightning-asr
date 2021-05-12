@@ -26,6 +26,7 @@ import warnings
 import pytorch_lightning as pl
 from omegaconf import DictConfig
 from hydra.core.config_store import ConfigStore
+from pytorch_lightning.plugins import TPUSpawnPlugin
 
 from lightning_asr.data.librispeech.lit_data_module import LightningLibriSpeechDataModule
 from lightning_asr.metric import WordErrorRate, CharacterErrorRate
@@ -86,6 +87,7 @@ def hydra_entry(configs: DictConfig) -> None:
                              gradient_clip_val=configs.gradient_clip_val,
                              logger=logger,
                              auto_scale_batch_size=configs.auto_scale_batch_size,
+                             plugins=TPUSpawnPlugin(),
                              max_epochs=configs.max_epochs)
     else:
         trainer = pl.Trainer(precision=configs.precision,
