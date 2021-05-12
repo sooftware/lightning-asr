@@ -52,10 +52,9 @@ class LibriSpeechVocabulary(Vocabulary):
 
         elif len(labels.shape) == 2:
             sentences = list()
-            for batch in labels:
-                sentence = str()
-                for label in batch:
-                    sentence = self.sp.DecodeIds([l for l in label])
+
+            for label in labels:
+                sentence = self.sp.DecodeIds([l for l in label])
                 sentences.append(sentence)
             return sentences
         else:
