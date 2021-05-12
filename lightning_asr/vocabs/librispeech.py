@@ -48,13 +48,13 @@ class LibriSpeechVocabulary(Vocabulary):
 
     def label_to_string(self, labels):
         if len(labels.shape) == 1:
-            return self.sp.DecodeIds(list(labels.cpu().numpy()))
+            return self.sp.DecodeIds([l.item() for l in labels])
 
         elif len(labels.shape) == 2:
             sentences = list()
 
             for label in labels:
-                sentence = self.sp.DecodeIds(list(label.cpu().numpy()))
+                sentence = self.sp.DecodeIds([l for l in label])
                 sentences.append(sentence)
             return sentences
         else:
