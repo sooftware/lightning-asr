@@ -96,7 +96,9 @@ class WordErrorRate(ErrorRate):
         w1 = [chr(unit2char[w]) for w in s1.split()]
         w2 = [chr(unit2char[w]) for w in s2.split()]
 
-        return Lev.distance(''.join(w1), ''.join(w2))
+        dist = Lev.distance(''.join(w1), ''.join(w2))
+        length = len(s1.replace(' ', ''))
+        return dist, length
 
 
 class CharacterErrorRate(ErrorRate):
