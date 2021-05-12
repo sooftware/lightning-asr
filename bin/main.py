@@ -87,7 +87,7 @@ def hydra_entry(configs: DictConfig) -> None:
                              gradient_clip_val=configs.gradient_clip_val,
                              logger=logger,
                              auto_scale_batch_size=configs.auto_scale_batch_size,
-                             plugins=TPUSpawnPlugin(),
+                             plugins=TPUSpawnPlugin(debug=True),
                              max_epochs=configs.max_epochs)
     else:
         trainer = pl.Trainer(precision=configs.precision,
