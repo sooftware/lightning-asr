@@ -140,7 +140,7 @@ class ConformerLSTMModel(pl.LightningModule):
         y_hats = self.decoder(encoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
         return y_hats
 
-    def training_step(self, train_batch: tuple, batch_idx: int) -> Tensor:
+    def training_step(self, batch: tuple, batch_idx: int) -> Tensor:
         """
         Forward propagate a `inputs` and `targets` pair for training.
 
@@ -151,29 +151,32 @@ class ConformerLSTMModel(pl.LightningModule):
         Returns:
             loss (torch.FloatTensor): Loss for training.
         """
-        inputs, targets, input_lengths, target_lengths = train_batch
+        inputs, targets, input_lengths, target_lengths = batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
-        y_hats = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=self.teacher_forcing_ratio)
+        outputs = self.decoder(targets, encoder_outputs, teacher_forcing_ratio=self.teacher_forcing_ratio)
 
         max_target_length = targets.size(1) - 1  # minus the start of sequence symbol
-        y_hats = y_hats[:, :max_target_length, :]
+        outputs = outputs[:, :max_target_length, :]
 
         loss, ctc_loss, cross_entropy_loss = self.criterion(
             encoder_log_probs=encoder_log_probs.transpose(0, 1),
-            decoder_log_probs=y_hats.contiguous().view(-1, y_hats.size(-1)),
+            decoder_log_probs=outputs.contiguous().view(-1, outputs.size(-1)),
             output_lengths=encoder_output_lengths,
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        # wer = self.wer_metric(targets[:, 1:], y_hats)
-        # cer = self.cer_metric(targets[:, 1:], y_hats)
-        #
-        # self._log_states('train', wer, cer, loss, cross_entropy_loss, ctc_loss)
+
+        y_hats = outputs.max(-1)[1]
+
+        wer = self.wer_metric(targets[:, 1:], y_hats)
+        cer = self.cer_metric(targets[:, 1:], y_hats)
+
+        self._log_states('train', wer, cer, loss, cross_entropy_loss, ctc_loss)
 
         return loss
 
-    def validation_step(self, val_batch: tuple, batch_idx: int, dataset_idx: int) -> Tensor:
+    def validation_step(self, batch: tuple, batch_idx: int, dataset_idx: int) -> Tensor:
         """
         Forward propagate a `inputs` and `targets` pair for validation.
 
@@ -184,29 +187,32 @@ class ConformerLSTMModel(pl.LightningModule):
         Returns:
             loss (torch.FloatTensor): Loss for training.
         """
-        inputs, targets, input_lengths, target_lengths = val_batch
+        inputs, targets, input_lengths, target_lengths = batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
-        y_hats = self.decoder(encoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
+        outputs = self.decoder(encoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
 
         max_target_length = targets.size(1) - 1  # minus the start of sequence symbol
-        y_hats = y_hats[:, :max_target_length, :]
+        outputs = outputs[:, :max_target_length, :]
 
         loss, ctc_loss, cross_entropy_loss = self.criterion(
             encoder_log_probs=encoder_log_probs.transpose(0, 1),
-            decoder_log_probs=y_hats.contiguous().view(-1, y_hats.size(-1)),
+            decoder_log_probs=outputs.contiguous().view(-1, outputs.size(-1)),
             output_lengths=encoder_output_lengths,
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        # wer = self.wer_metric(targets[:, 1:], y_hats)
-        # cer = self.cer_metric(targets[:, 1:], y_hats)
-        #
-        # self._log_states('valid', wer, cer, loss, cross_entropy_loss, ctc_loss)
+
+        y_hats = outputs.max(-1)[1]
+
+        wer = self.wer_metric(targets[:, 1:], y_hats)
+        cer = self.cer_metric(targets[:, 1:], y_hats)
+
+        self._log_states('valid', wer, cer, loss, cross_entropy_loss, ctc_loss)
 
         return loss
 
-    def test_step(self, test_batch: tuple, batch_idx: int, dataset_idx: int) -> Tensor:
+    def test_step(self, batch: tuple, batch_idx: int, dataset_idx: int) -> Tensor:
         """
         Forward propagate a `inputs` and `targets` pair for test.
 
@@ -217,25 +223,28 @@ class ConformerLSTMModel(pl.LightningModule):
         Returns:
             loss (torch.FloatTensor): Loss for training.
         """
-        inputs, targets, input_lengths, target_lengths = test_batch
+        inputs, targets, input_lengths, target_lengths = batch
 
         encoder_log_probs, encoder_outputs, encoder_output_lengths = self.encoder(inputs, input_lengths)
-        y_hats = self.decoder(encoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
+        outputs = self.decoder(encoder_outputs=encoder_outputs, teacher_forcing_ratio=0.0)
 
         max_target_length = targets.size(1) - 1  # minus the start of sequence symbol
-        y_hats = y_hats[:, :max_target_length, :]
+        outputs = outputs[:, :max_target_length, :]
 
         loss, ctc_loss, cross_entropy_loss = self.criterion(
             encoder_log_probs=encoder_log_probs.transpose(0, 1),
-            decoder_log_probs=y_hats.contiguous().view(-1, y_hats.size(-1)),
+            decoder_log_probs=outputs.contiguous().view(-1, outputs.size(-1)),
             output_lengths=encoder_output_lengths,
             targets=targets[:, 1:],
             target_lengths=target_lengths,
         )
-        # wer = self.wer_metric(targets[:, 1:], y_hats)
-        # cer = self.cer_metric(targets[:, 1:], y_hats)
-        #
-        # self._log_states('test', wer, cer, loss, cross_entropy_loss, ctc_loss)
+
+        y_hats = outputs.max(-1)[1]
+
+        wer = self.wer_metric(targets[:, 1:], y_hats)
+        cer = self.cer_metric(targets[:, 1:], y_hats)
+
+        self._log_states('test', wer, cer, loss, cross_entropy_loss, ctc_loss)
 
         return loss
 
