@@ -97,7 +97,7 @@ class WordErrorRate(ErrorRate):
         w2 = [chr(unit2char[w]) for w in s2.split()]
 
         dist = Lev.distance(''.join(w1), ''.join(w2))
-        length = len(s1.replace(' ', ''))
+        length = len(s1.split())
         return dist, length
 
 
