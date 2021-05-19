@@ -90,24 +90,24 @@ You can simply train with LibriSpeech dataset like below:
   
 ```
 $ python ./bin/main.py \
-data=default \
-dataset_download=True \
-audio=fbank \
-model=conformer_lstm \
-lr_scheduler=reduce_lr_on_plateau \
-trainer=gpu
+    data=default \
+    dataset_download=True \
+    audio=fbank \
+    model=conformer_lstm \
+    lr_scheduler=reduce_lr_on_plateau \
+    trainer=gpu
 ```
 
 - Example2: Train the `conformer-lstm` model with `mel-spectrogram` features On TPU:
   
 ```
 $ python ./bin/main.py \
-data=default \
-dataset_download=True \
-audio=melspectrogram \
-model=conformer_lstm \
-lr_scheduler=reduce_lr_on_plateau \
-trainer=tpu
+    data=default \
+    dataset_download=True \
+    audio=melspectrogram \
+    model=conformer_lstm \
+    lr_scheduler=reduce_lr_on_plateau \
+    trainer=tpu
 ```
  
 ## Troubleshoots and Contributing
